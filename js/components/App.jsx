@@ -19,9 +19,9 @@ class App extends React.Component {
     return <Router history={ hashHistory }>
       <Route path="/" component={ Main }>
         <IndexRoute component={ Menu }/>
+        <Route path="/menu" component={ Menu }/>
         <Route path="/game" component={ Game }/>
         <Route path="/bestscores" component={ BestScores }/>
-        <Route path="/menu" component={ Menu }/>
       </Route>
 
 
