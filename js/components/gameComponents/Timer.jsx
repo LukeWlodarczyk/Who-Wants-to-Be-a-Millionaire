@@ -9,9 +9,9 @@ class Timer extends React.Component {
     }
   }
 
-  componentDidUpdate() {
+  componentWillReceiveProps(nextProps) {
     this.setState({
-      time: this.props.time,
+      time: nextProps.time,
     });
   }
 

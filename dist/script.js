@@ -13817,11 +13817,11 @@ var _Game = __webpack_require__(244);
 
 var _Game2 = _interopRequireDefault(_Game);
 
-var _BestScores = __webpack_require__(247);
+var _BestScores = __webpack_require__(248);
 
 var _BestScores2 = _interopRequireDefault(_BestScores);
 
-var _Main = __webpack_require__(248);
+var _Main = __webpack_require__(249);
 
 var _Main2 = _interopRequireDefault(_Main);
 
@@ -27509,6 +27509,10 @@ var _Answers = __webpack_require__(246);
 
 var _Answers2 = _interopRequireDefault(_Answers);
 
+var _Timer = __webpack_require__(247);
+
+var _Timer2 = _interopRequireDefault(_Timer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27518,111 +27522,147 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Game = function (_React$Component) {
-  _inherits(Game, _React$Component);
+    _inherits(Game, _React$Component);
 
-  function Game(props) {
-    _classCallCheck(this, Game);
+    function Game(props) {
+        _classCallCheck(this, Game);
 
-    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, props));
 
-    _this.insertQuestion = function (data) {
-      _this.setState({
-        question: data,
-        correctAnswer: data.results[0].correct_answer,
-        loading: false
-      });
-    };
+        _this.shuffle = function (arr) {
+            for (var i = arr.length; i; i--) {
+                var j = Math.floor(Math.random() * i);
+                var _ref = [arr[j], arr[i - 1]];
+                arr[i - 1] = _ref[0];
+                arr[j] = _ref[1];
+            }
 
-    _this.getQuestion = function () {
-      var baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=easy&type=multiple';
-      fetch(baseUrl).then(function (data) {
-        if (data.ok) {
-          return data.json();
-        } else {
-          throw new Error('Error getting data');
+            return arr;
+        };
+
+        _this.insertQuestion = function (data) {
+            _this.setState({
+                question: data.results[0].question,
+                correctAnswer: data.results[0].correct_answer,
+                shuffledAnswers: _this.shuffle(data.results[0].incorrect_answers.concat(data.results[0].correct_answer)),
+                loading: false
+            });
+            console.log('Correct answer: ', _this.state.correctAnswer);
+        };
+
+        _this.getQuestion = function () {
+            var baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=easy&type=multiple';
+            fetch(baseUrl).then(function (data) {
+                if (data.ok) {
+                    return data.json();
+                } else {
+                    throw new Error('Error getting data');
+                }
+            }).then(function (data) {
+                _this.insertQuestion(data);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        };
+
+        _this.startGame = function () {
+            _this.getQuestion();
+
+            _this.setState({
+                canAnswer: true,
+                text: null,
+                secsLeft: 30
+            });
+        };
+
+        _this.finishGame = function (text) {
+            var nextRound = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+            if (!nextRound) {
+                clearInterval(_this.intervalId);
+            }
+
+            _this.setState({
+                canAnswer: false,
+                text: text
+            });
+
+            if (nextRound) {
+                _this.setState({
+                    scores: _this.state.scores + 1
+                });
+                _this.startGame();
+            }
+        };
+
+        _this.handleAnsSelect = function (answer) {
+            if (answer === _this.state.correctAnswer) {
+                _this.finishGame('Brawo!', true);
+            } else {
+                _this.finishGame('Nieprawidłowa odpowiedź!');
+            }
+        };
+
+        _this.state = {
+            question: '',
+            correctAnswer: '',
+            allAnswers: [],
+            shuffledAnswers: [],
+            loading: true,
+            canAnswer: true,
+            text: null,
+            scores: 0,
+            secsLeft: 30
+
+        };
+        return _this;
+    }
+
+    _createClass(Game, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            this.startGame();
+
+            this.intervalId = setInterval(function () {
+                _this2.setState({
+                    secsLeft: _this2.state.secsLeft - 1
+                });
+                if (_this2.state.secsLeft === 0) {
+                    _this2.finishGame('Koniec czasu!');
+                }
+            }, 700);
         }
-      }).then(function (data) {
-        _this.insertQuestion(data);
-        console.log(_this.state.correctAnswer);
-      }).catch(function (error) {
-        console.log(error);
-      });
-    };
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            clearInterval(this.intervalId);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            if (this.state.loading) {
+                return null;
+            } else {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'container' },
+                    _react2.default.createElement(_Question2.default, { question: this.state.question }),
+                    _react2.default.createElement(_Answers2.default, { shuffledAnswers: this.state.shuffledAnswers, canAnswer: this.state.canAnswer, onMyClick: this.handleAnsSelect }),
+                    _react2.default.createElement(
+                        'h3',
+                        null,
+                        'Punkty: ',
+                        this.state.scores
+                    ),
+                    _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft })
+                );
+            }
+        }
+    }]);
 
-    _this.startGame = function () {
-      _this.getQuestion();
-
-      _this.setState({
-        canAnswer: true,
-        text: null
-      });
-    };
-
-    _this.finishGame = function (text) {
-      var nextRound = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-
-      _this.setState({
-        canAnswer: false,
-        text: text
-      });
-
-      if (nextRound) {
-        _this.setState({
-          scores: _this.state.scores + 1
-        });
-        _this.startGame();
-      }
-    };
-
-    _this.handleAnsSelect = function (answer) {
-      if (answer === _this.state.correctAnswer) {
-        _this.finishGame('Brawo!', true);
-      } else {
-        _this.finishGame('Nieprawidłowa odpowiedź!');
-      }
-    };
-
-    _this.state = {
-      question: '',
-      correctAnswer: '',
-      loading: true,
-      canAnswer: true,
-      text: null,
-      scores: 0
-
-    };
-    return _this;
-  }
-
-  _createClass(Game, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.startGame();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      if (this.state.loading) {
-        return null;
-      } else {
-        return _react2.default.createElement(
-          'div',
-          { className: 'container' },
-          _react2.default.createElement(_Question2.default, { question: this.state.question.results[0] }),
-          _react2.default.createElement(_Answers2.default, { question: this.state.question.results[0], canAnswer: this.state.canAnswer, onMyClick: this.handleAnsSelect }),
-          _react2.default.createElement(
-            'h3',
-            null,
-            'Punkty: ',
-            this.state.scores
-          )
-        );
-      }
-    }
-  }]);
-
-  return Game;
+    return Game;
 }(_react2.default.Component);
 
 module.exports = Game;
@@ -27656,17 +27696,21 @@ var Question = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Question.__proto__ || Object.getPrototypeOf(Question)).call(this, props));
 
+    _this.createMarkup = function () {
+      return { __html: _this.state.question };
+    };
+
     _this.state = {
-      question: _this.props.question.question
+      question: _this.props.question
     };
     return _this;
   }
 
   _createClass(Question, [{
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
       this.setState({
-        question: this.props.question.question
+        question: nextProps.question
       });
     }
   }, {
@@ -27675,11 +27719,7 @@ var Question = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { className: 'container' },
-        _react2.default.createElement(
-          'p',
-          null,
-          this.state.question
-        )
+        _react2.default.createElement('p', { dangerouslySetInnerHTML: this.createMarkup() })
       );
     }
   }]);
@@ -27711,71 +27751,128 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Answers = function (_React$Component) {
-    _inherits(Answers, _React$Component);
+  _inherits(Answers, _React$Component);
 
-    function Answers(props) {
-        _classCallCheck(this, Answers);
+  function Answers(props) {
+    _classCallCheck(this, Answers);
 
-        var _this = _possibleConstructorReturn(this, (Answers.__proto__ || Object.getPrototypeOf(Answers)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Answers.__proto__ || Object.getPrototypeOf(Answers)).call(this, props));
 
-        _this.shuffle = function (arr) {
-            for (var i = arr.length; i; i--) {
-                var j = Math.floor(Math.random() * i);
-                var _ref = [arr[j], arr[i - 1]];
-                arr[i - 1] = _ref[0];
-                arr[j] = _ref[1];
-            }
-        };
+    _this.onHandleClick = function (answer) {
+      if (typeof _this.props.onMyClick === 'function') {
+        _this.props.onMyClick(answer);
+      }
+    };
 
-        _this.onHandleClick = function (answer) {
-            if (typeof _this.props.onMyClick === 'function') {
-                _this.props.onMyClick(answer);
-            }
-        };
+    _this.state = {
+      answers: _this.props.shuffledAnswers
+    };
+    console.log(_this.state.answers);
+    return _this;
+  }
 
-        _this.state = {
-            answers: _this.props.question.incorrect_answers.concat(_this.props.question.correct_answer)
-        };
-        console.log(_this.state.answers);
-        return _this;
+  _createClass(Answers, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps !== this.props.question) {
+        this.setState({
+          answers: nextProps.shuffledAnswers
+        });
+      }
     }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
 
-    _createClass(Answers, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            this.shuffle(this.state.answers);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
+      var btns = this.state.answers.map(function (answer, i) {
+        return _react2.default.createElement(
+          'button',
+          { key: i, disabled: !_this2.props.canAnswer,
+            onClick: function onClick(e) {
+              return _this2.onHandleClick(answer);
+            } },
+          answer
+        );
+      });
 
-            var btns = this.state.answers.map(function (answer, i) {
-                return _react2.default.createElement(
-                    'button',
-                    { key: i, disabled: !_this2.props.canAnswer,
-                        onClick: function onClick(e) {
-                            return _this2.onHandleClick(answer);
-                        } },
-                    answer
-                );
-            });
+      return _react2.default.createElement(
+        'div',
+        { className: 'container' },
+        btns
+      );
+    }
+  }]);
 
-            return _react2.default.createElement(
-                'div',
-                { className: 'container' },
-                btns
-            );
-        }
-    }]);
-
-    return Answers;
+  return Answers;
 }(_react2.default.Component);
 
 module.exports = Answers;
 
 /***/ }),
 /* 247 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Timer = function (_React$Component) {
+  _inherits(Timer, _React$Component);
+
+  function Timer(props) {
+    _classCallCheck(this, Timer);
+
+    var _this = _possibleConstructorReturn(this, (Timer.__proto__ || Object.getPrototypeOf(Timer)).call(this, props));
+
+    _this.state = {
+      time: _this.props.time
+    };
+    return _this;
+  }
+
+  _createClass(Timer, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState({
+        time: nextProps.time
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'container' },
+        _react2.default.createElement(
+          'p',
+          null,
+          this.state.time
+        )
+      );
+    }
+  }]);
+
+  return Timer;
+}(_react2.default.Component);
+
+module.exports = Timer;
+
+/***/ }),
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27831,7 +27928,7 @@ var BestScores = function (_React$Component) {
 module.exports = BestScores;
 
 /***/ }),
-/* 248 */
+/* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27847,11 +27944,11 @@ var _reactDom = __webpack_require__(80);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _Header = __webpack_require__(249);
+var _Header = __webpack_require__(250);
 
 var _Header2 = _interopRequireDefault(_Header);
 
-var _Footer = __webpack_require__(250);
+var _Footer = __webpack_require__(251);
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -27891,7 +27988,7 @@ var Main = function (_React$Component) {
 module.exports = Main;
 
 /***/ }),
-/* 249 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27947,7 +28044,7 @@ var Header = function (_React$Component) {
 module.exports = Header;
 
 /***/ }),
-/* 250 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

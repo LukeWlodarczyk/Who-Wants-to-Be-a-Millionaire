@@ -5,22 +5,26 @@ class Question extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      question: this.props.question.question,
+      question: this.props.question,
     }
   }
 
-  componentDidUpdate() {
-    this.setState({
-      question: this.props.question.question,
-    });
+  componentWillReceiveProps(nextProps) {
+      this.setState({
+        question: nextProps.question,
+      });
+  }
+
+  createMarkup = () => {
+  return {__html: this.state.question};
   }
 
 
-    render() {
-        return <div className = 'container'>
-          <p>{this.state.question}</p>
-        </div>
-      }
+  render() {
+      return <div className = 'container'>
+        <p dangerouslySetInnerHTML={this.createMarkup()} />
+      </div>
+    }
 }
 
 

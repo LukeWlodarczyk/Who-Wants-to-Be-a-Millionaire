@@ -1,6 +1,7 @@
 import React from 'react';
 import Question from './Question.jsx'
 import Answers from './Answers.jsx'
+import Timer from './Timer.jsx'
 
 
 class Game extends React.Component {
@@ -9,19 +10,35 @@ class Game extends React.Component {
     this.state = {
       question: '',
       correctAnswer: '',
+      allAnswers:[],
+      shuffledAnswers: [],
       loading: true,
-      canAnswer : true,
-      text : null,
-      scores : 0,
+      canAnswer: true,
+      text: null,
+      scores: 0,
+      secsLeft: 30,
 
     }
   }
+
+  shuffle = arr => {
+      for (let i = arr.length; i; i--) {
+          let j = Math.floor(Math.random() * i);
+          [arr[i - 1], arr[j]] = [arr[j], arr[i - 1]];
+      }
+
+      return arr;
+  }
+
   insertQuestion = data => {
     this.setState({
-      question: data,
+      question: data.results[0].question,
       correctAnswer: data.results[0].correct_answer,
+      shuffledAnswers: this.shuffle(data.results[0].incorrect_answers.concat(data.results[0].correct_answer)),
       loading: false,
     });
+    console.log('Correct answer: ', this.state.correctAnswer);
+
   }
 
   getQuestion = () => {
@@ -35,7 +52,6 @@ class Game extends React.Component {
         }
     }).then(data => {
         this.insertQuestion(data)
-        console.log(this.state.correctAnswer);
     })
     .catch(error => {
       console.log(error);
@@ -48,10 +64,14 @@ class Game extends React.Component {
     this.setState({
               canAnswer : true,
               text : null,
+              secsLeft: 30,
           });
   }
 
   finishGame = (text, nextRound = false) => {
+    if (!nextRound) {
+            clearInterval(this.intervalId);
+        }
 
       this.setState({
           canAnswer : false,
@@ -70,6 +90,20 @@ class Game extends React.Component {
 
   componentDidMount() {
     this.startGame();
+
+    this.intervalId = setInterval(() => {
+        this.setState({
+            secsLeft: this.state.secsLeft - 1,
+        });
+        if (this.state.secsLeft === 0){
+            this.finishGame('Koniec czasu!');
+        }
+    }, 700);
+
+  }
+
+  componentWillUnmount(){
+      clearInterval(this.intervalId);
   }
 
 
@@ -89,9 +123,10 @@ class Game extends React.Component {
       return null;
     } else {
       return <div className = 'container'>
-        <Question question = {this.state.question.results[0]} />
-        <Answers question = {this.state.question.results[0]} canAnswer = {this.state.canAnswer} onMyClick = {this.handleAnsSelect}/>  
+        <Question question = {this.state.question} />
+        <Answers shuffledAnswers = {this.state.shuffledAnswers} canAnswer = {this.state.canAnswer} onMyClick = {this.handleAnsSelect}/>
         <h3>Punkty: {this.state.scores}</h3>
+        <Timer time={this.state.secsLeft} />
       </div>
     }
   }

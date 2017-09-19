@@ -5,17 +5,11 @@ class Answers extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      answers: this.props.question.incorrect_answers.concat(this.props.question.correct_answer)
+      answers: this.props.shuffledAnswers
     }
     console.log(this.state.answers);
   }
 
-  shuffle = arr => {
-      for (let i = arr.length; i; i--) {
-          let j = Math.floor(Math.random() * i);
-          [arr[i - 1], arr[j]] = [arr[j], arr[i - 1]];
-      }
-  }
 
   onHandleClick = answer => {
       if ( typeof this.props.onMyClick === 'function' ){
@@ -23,8 +17,13 @@ class Answers extends React.Component {
       }
   };
 
-  componentWillMount() {
-    this.shuffle(this.state.answers)
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps !== this.props.question) {
+      this.setState({
+        answers: nextProps.shuffledAnswers
+      });
+    }
   }
 
 
