@@ -28136,6 +28136,11 @@ var Answers = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Answers.__proto__ || Object.getPrototypeOf(Answers)).call(this, props));
 
+    _this.currentMoney = function (score) {
+      var lis = document.querySelectorAll('li');
+      lis[score - 1].style.color = 'red';
+    };
+
     _this.state = {
       currentScore: _this.props.currentScore
     };
@@ -28151,6 +28156,7 @@ var Answers = function (_React$Component) {
           currentScore: nextProps.currentScore
         });
       }
+      this.currentMoney(this.state.currentScore);
     }
   }, {
     key: 'render',
@@ -28159,9 +28165,38 @@ var Answers = function (_React$Component) {
         'div',
         { className: 'container' },
         _react2.default.createElement(
-          'p',
+          'ul',
           null,
-          this.state.currentScore
+          _react2.default.createElement(
+            'li',
+            null,
+            '100'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '500'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '1000'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '5000'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '10000'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '50000'
+          )
         )
       );
     }
