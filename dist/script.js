@@ -27525,6 +27525,14 @@ var Game = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, props));
 
+    _this.insertQuestion = function (data) {
+      _this.setState({
+        question: data,
+        correctAnswer: data.results[0].correct_answer,
+        loading: false
+      });
+    };
+
     _this.getQuestion = function () {
       var baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=easy&type=multiple';
       fetch(baseUrl).then(function (data) {
@@ -27534,26 +27542,65 @@ var Game = function (_React$Component) {
           throw new Error('Error getting data');
         }
       }).then(function (data) {
-        _this.setState({
-          question: data,
-          loading: false
-        });
+        _this.insertQuestion(data);
+        console.log(_this.state.correctAnswer);
       }).catch(function (error) {
         console.log(error);
       });
     };
 
+    _this.handleAnsSelect = function (answer) {
+      if (answer === _this.state.correctAnswer) {
+        _this.finishGame('Brawo!', true);
+      } else {
+        _this.finishGame('Nieprawidłowa odpowiedź!');
+      }
+    };
+
     _this.state = {
       question: '',
-      loading: true
+      correctAnswer: '',
+      loading: true,
+      canAnswer: true,
+      text: null,
+      scores: 0
+
     };
     return _this;
   }
 
   _createClass(Game, [{
+    key: 'startGame',
+    value: function startGame() {
+      this.getQuestion();
+
+      this.setState({
+        canAnswer: true,
+        text: null
+      });
+    }
+  }, {
+    key: 'finishGame',
+    value: function finishGame(text) {
+      var nextRound = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+
+      this.setState({
+        canAnswer: false,
+        text: text
+      });
+
+      if (nextRound) {
+        this.setState({
+          scores: this.state.scores + 1
+        });
+        this.startGame();
+      }
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.getQuestion();
+      this.startGame();
     }
   }, {
     key: 'render',
@@ -27565,7 +27612,13 @@ var Game = function (_React$Component) {
           'div',
           { className: 'container' },
           _react2.default.createElement(_Question2.default, { question: this.state.question.results[0] }),
-          _react2.default.createElement(_Answers2.default, { question: this.state.question.results[0] })
+          _react2.default.createElement(_Answers2.default, { question: this.state.question.results[0], canAnswer: this.state.canAnswer, onMyClick: this.handleAnsSelect }),
+          _react2.default.createElement(
+            'h3',
+            null,
+            'Punkty: ',
+            this.state.scores
+          )
         );
       }
     }
@@ -27660,55 +27713,65 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Answers = function (_React$Component) {
-  _inherits(Answers, _React$Component);
+    _inherits(Answers, _React$Component);
 
-  function Answers(props) {
-    _classCallCheck(this, Answers);
+    function Answers(props) {
+        _classCallCheck(this, Answers);
 
-    var _this = _possibleConstructorReturn(this, (Answers.__proto__ || Object.getPrototypeOf(Answers)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Answers.__proto__ || Object.getPrototypeOf(Answers)).call(this, props));
 
-    _this.shuffle = function (arr) {
-      for (var i = arr.length; i; i--) {
-        var j = Math.floor(Math.random() * i);
-        var _ref = [arr[j], arr[i - 1]];
-        arr[i - 1] = _ref[0];
-        arr[j] = _ref[1];
-      }
-    };
+        _this.shuffle = function (arr) {
+            for (var i = arr.length; i; i--) {
+                var j = Math.floor(Math.random() * i);
+                var _ref = [arr[j], arr[i - 1]];
+                arr[i - 1] = _ref[0];
+                arr[j] = _ref[1];
+            }
+        };
 
-    _this.state = {
-      answers: _this.props.question.incorrect_answers.concat(_this.props.question.correct_answer)
-    };
-    console.log(_this.state.answers);
-    return _this;
-  }
+        _this.onHandleClick = function (answer) {
+            if (typeof _this.props.onMyClick === 'function') {
+                _this.props.onMyClick(answer);
+            }
+        };
 
-  _createClass(Answers, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.shuffle(this.state.answers);
-      console.log(this.state.answers);
+        _this.state = {
+            answers: _this.props.question.incorrect_answers.concat(_this.props.question.correct_answer)
+        };
+        console.log(_this.state.answers);
+        return _this;
     }
-  }, {
-    key: 'render',
-    value: function render() {
-      var btns = this.state.answers.map(function (n, i) {
-        return _react2.default.createElement(
-          'button',
-          { key: i },
-          n
-        );
-      });
 
-      return _react2.default.createElement(
-        'div',
-        { className: 'container' },
-        btns
-      );
-    }
-  }]);
+    _createClass(Answers, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.shuffle(this.state.answers);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
 
-  return Answers;
+            var btns = this.state.answers.map(function (answer, i) {
+                return _react2.default.createElement(
+                    'button',
+                    { key: i, disabled: !_this2.props.canAnswer,
+                        onClick: function onClick(e) {
+                            return _this2.onHandleClick(answer);
+                        } },
+                    answer
+                );
+            });
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'container' },
+                btns
+            );
+        }
+    }]);
+
+    return Answers;
 }(_react2.default.Component);
 
 module.exports = Answers;

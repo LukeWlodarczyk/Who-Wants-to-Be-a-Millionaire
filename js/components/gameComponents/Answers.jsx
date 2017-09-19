@@ -17,23 +17,29 @@ class Answers extends React.Component {
       }
   }
 
-  componentDidMount() {
+  onHandleClick = answer => {
+      if ( typeof this.props.onMyClick === 'function' ){
+          this.props.onMyClick(answer);
+      }
+  };
+
+  componentWillMount() {
     this.shuffle(this.state.answers)
-    console.log(this.state.answers);
   }
 
 
-    render() {
-      const btns = this.state.answers.map( (n, i) => {
-              return <button key = {i} >
-                  {n}
-              </button>;
-          });
+  render() {
+    const btns = this.state.answers.map( (answer, i) => {
+            return <button key = {i} disabled={!this.props.canAnswer}
+                onClick = {e => this.onHandleClick(answer)} >
+                {answer}
+            </button>;
+        });
 
-        return <div className = 'container'>
-          {btns}
-        </div>
-      }
+      return <div className = 'container'>
+        {btns}
+      </div>
+    }
 }
 
 
