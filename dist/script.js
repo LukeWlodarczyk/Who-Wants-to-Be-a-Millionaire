@@ -27513,6 +27513,10 @@ var _Timer = __webpack_require__(256);
 
 var _Timer2 = _interopRequireDefault(_Timer);
 
+var _CurrentScore = __webpack_require__(258);
+
+var _CurrentScore2 = _interopRequireDefault(_CurrentScore);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27652,12 +27656,7 @@ var Game = function (_React$Component) {
                     { className: 'container' },
                     _react2.default.createElement(_Question2.default, { question: this.state.question }),
                     _react2.default.createElement(_Answers2.default, { shuffledAnswers: this.state.shuffledAnswers, canAnswer: this.state.canAnswer, onMyClick: this.handleAnsSelect }),
-                    _react2.default.createElement(
-                        'h3',
-                        null,
-                        'Punkty: ',
-                        this.state.scores
-                    ),
+                    _react2.default.createElement(_CurrentScore2.default, { currentScore: this.state.scores }),
                     _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft })
                 );
             }
@@ -28009,7 +28008,7 @@ var Answers = function (_React$Component) {
   _createClass(Answers, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      if (nextProps !== this.props.question) {
+      if (nextProps.shuffledAnswers !== this.props.shuffledAnswers) {
         this.setState({
           answers: nextProps.shuffledAnswers
         });
@@ -28106,6 +28105,72 @@ var Timer = function (_React$Component) {
 }(_react2.default.Component);
 
 module.exports = Timer;
+
+/***/ }),
+/* 257 */,
+/* 258 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(7);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Answers = function (_React$Component) {
+  _inherits(Answers, _React$Component);
+
+  function Answers(props) {
+    _classCallCheck(this, Answers);
+
+    var _this = _possibleConstructorReturn(this, (Answers.__proto__ || Object.getPrototypeOf(Answers)).call(this, props));
+
+    _this.state = {
+      currentScore: _this.props.currentScore
+    };
+
+    return _this;
+  }
+
+  _createClass(Answers, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.currentScore !== this.props.currentScore) {
+        this.setState({
+          currentScore: nextProps.currentScore
+        });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'container' },
+        _react2.default.createElement(
+          'p',
+          null,
+          this.state.currentScore
+        )
+      );
+    }
+  }]);
+
+  return Answers;
+}(_react2.default.Component);
+
+module.exports = Answers;
 
 /***/ })
 /******/ ]);

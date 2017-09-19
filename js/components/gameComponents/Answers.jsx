@@ -19,7 +19,7 @@ class Answers extends React.Component {
 
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps !== this.props.question) {
+    if(nextProps.shuffledAnswers !== this.props.shuffledAnswers) {
       this.setState({
         answers: nextProps.shuffledAnswers
       });

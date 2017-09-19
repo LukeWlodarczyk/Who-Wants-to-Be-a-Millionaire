@@ -2,6 +2,7 @@ import React from 'react';
 import Question from './Question.jsx'
 import Answers from './Answers.jsx'
 import Timer from './Timer.jsx'
+import CurrentScore from './CurrentScore.jsx'
 
 
 class Game extends React.Component {
@@ -127,8 +128,9 @@ class Game extends React.Component {
       return <div className = 'container'>
         <Question question = {this.state.question} />
         <Answers shuffledAnswers = {this.state.shuffledAnswers} canAnswer = {this.state.canAnswer} onMyClick = {this.handleAnsSelect}/>
-        <h3>Punkty: {this.state.scores}</h3>
-        <Timer time={this.state.secsLeft} />
+
+        <CurrentScore currentScore = {this.state.scores}/>
+        <Timer time = {this.state.secsLeft} />
       </div>
     }
   }
