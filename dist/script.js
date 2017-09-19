@@ -27549,6 +27549,32 @@ var Game = function (_React$Component) {
       });
     };
 
+    _this.startGame = function () {
+      _this.getQuestion();
+
+      _this.setState({
+        canAnswer: true,
+        text: null
+      });
+    };
+
+    _this.finishGame = function (text) {
+      var nextRound = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+
+      _this.setState({
+        canAnswer: false,
+        text: text
+      });
+
+      if (nextRound) {
+        _this.setState({
+          scores: _this.state.scores + 1
+        });
+        _this.startGame();
+      }
+    };
+
     _this.handleAnsSelect = function (answer) {
       if (answer === _this.state.correctAnswer) {
         _this.finishGame('Brawo!', true);
@@ -27570,34 +27596,6 @@ var Game = function (_React$Component) {
   }
 
   _createClass(Game, [{
-    key: 'startGame',
-    value: function startGame() {
-      this.getQuestion();
-
-      this.setState({
-        canAnswer: true,
-        text: null
-      });
-    }
-  }, {
-    key: 'finishGame',
-    value: function finishGame(text) {
-      var nextRound = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-
-      this.setState({
-        canAnswer: false,
-        text: text
-      });
-
-      if (nextRound) {
-        this.setState({
-          scores: this.state.scores + 1
-        });
-        this.startGame();
-      }
-    }
-  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       this.startGame();

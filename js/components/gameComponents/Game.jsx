@@ -42,7 +42,7 @@ class Game extends React.Component {
     });
   }
 
-  startGame(){
+  startGame = () => {
     this.getQuestion();
 
     this.setState({
@@ -51,7 +51,7 @@ class Game extends React.Component {
           });
   }
 
-  finishGame(text, nextRound = false){
+  finishGame = (text, nextRound = false) => {
 
       this.setState({
           canAnswer : false,
@@ -70,7 +70,6 @@ class Game extends React.Component {
 
   componentDidMount() {
     this.startGame();
-
   }
 
 
@@ -91,7 +90,7 @@ class Game extends React.Component {
     } else {
       return <div className = 'container'>
         <Question question = {this.state.question.results[0]} />
-        <Answers question = {this.state.question.results[0]} canAnswer = {this.state.canAnswer} onMyClick = {this.handleAnsSelect}/>
+        <Answers question = {this.state.question.results[0]} canAnswer = {this.state.canAnswer} onMyClick = {this.handleAnsSelect}/>  
         <h3>Punkty: {this.state.scores}</h3>
       </div>
     }
