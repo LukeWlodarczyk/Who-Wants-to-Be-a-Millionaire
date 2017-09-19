@@ -10,7 +10,6 @@ class Game extends React.Component {
     this.state = {
       question: '',
       correctAnswer: '',
-      allAnswers:[],
       shuffledAnswers: [],
       loading: true,
       canAnswer: true,
@@ -31,10 +30,13 @@ class Game extends React.Component {
   }
 
   insertQuestion = data => {
+  let incorrectAnswer = data.results[0].incorrect_answers;
+  let correctAnswer = data.results[0].correct_answer;
+  let allAnswers = incorrectAnswer.concat(correctAnswer);
     this.setState({
       question: data.results[0].question,
       correctAnswer: data.results[0].correct_answer,
-      shuffledAnswers: this.shuffle(data.results[0].incorrect_answers.concat(data.results[0].correct_answer)),
+      shuffledAnswers: this.shuffle(allAnswers),
       loading: false,
     });
     console.log('Correct answer: ', this.state.correctAnswer);
