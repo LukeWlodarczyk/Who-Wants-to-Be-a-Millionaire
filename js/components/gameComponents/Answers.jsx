@@ -27,12 +27,14 @@ class Answers extends React.Component {
   }
 
 
+
+
   render() {
-    const letter = ['A: ', 'B: ', 'C: ', 'D: '];
+    const letters = ['A: ', 'B: ', 'C: ', 'D: '];
     const btns = this.state.answers.map( (answer, i) => {
-            return <button key = {i} disabled={!this.props.canAnswer}
+            return <button className = 'answerBtn' key = {i} disabled={!this.props.canAnswer}
                 onClick = {e => this.onHandleClick(answer)} >
-                {letter[i] + answer}
+                {letters[i] + answer}
             </button>;
         });
 

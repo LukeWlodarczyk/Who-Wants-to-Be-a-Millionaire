@@ -5,23 +5,34 @@ class Lifelines extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      answers: this.props.shuffledAnswers
+      canUseLifelines: this.props.canUseLifelines
     }
-    console.log(this.state.answers);
+
   }
 
 
-  onHandleClick = answer => {
-      if ( typeof this.props.onMyClick === 'function' ){
-          this.props.onMyClick(answer);
+  onHandleClickExtraTime = () => {
+      if ( typeof this.props.onMyClickAddExtraTime === 'function' ){
+          this.props.onMyClickAddExtraTime();
       }
   };
 
+  onHandleClickChangeQuestion = () => {
+      if ( typeof this.props.onMyClickChangeQuestion === 'function' ){
+          this.props.onMyClickChangeQuestion();
+      }
+  };
+
+  onHandleClickFiftyFifty = () => {
+      if ( typeof this.props.onMyClickFiftyFifty === 'function' ){
+          this.props.onMyClickFiftyFifty();
+      }
+  };
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps !== this.props.question) {
+    if(nextProps.canUseLifelines !== this.props.canUseLifelines) {
       this.setState({
-        answers: nextProps.shuffledAnswers
+        canUseLifelines: nextProps.canUseLifelines
       });
     }
   }
@@ -29,7 +40,9 @@ class Lifelines extends React.Component {
 
   render() {
       return <div className = 'container'>
-
+          <button disabled={!this.state.canUseLifelines[0]} onClick = {this.onHandleClickExtraTime} >Extra Time</button>
+          <button disabled={!this.state.canUseLifelines[1]} onClick = {this.onHandleClickFiftyFifty} >50/50</button>
+          <button disabled={!this.state.canUseLifelines[2]} onClick = {this.onHandleClickChangeQuestion} >Change Question</button>
       </div>
     }
 }

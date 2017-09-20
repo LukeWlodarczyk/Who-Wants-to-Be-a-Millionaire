@@ -3,6 +3,7 @@ import Question from './Question.jsx'
 import Answers from './Answers.jsx'
 import Timer from './Timer.jsx'
 import CurrentScore from './CurrentScore.jsx'
+import Lifelines from './Lifelines.jsx'
 
 
 class Game extends React.Component {
@@ -17,23 +18,23 @@ class Game extends React.Component {
       text: null,
       scores: 0,
       secsLeft: 30,
-
+      canUseLifelines: [true, true, true],
     }
   }
 
   shuffle = arr => {
-      for (let i = arr.length; i; i--) {
-          let j = Math.floor(Math.random() * i);
-          [arr[i - 1], arr[j]] = [arr[j], arr[i - 1]];
-      }
+    for (let i = arr.length; i; i--) {
+        let j = Math.floor(Math.random() * i);
+        [arr[i - 1], arr[j]] = [arr[j], arr[i - 1]];
+    }
 
-      return arr;
+    return arr;
   }
 
   insertQuestion = data => {
-  let incorrectAnswer = data.results[0].incorrect_answers;
-  let correctAnswer = data.results[0].correct_answer;
-  let allAnswers = incorrectAnswer.concat(correctAnswer);
+    let incorrectAnswer = data.results[0].incorrect_answers;
+    let correctAnswer = data.results[0].correct_answer;
+    let allAnswers = incorrectAnswer.concat(correctAnswer);
     this.setState({
       question: data.results[0].question,
       correctAnswer: data.results[0].correct_answer,
@@ -41,7 +42,6 @@ class Game extends React.Component {
       loading: false,
     });
     console.log('Correct answer: ', this.state.correctAnswer);
-
   }
 
   getQuestion = () => {
@@ -61,7 +61,13 @@ class Game extends React.Component {
     });
   }
 
+  enableBtns = () => {
+    let btns = document.querySelectorAll('.answerBtn')
+    btns.forEach(btn => btn.disabled = false)
+  }
+
   startGame = () => {
+    this.enableBtns();
     this.getQuestion();
 
     this.setState({
@@ -119,19 +125,59 @@ class Game extends React.Component {
           }
   }
 
+  handleAddExtraTime = () => {
+    let canUseLifelines = this.state.canUseLifelines;
+    canUseLifelines[0] = false;
+    this.setState({
+        secsLeft: this.state.secsLeft + 30,
+    });
+  }
 
+  handleFiftyFifty = () => {
+    this.enableBtns();
+    let canUseLifelines = this.state.canUseLifelines;
+    canUseLifelines[1] = false;
+    //Convert NodeList to Array
+    let allBtns = [...document.querySelectorAll('.answerBtn')]
+    console.log(allBtns);
+    console.log(this.state.correctAnswer);
+    let incorrectBtns = allBtns.filter( btn => btn.innerText.indexOf(this.state.correctAnswer) < 0)
+    this.shuffle(incorrectBtns)
+    for (let i = 0; i < 2; i++) {
+      incorrectBtns[i].disabled = true;
+    }
+
+  }
+
+  handleChangeQuestion = () => {
+    this.enableBtns();
+    let canUseLifelines = this.state.canUseLifelines;
+    canUseLifelines[2] = false;
+    this.getQuestion();
+  }
 
   render() {
     if(this.state.loading) {
       return null;
     } else {
-      return <div className = 'container'>
+      return (
+      <div className = 'container'>
         <Question question = {this.state.question} />
-        <Answers shuffledAnswers = {this.state.shuffledAnswers} canAnswer = {this.state.canAnswer} onMyClick = {this.handleAnsSelect}/>
-
-        <CurrentScore currentScore = {this.state.scores}/>
+        <Answers
+          shuffledAnswers = {this.state.shuffledAnswers}
+          canAnswer = {this.state.canAnswer}
+          onMyClick = {this.handleAnsSelect}
+        />
+        <Lifelines
+          canUseLifelines = {this.state.canUseLifelines}
+          onMyClickAddExtraTime = {this.handleAddExtraTime}
+          onMyClickFiftyFifty = {this.handleFiftyFifty}
+          onMyClickChangeQuestion = {this.handleChangeQuestion}
+        />
+        <CurrentScore currentScore = {this.state.scores} />
         <Timer time = {this.state.secsLeft} />
       </div>
+    )
     }
   }
 }

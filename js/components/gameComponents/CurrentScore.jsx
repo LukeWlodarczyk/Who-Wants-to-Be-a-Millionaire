@@ -13,7 +13,7 @@ class Answers extends React.Component {
 
   currentMoney = score => {
     const lis = document.querySelectorAll('li');
-    lis[score-1].style.color = 'red';
+    lis[score].style.color = 'red';
   }
 
 
