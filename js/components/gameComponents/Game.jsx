@@ -15,10 +15,11 @@ class Game extends React.Component {
       shuffledAnswers: [],
       loading: true,
       canAnswer: true,
-      text: null,
-      scores: 0,
-      secsLeft: 30,
-      canUseLifelines: [true, true, true, true],
+      text: 'Who wants to be a millionaire?',
+      scores: -1,
+      secsLeft: 0,
+      canUseLifelines: [false, false, false, false],
+      canClickControl: [true, false, false],
       difficulty: ['easy', 'medium', 'hard']
     }
   }
@@ -68,37 +69,39 @@ class Game extends React.Component {
     btns.forEach(btn => btn.disabled = false)
   }
 
-  startGame = () => {
+  prepareQuestion = () => {
     this.getQuestion();
     this.setState({
       canAnswer : true,
-      text : null,
-      secsLeft: 30,
+      secsLeft: 30 + this.state.secsLeft,
     });
   }
 
-  finishGame = (text, nextRound = false) => {
-    if(!nextRound) {
+  finishGame = text => {
       clearInterval(this.intervalId);
       this.setState({
         canUseLifelines: [false, false, false, false],
+        canClickControl: [true, false, false],
         canAnswer: false,
-        text,
+        text: text,
       });
-    }
 
-    if(nextRound){
-      this.setState({
-          scores : this.state.scores + 1,
-      });
-      this.startGame();
-    }
+
   }
 
 
+  startGame = () => {
+    //Clear inteval in case multiple click on Start Game button
+    clearInterval(this.intervalId);
 
-  componentDidMount() {
-    this.startGame();
+    this.prepareQuestion();
+    this.setState({
+      canAnswer: true,
+      text: 'Who wants to be a millionaire?',
+      scores: 0,
+      secsLeft: 30,
+      canUseLifelines: [true, true, true, true],
+    });
 
     this.intervalId = setInterval(() => {
         this.setState({
@@ -108,7 +111,40 @@ class Game extends React.Component {
             this.finishGame('Koniec czasu!');
         }
     }, 700);
+  }
 
+  nextRound = () => {
+    this.prepareQuestion();
+    this.setText('Świetnie! Do dzieła! Oto pytanie')
+    this.intervalId = setInterval(() => {
+        this.setState({
+            secsLeft: this.state.secsLeft - 1,
+        });
+        if (this.state.secsLeft === 0){
+            this.finishGame('Koniec czasu!');
+        }
+    }, 700);
+  }
+
+  setText = text => {
+    this.setState({
+      text: text,
+    });
+  }
+
+  handleAnsSelect = answer => {
+    if (answer === this.state.correctAnswer){
+      clearInterval(this.intervalId);
+      this.setState({
+          scores : this.state.scores + 1,
+          canAnswer: false,
+          canClickControl: [true, true, true],
+      });
+      this.setText('Prawidłowa odpowiedź! Grasz dalej?');
+
+    } else {
+        this.finishGame('Nieprawidłowa odpowiedź!');
+    }
   }
 
   componentWillUnmount(){
@@ -116,14 +152,7 @@ class Game extends React.Component {
   }
 
 
-
-  handleAnsSelect = answer => {
-    if (answer === this.state.correctAnswer){
-              this.finishGame('Brawo!', true);
-          } else {
-              this.finishGame('Nieprawidłowa odpowiedź!');
-          }
-  }
+  //Lifelines
 
   handleAddExtraTime = () => {
     const canUseLifelines = this.state.canUseLifelines;
@@ -145,7 +174,6 @@ class Game extends React.Component {
     for (let i = 0; i < 2; i++) {
       incorrectBtns[i].disabled = true;
     }
-
   }
 
   handleChangeQuestion = () => {
@@ -161,29 +189,29 @@ class Game extends React.Component {
   }
 
   render() {
-    if(this.state.loading) {
-      return null;
-    } else {
-      return (
-      <div className = 'container'>
-        <Question question = {this.state.question} />
-        <Answers
-          shuffledAnswers = {this.state.shuffledAnswers}
-          canAnswer = {this.state.canAnswer}
-          onMyClick = {this.handleAnsSelect}
-        />
-        <Lifelines
-          canUseLifelines = {this.state.canUseLifelines}
-          onMyClickAddExtraTime = {this.handleAddExtraTime}
-          onMyClickFiftyFifty = {this.handleFiftyFifty}
-          onMyClickChangeQuestion = {this.handleChangeQuestion}
-          onMyClickVoting = {this.handleVoting}
-        />
-        <CurrentScore currentScore = {this.state.scores} />
-        <Timer time = {this.state.secsLeft} />
-      </div>
-    )
-    }
+    return (
+    <div className = 'container'>
+      <p>{this.state.text}</p>
+      <Question question = {this.state.question} />
+      <Answers
+        shuffledAnswers = {this.state.shuffledAnswers}
+        canAnswer = {this.state.canAnswer}
+        onMyClick = {this.handleAnsSelect}
+      />
+      <Lifelines
+        canUseLifelines = {this.state.canUseLifelines}
+        onMyClickAddExtraTime = {this.handleAddExtraTime}
+        onMyClickFiftyFifty = {this.handleFiftyFifty}
+        onMyClickChangeQuestion = {this.handleChangeQuestion}
+        onMyClickVoting = {this.handleVoting}
+      />
+      <CurrentScore currentScore = {this.state.scores} />
+      <Timer time = {this.state.secsLeft} />
+      <button onClick = {this.startGame} disabled = {!this.state.canClickControl[0]}>START NEW GAME</button>
+      <button onClick = {this.nextRound} disabled = {!this.state.canClickControl[1]}>NEXT QUESTION</button>
+      <button disabled = {!this.state.canClickControl[2]}>RESIGN</button>
+    </div>
+  )
   }
 }
 

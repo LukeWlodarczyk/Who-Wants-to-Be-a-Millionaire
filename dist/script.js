@@ -27586,38 +27586,75 @@ var Game = function (_React$Component) {
       });
     };
 
-    _this.startGame = function () {
+    _this.prepareQuestion = function () {
       _this.getQuestion();
       _this.setState({
         canAnswer: true,
-        text: null,
-        secsLeft: 30
+        secsLeft: 30 + _this.state.secsLeft
       });
     };
 
     _this.finishGame = function (text) {
-      var nextRound = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      clearInterval(_this.intervalId);
+      _this.setState({
+        canUseLifelines: [false, false, false, false],
+        canClickControl: [true, false, false],
+        canAnswer: false,
+        text: text
+      });
+    };
 
-      if (!nextRound) {
-        clearInterval(_this.intervalId);
-        _this.setState({
-          canUseLifelines: [false, false, false, false],
-          canAnswer: false,
-          text: text
-        });
-      }
+    _this.startGame = function () {
+      //Clear inteval in case multiple click on Start Game button
+      clearInterval(_this.intervalId);
 
-      if (nextRound) {
+      _this.prepareQuestion();
+      _this.setState({
+        canAnswer: true,
+        text: 'Who wants to be a millionaire?',
+        scores: 0,
+        secsLeft: 30,
+        canUseLifelines: [true, true, true, true]
+      });
+
+      _this.intervalId = setInterval(function () {
         _this.setState({
-          scores: _this.state.scores + 1
+          secsLeft: _this.state.secsLeft - 1
         });
-        _this.startGame();
-      }
+        if (_this.state.secsLeft === 0) {
+          _this.finishGame('Koniec czasu!');
+        }
+      }, 700);
+    };
+
+    _this.nextRound = function () {
+      _this.prepareQuestion();
+      _this.setText('Świetnie! Do dzieła! Oto pytanie');
+      _this.intervalId = setInterval(function () {
+        _this.setState({
+          secsLeft: _this.state.secsLeft - 1
+        });
+        if (_this.state.secsLeft === 0) {
+          _this.finishGame('Koniec czasu!');
+        }
+      }, 700);
+    };
+
+    _this.setText = function (text) {
+      _this.setState({
+        text: text
+      });
     };
 
     _this.handleAnsSelect = function (answer) {
       if (answer === _this.state.correctAnswer) {
-        _this.finishGame('Brawo!', true);
+        clearInterval(_this.intervalId);
+        _this.setState({
+          scores: _this.state.scores + 1,
+          canAnswer: false,
+          canClickControl: [true, true, true]
+        });
+        _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
       } else {
         _this.finishGame('Nieprawidłowa odpowiedź!');
       }
@@ -27664,62 +27701,66 @@ var Game = function (_React$Component) {
       shuffledAnswers: [],
       loading: true,
       canAnswer: true,
-      text: null,
-      scores: 0,
-      secsLeft: 30,
-      canUseLifelines: [true, true, true, true],
+      text: 'Who wants to be a millionaire?',
+      scores: -1,
+      secsLeft: 0,
+      canUseLifelines: [false, false, false, false],
+      canClickControl: [true, false, false],
       difficulty: ['easy', 'medium', 'hard']
     };
     return _this;
   }
 
   _createClass(Game, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      this.startGame();
-
-      this.intervalId = setInterval(function () {
-        _this2.setState({
-          secsLeft: _this2.state.secsLeft - 1
-        });
-        if (_this2.state.secsLeft === 0) {
-          _this2.finishGame('Koniec czasu!');
-        }
-      }, 700);
-    }
-  }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       clearInterval(this.intervalId);
     }
+
+    //Lifelines
+
   }, {
     key: 'render',
     value: function render() {
-      if (this.state.loading) {
-        return null;
-      } else {
-        return _react2.default.createElement(
-          'div',
-          { className: 'container' },
-          _react2.default.createElement(_Question2.default, { question: this.state.question }),
-          _react2.default.createElement(_Answers2.default, {
-            shuffledAnswers: this.state.shuffledAnswers,
-            canAnswer: this.state.canAnswer,
-            onMyClick: this.handleAnsSelect
-          }),
-          _react2.default.createElement(_Lifelines2.default, {
-            canUseLifelines: this.state.canUseLifelines,
-            onMyClickAddExtraTime: this.handleAddExtraTime,
-            onMyClickFiftyFifty: this.handleFiftyFifty,
-            onMyClickChangeQuestion: this.handleChangeQuestion,
-            onMyClickVoting: this.handleVoting
-          }),
-          _react2.default.createElement(_CurrentScore2.default, { currentScore: this.state.scores }),
-          _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft })
-        );
-      }
+      return _react2.default.createElement(
+        'div',
+        { className: 'container' },
+        _react2.default.createElement(
+          'p',
+          null,
+          this.state.text
+        ),
+        _react2.default.createElement(_Question2.default, { question: this.state.question }),
+        _react2.default.createElement(_Answers2.default, {
+          shuffledAnswers: this.state.shuffledAnswers,
+          canAnswer: this.state.canAnswer,
+          onMyClick: this.handleAnsSelect
+        }),
+        _react2.default.createElement(_Lifelines2.default, {
+          canUseLifelines: this.state.canUseLifelines,
+          onMyClickAddExtraTime: this.handleAddExtraTime,
+          onMyClickFiftyFifty: this.handleFiftyFifty,
+          onMyClickChangeQuestion: this.handleChangeQuestion,
+          onMyClickVoting: this.handleVoting
+        }),
+        _react2.default.createElement(_CurrentScore2.default, { currentScore: this.state.scores }),
+        _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft }),
+        _react2.default.createElement(
+          'button',
+          { onClick: this.startGame, disabled: !this.state.canClickControl[0] },
+          'START NEW GAME'
+        ),
+        _react2.default.createElement(
+          'button',
+          { onClick: this.nextRound, disabled: !this.state.canClickControl[1] },
+          'NEXT QUESTION'
+        ),
+        _react2.default.createElement(
+          'button',
+          { disabled: !this.state.canClickControl[2] },
+          'RESIGN'
+        )
+      );
     }
   }]);
 
@@ -27963,8 +28004,10 @@ var Answers = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Answers.__proto__ || Object.getPrototypeOf(Answers)).call(this, props));
 
     _this.currentMoney = function (score) {
-      var lis = document.querySelectorAll('li');
-      lis[score].style.color = 'red';
+      if (score > -1) {
+        var lis = document.querySelectorAll('li');
+        lis[score].style.color = 'red';
+      }
     };
 
     _this.state = {
@@ -28007,6 +28050,51 @@ var Answers = function (_React$Component) {
             'li',
             null,
             '1000'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '5000'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '10000'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '50000'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '100'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '500'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '1000'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '5000'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '10000'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            '50000'
           ),
           _react2.default.createElement(
             'li',
