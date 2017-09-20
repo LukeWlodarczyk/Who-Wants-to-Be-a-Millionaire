@@ -27600,12 +27600,12 @@ var Game = function (_React$Component) {
 
       if (!nextRound) {
         clearInterval(_this.intervalId);
+        _this.setState({
+          canUseLifelines: [false, false, false, false],
+          canAnswer: false,
+          text: text
+        });
       }
-
-      _this.setState({
-        canAnswer: false,
-        text: text
-      });
 
       if (nextRound) {
         _this.setState({
@@ -27653,6 +27653,11 @@ var Game = function (_React$Component) {
       _this.getQuestion();
     };
 
+    _this.handleVoting = function () {
+      var canUseLifelines = _this.state.canUseLifelines;
+      canUseLifelines[3] = false;
+    };
+
     _this.state = {
       question: '',
       correctAnswer: '',
@@ -27662,7 +27667,8 @@ var Game = function (_React$Component) {
       text: null,
       scores: 0,
       secsLeft: 30,
-      canUseLifelines: [true, true, true]
+      canUseLifelines: [true, true, true, true],
+      difficulty: ['easy', 'medium', 'hard']
     };
     return _this;
   }
@@ -27707,7 +27713,8 @@ var Game = function (_React$Component) {
             canUseLifelines: this.state.canUseLifelines,
             onMyClickAddExtraTime: this.handleAddExtraTime,
             onMyClickFiftyFifty: this.handleFiftyFifty,
-            onMyClickChangeQuestion: this.handleChangeQuestion
+            onMyClickChangeQuestion: this.handleChangeQuestion,
+            onMyClickVoting: this.handleVoting
           }),
           _react2.default.createElement(_CurrentScore2.default, { currentScore: this.state.scores }),
           _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft })
@@ -28073,6 +28080,12 @@ var Lifelines = function (_React$Component) {
             }
         };
 
+        _this.onHandleClickVoting = function () {
+            if (typeof _this.props.onMyClickVoting === 'function') {
+                _this.props.onMyClickVoting();
+            }
+        };
+
         _this.state = {
             canUseLifelines: _this.props.canUseLifelines
         };
@@ -28112,8 +28125,8 @@ var Lifelines = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     'button',
-                    { disabled: !this.state.canUseLifelines[2], onClick: this.onHandleClickChangeQuestion },
-                    'Change Question'
+                    { disabled: !this.state.canUseLifelines[3], onClick: this.onHandleClickVoting },
+                    'Audience Voting'
                 )
             );
         }

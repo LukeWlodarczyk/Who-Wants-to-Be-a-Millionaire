@@ -18,7 +18,8 @@ class Game extends React.Component {
       text: null,
       scores: 0,
       secsLeft: 30,
-      canUseLifelines: [true, true, true],
+      canUseLifelines: [true, true, true, true],
+      difficulty: ['easy', 'medium', 'hard']
     }
   }
 
@@ -32,9 +33,9 @@ class Game extends React.Component {
   }
 
   insertQuestion = data => {
-    let incorrectAnswer = data.results[0].incorrect_answers;
-    let correctAnswer = data.results[0].correct_answer;
-    let allAnswers = incorrectAnswer.concat(correctAnswer);
+    const incorrectAnswer = data.results[0].incorrect_answers;
+    const correctAnswer = data.results[0].correct_answer;
+    const allAnswers = incorrectAnswer.concat(correctAnswer);
     this.setState({
       question: data.results[0].question,
       correctAnswer: data.results[0].correct_answer,
@@ -63,7 +64,7 @@ class Game extends React.Component {
   }
 
   enableAnsBtns = () => {
-    let btns = document.querySelectorAll('.answerBtn')
+    const btns = document.querySelectorAll('.answerBtn')
     btns.forEach(btn => btn.disabled = false)
   }
 
@@ -77,21 +78,21 @@ class Game extends React.Component {
   }
 
   finishGame = (text, nextRound = false) => {
-    if (!nextRound) {
-            clearInterval(this.intervalId);
-        }
-
+    if(!nextRound) {
+      clearInterval(this.intervalId);
       this.setState({
-        canAnswer : false,
+        canUseLifelines: [false, false, false, false],
+        canAnswer: false,
         text,
       });
+    }
 
-      if (nextRound){
-          this.setState({
-              scores : this.state.scores + 1,
-          });
-          this.startGame();
-      }
+    if(nextRound){
+      this.setState({
+          scores : this.state.scores + 1,
+      });
+      this.startGame();
+    }
   }
 
 
@@ -125,7 +126,7 @@ class Game extends React.Component {
   }
 
   handleAddExtraTime = () => {
-    let canUseLifelines = this.state.canUseLifelines;
+    const canUseLifelines = this.state.canUseLifelines;
     canUseLifelines[0] = false;
     this.setState({
         secsLeft: this.state.secsLeft + 30,
@@ -133,13 +134,13 @@ class Game extends React.Component {
   }
 
   handleFiftyFifty = () => {
-    let canUseLifelines = this.state.canUseLifelines;
+    const canUseLifelines = this.state.canUseLifelines;
     canUseLifelines[1] = false;
     //Convert NodeList to Array
-    let allBtns = [...document.querySelectorAll('.answerBtn')]
+    const allBtns = [...document.querySelectorAll('.answerBtn')]
     console.log(allBtns);
     console.log(this.state.correctAnswer);
-    let incorrectBtns = allBtns.filter( btn => btn.innerText.indexOf(this.state.correctAnswer) < 0)
+    const incorrectBtns = allBtns.filter( btn => btn.innerText.indexOf(this.state.correctAnswer) < 0)
     this.shuffle(incorrectBtns)
     for (let i = 0; i < 2; i++) {
       incorrectBtns[i].disabled = true;
@@ -148,9 +149,15 @@ class Game extends React.Component {
   }
 
   handleChangeQuestion = () => {
-    let canUseLifelines = this.state.canUseLifelines;
+    const canUseLifelines = this.state.canUseLifelines;
     canUseLifelines[2] = false;
     this.getQuestion();
+  }
+
+  handleVoting = () => {
+    const canUseLifelines = this.state.canUseLifelines;
+    canUseLifelines[3] = false;
+
   }
 
   render() {
@@ -170,6 +177,7 @@ class Game extends React.Component {
           onMyClickAddExtraTime = {this.handleAddExtraTime}
           onMyClickFiftyFifty = {this.handleFiftyFifty}
           onMyClickChangeQuestion = {this.handleChangeQuestion}
+          onMyClickVoting = {this.handleVoting}
         />
         <CurrentScore currentScore = {this.state.scores} />
         <Timer time = {this.state.secsLeft} />
