@@ -4,8 +4,7 @@ import Answers from './Answers.jsx'
 import Timer from './Timer.jsx'
 import CurrentScore from './CurrentScore.jsx'
 import Lifelines from './Lifelines.jsx'
-import winnings from './winnings.json'
-
+import winnings from './winnings.jsx'
 
 class Game extends React.Component {
   constructor(props) {
@@ -17,8 +16,8 @@ class Game extends React.Component {
       loading: true,
       canAnswer: true,
       text: 'Who wants to be a millionaire?',
-      scores: -1,
-      secsLeft: 0,
+      scores: 0,
+      secsLeft: 30,
       canUseLifelines: [false, false, false, false],
       canClickControl: [true, false, false],
       difficulty: ['easy', 'medium', 'hard'],
@@ -144,7 +143,8 @@ class Game extends React.Component {
           scores : this.state.scores + 1,
           canAnswer: false,
           canClickControl: [true, true, true],
-          currentWinnings: this.getCurrentWinnings(),
+          currentWinnings: winnings[0].currentWinnings[this.state.scores],
+          guaranteedWinnings: winnings[0].guaranteedWinnings[this.state.scores]
       });
       this.setText('Prawidłowa odpowiedź! Grasz dalej?');
 
@@ -194,10 +194,8 @@ class Game extends React.Component {
 
   }
 
-  getCurrentWinnings = () => {
-    const winnings = [100, 500, 1000, 5000, 10000, 50000, 100000]
-    return <span>{winnings[this.state.scores]}</span>
-  }
+
+
 
   render() {
     return (

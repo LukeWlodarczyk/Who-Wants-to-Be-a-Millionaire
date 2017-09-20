@@ -27657,7 +27657,8 @@ var Game = function (_React$Component) {
           scores: _this.state.scores + 1,
           canAnswer: false,
           canClickControl: [true, true, true],
-          currentWinnings: _this.getCurrentWinnings()
+          currentWinnings: _winnings2.default[0].currentWinnings[_this.state.scores],
+          guaranteedWinnings: _winnings2.default[0].guaranteedWinnings[_this.state.scores]
         });
         _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
       } else {
@@ -27700,15 +27701,6 @@ var Game = function (_React$Component) {
       canUseLifelines[3] = false;
     };
 
-    _this.getCurrentWinnings = function () {
-      var winnings = [100, 500, 1000, 5000, 10000, 50000, 100000];
-      return _react2.default.createElement(
-        'span',
-        null,
-        winnings[_this.state.scores]
-      );
-    };
-
     _this.state = {
       question: '',
       correctAnswer: '',
@@ -27716,8 +27708,8 @@ var Game = function (_React$Component) {
       loading: true,
       canAnswer: true,
       text: 'Who wants to be a millionaire?',
-      scores: -1,
-      secsLeft: 0,
+      scores: 0,
+      secsLeft: 30,
       canUseLifelines: [false, false, false, false],
       canClickControl: [true, false, false],
       difficulty: ['easy', 'medium', 'hard'],
@@ -28016,7 +28008,13 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _winnings = __webpack_require__(250);
+
+var _winnings2 = _interopRequireDefault(_winnings);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -28033,10 +28031,11 @@ var Answers = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Answers.__proto__ || Object.getPrototypeOf(Answers)).call(this, props));
 
     _this.currentMoney = function (score) {
-      if (score > -1) {
-        var lis = document.querySelectorAll('li');
-        lis[score].style.color = 'red';
+      var lis = [].concat(_toConsumableArray(document.querySelectorAll('li'))).reverse();
+      if (score > 0) {
+        lis[score - 1].style.color = 'black';
       }
+      lis[score].style.color = 'red';
     };
 
     _this.state = {
@@ -28059,87 +28058,20 @@ var Answers = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var winningsLi = _winnings2.default[0].currentWinnings.slice(0).reverse().map(function (win) {
+        return _react2.default.createElement(
+          'li',
+          { key: win },
+          win
+        );
+      });
       return _react2.default.createElement(
         'div',
         { className: 'container' },
         _react2.default.createElement(
           'ul',
           null,
-          _react2.default.createElement(
-            'li',
-            null,
-            '100'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '500'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '1000'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '5000'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '10000'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '50000'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '100'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '500'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '1000'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '5000'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '10000'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '50000'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '5000'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '10000'
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            '50000'
-          )
+          winningsLi
         )
       );
     }
@@ -28256,9 +28188,15 @@ module.exports = Lifelines;
 
 /***/ }),
 /* 250 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = {"winnings":[100,500,1000,5000,10000,50000,100000]}
+"use strict";
+
+
+module.exports = [{
+    currentWinnings: [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000],
+    guaranteedWinnings: [0, 0, 0, 0, 1000, 1000, 1000, 1000, 1000, 32000, 32000, 32000, 32000, 32000, 1000000]
+}];
 
 /***/ }),
 /* 251 */
