@@ -13817,11 +13817,11 @@ var _Game = __webpack_require__(244);
 
 var _Game2 = _interopRequireDefault(_Game);
 
-var _BestScores = __webpack_require__(250);
+var _BestScores = __webpack_require__(251);
 
 var _BestScores2 = _interopRequireDefault(_BestScores);
 
-var _Main = __webpack_require__(251);
+var _Main = __webpack_require__(252);
 
 var _Main2 = _interopRequireDefault(_Main);
 
@@ -27521,6 +27521,10 @@ var _Lifelines = __webpack_require__(249);
 
 var _Lifelines2 = _interopRequireDefault(_Lifelines);
 
+var _winnings = __webpack_require__(250);
+
+var _winnings2 = _interopRequireDefault(_winnings);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -27652,7 +27656,8 @@ var Game = function (_React$Component) {
         _this.setState({
           scores: _this.state.scores + 1,
           canAnswer: false,
-          canClickControl: [true, true, true]
+          canClickControl: [true, true, true],
+          currentWinnings: _this.getCurrentWinnings()
         });
         _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
       } else {
@@ -27695,6 +27700,15 @@ var Game = function (_React$Component) {
       canUseLifelines[3] = false;
     };
 
+    _this.getCurrentWinnings = function () {
+      var winnings = [100, 500, 1000, 5000, 10000, 50000, 100000];
+      return _react2.default.createElement(
+        'span',
+        null,
+        winnings[_this.state.scores]
+      );
+    };
+
     _this.state = {
       question: '',
       correctAnswer: '',
@@ -27706,7 +27720,9 @@ var Game = function (_React$Component) {
       secsLeft: 0,
       canUseLifelines: [false, false, false, false],
       canClickControl: [true, false, false],
-      difficulty: ['easy', 'medium', 'hard']
+      difficulty: ['easy', 'medium', 'hard'],
+      currentWinnings: 0,
+      guaranteedWinnings: 0
     };
     return _this;
   }
@@ -27726,7 +27742,7 @@ var Game = function (_React$Component) {
         'div',
         { className: 'container' },
         _react2.default.createElement(
-          'p',
+          'h1',
           null,
           this.state.text
         ),
@@ -27759,6 +27775,19 @@ var Game = function (_React$Component) {
           'button',
           { disabled: !this.state.canClickControl[2] },
           'RESIGN'
+        ),
+        _react2.default.createElement(
+          'h2',
+          null,
+          'Current winnings: ',
+          this.state.currentWinnings,
+          ' '
+        ),
+        _react2.default.createElement(
+          'h2',
+          null,
+          'Guaranteed winnings: ',
+          this.state.guaranteedWinnings
         )
       );
     }
@@ -28227,6 +28256,12 @@ module.exports = Lifelines;
 
 /***/ }),
 /* 250 */
+/***/ (function(module, exports) {
+
+module.exports = {"winnings":[100,500,1000,5000,10000,50000,100000]}
+
+/***/ }),
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28282,7 +28317,7 @@ var BestScores = function (_React$Component) {
 module.exports = BestScores;
 
 /***/ }),
-/* 251 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28298,11 +28333,11 @@ var _reactDom = __webpack_require__(80);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _Header = __webpack_require__(252);
+var _Header = __webpack_require__(253);
 
 var _Header2 = _interopRequireDefault(_Header);
 
-var _Footer = __webpack_require__(253);
+var _Footer = __webpack_require__(254);
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -28342,7 +28377,7 @@ var Main = function (_React$Component) {
 module.exports = Main;
 
 /***/ }),
-/* 252 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28398,7 +28433,7 @@ var Header = function (_React$Component) {
 module.exports = Header;
 
 /***/ }),
-/* 253 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

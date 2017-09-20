@@ -4,6 +4,7 @@ import Answers from './Answers.jsx'
 import Timer from './Timer.jsx'
 import CurrentScore from './CurrentScore.jsx'
 import Lifelines from './Lifelines.jsx'
+import winnings from './winnings.json'
 
 
 class Game extends React.Component {
@@ -20,9 +21,13 @@ class Game extends React.Component {
       secsLeft: 0,
       canUseLifelines: [false, false, false, false],
       canClickControl: [true, false, false],
-      difficulty: ['easy', 'medium', 'hard']
+      difficulty: ['easy', 'medium', 'hard'],
+      currentWinnings: 0,
+      guaranteedWinnings: 0,
     }
   }
+
+
 
   shuffle = arr => {
     for (let i = arr.length; i; i--) {
@@ -139,6 +144,7 @@ class Game extends React.Component {
           scores : this.state.scores + 1,
           canAnswer: false,
           canClickControl: [true, true, true],
+          currentWinnings: this.getCurrentWinnings(),
       });
       this.setText('Prawidłowa odpowiedź! Grasz dalej?');
 
@@ -188,10 +194,15 @@ class Game extends React.Component {
 
   }
 
+  getCurrentWinnings = () => {
+    const winnings = [100, 500, 1000, 5000, 10000, 50000, 100000]
+    return <span>{winnings[this.state.scores]}</span>
+  }
+
   render() {
     return (
     <div className = 'container'>
-      <p>{this.state.text}</p>
+      <h1>{this.state.text}</h1>
       <Question question = {this.state.question} />
       <Answers
         shuffledAnswers = {this.state.shuffledAnswers}
@@ -210,6 +221,8 @@ class Game extends React.Component {
       <button onClick = {this.startGame} disabled = {!this.state.canClickControl[0]}>START NEW GAME</button>
       <button onClick = {this.nextRound} disabled = {!this.state.canClickControl[1]}>NEXT QUESTION</button>
       <button disabled = {!this.state.canClickControl[2]}>RESIGN</button>
+      <h2>Current winnings: {this.state.currentWinnings} </h2>
+      <h2>Guaranteed winnings: {this.state.guaranteedWinnings}</h2>
     </div>
   )
   }
