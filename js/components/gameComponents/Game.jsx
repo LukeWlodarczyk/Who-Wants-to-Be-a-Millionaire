@@ -45,6 +45,7 @@ class Game extends React.Component {
   }
 
   getQuestion = () => {
+    this.enableAnsBtns();
     const baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=easy&type=multiple';
     fetch(baseUrl)
       .then( data => {
@@ -61,20 +62,18 @@ class Game extends React.Component {
     });
   }
 
-  enableBtns = () => {
+  enableAnsBtns = () => {
     let btns = document.querySelectorAll('.answerBtn')
     btns.forEach(btn => btn.disabled = false)
   }
 
   startGame = () => {
-    this.enableBtns();
     this.getQuestion();
-
     this.setState({
-              canAnswer : true,
-              text : null,
-              secsLeft: 30,
-          });
+      canAnswer : true,
+      text : null,
+      secsLeft: 30,
+    });
   }
 
   finishGame = (text, nextRound = false) => {
@@ -83,8 +82,8 @@ class Game extends React.Component {
         }
 
       this.setState({
-          canAnswer : false,
-          text,
+        canAnswer : false,
+        text,
       });
 
       if (nextRound){
@@ -134,7 +133,6 @@ class Game extends React.Component {
   }
 
   handleFiftyFifty = () => {
-    this.enableBtns();
     let canUseLifelines = this.state.canUseLifelines;
     canUseLifelines[1] = false;
     //Convert NodeList to Array
@@ -150,7 +148,6 @@ class Game extends React.Component {
   }
 
   handleChangeQuestion = () => {
-    this.enableBtns();
     let canUseLifelines = this.state.canUseLifelines;
     canUseLifelines[2] = false;
     this.getQuestion();

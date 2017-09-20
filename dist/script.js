@@ -27564,6 +27564,7 @@ var Game = function (_React$Component) {
     };
 
     _this.getQuestion = function () {
+      _this.enableAnsBtns();
       var baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=easy&type=multiple';
       fetch(baseUrl).then(function (data) {
         if (data.ok) {
@@ -27578,7 +27579,7 @@ var Game = function (_React$Component) {
       });
     };
 
-    _this.enableBtns = function () {
+    _this.enableAnsBtns = function () {
       var btns = document.querySelectorAll('.answerBtn');
       btns.forEach(function (btn) {
         return btn.disabled = false;
@@ -27586,9 +27587,7 @@ var Game = function (_React$Component) {
     };
 
     _this.startGame = function () {
-      _this.enableBtns();
       _this.getQuestion();
-
       _this.setState({
         canAnswer: true,
         text: null,
@@ -27633,7 +27632,6 @@ var Game = function (_React$Component) {
     };
 
     _this.handleFiftyFifty = function () {
-      _this.enableBtns();
       var canUseLifelines = _this.state.canUseLifelines;
       canUseLifelines[1] = false;
       //Convert NodeList to Array
@@ -27650,7 +27648,6 @@ var Game = function (_React$Component) {
     };
 
     _this.handleChangeQuestion = function () {
-      _this.enableBtns();
       var canUseLifelines = _this.state.canUseLifelines;
       canUseLifelines[2] = false;
       _this.getQuestion();
@@ -28107,6 +28104,11 @@ var Lifelines = function (_React$Component) {
                     'button',
                     { disabled: !this.state.canUseLifelines[1], onClick: this.onHandleClickFiftyFifty },
                     '50/50'
+                ),
+                _react2.default.createElement(
+                    'button',
+                    { disabled: !this.state.canUseLifelines[2], onClick: this.onHandleClickChangeQuestion },
+                    'Change Question'
                 ),
                 _react2.default.createElement(
                     'button',
