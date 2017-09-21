@@ -102,6 +102,8 @@ class Game extends React.Component {
       text: 'Who wants to be a millionaire?',
       canType: false,
       scores: 0,
+      currentWinnings: 0,
+      guaranteedWinnings: 0,
       secsLeft: 30,
       canUseLifelines: [true, true, true, true],
     });
