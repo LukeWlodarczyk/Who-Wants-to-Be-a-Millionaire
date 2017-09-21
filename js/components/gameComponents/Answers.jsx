@@ -26,16 +26,22 @@ class Answers extends React.Component {
     }
   }
 
+  createMarkup = (i, text) => {
+  return {__html: i + text};
+  }
+
 
 
 
   render() {
     const letters = ['A: ', 'B: ', 'C: ', 'D: '];
     const btns = this.state.answers.map( (answer, i) => {
-            return <button className = 'answerBtn' key = {i} disabled={!this.props.canAnswer}
-                onClick = {e => this.onHandleClick(answer)} >
-                {letters[i] + answer}
-            </button>;
+            return <button
+                      className = 'answerBtn'
+                      key = {answer}
+                      disabled={!this.props.canAnswer}
+                      onClick = {e => this.onHandleClick(answer)} dangerouslySetInnerHTML={this.createMarkup(letters[i], answer)} >
+                    </button>
         });
 
       return <div className = 'container'>

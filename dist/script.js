@@ -27887,6 +27887,10 @@ var Answers = function (_React$Component) {
       }
     };
 
+    _this.createMarkup = function (i, text) {
+      return { __html: i + text };
+    };
+
     _this.state = {
       answers: _this.props.shuffledAnswers
     };
@@ -27910,14 +27914,13 @@ var Answers = function (_React$Component) {
 
       var letters = ['A: ', 'B: ', 'C: ', 'D: '];
       var btns = this.state.answers.map(function (answer, i) {
-        return _react2.default.createElement(
-          'button',
-          { className: 'answerBtn', key: i, disabled: !_this2.props.canAnswer,
-            onClick: function onClick(e) {
-              return _this2.onHandleClick(answer);
-            } },
-          letters[i] + answer
-        );
+        return _react2.default.createElement('button', {
+          className: 'answerBtn',
+          key: answer,
+          disabled: !_this2.props.canAnswer,
+          onClick: function onClick(e) {
+            return _this2.onHandleClick(answer);
+          }, dangerouslySetInnerHTML: _this2.createMarkup(letters[i], answer) });
       });
 
       return _react2.default.createElement(
