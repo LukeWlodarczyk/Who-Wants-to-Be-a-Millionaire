@@ -5,9 +5,8 @@ class Answers extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      answers: this.props.shuffledAnswers
+      answers: this.props.allAnswers
     }
-    console.log(this.state.answers);
   }
 
 
@@ -18,10 +17,11 @@ class Answers extends React.Component {
   };
 
 
+
   componentWillReceiveProps(nextProps) {
-    if(nextProps.shuffledAnswers !== this.props.shuffledAnswers) {
+    if(nextProps.allAnswers !== this.props.allAnswers) {
       this.setState({
-        answers: nextProps.shuffledAnswers
+        answers: this.props.shuffle(nextProps.allAnswers)
       });
     }
   }
@@ -39,7 +39,7 @@ class Answers extends React.Component {
             return <button
                       className = 'answerBtn'
                       key = {answer}
-                      disabled={!this.props.canAnswer}
+                      disabled={!this.props.canAnswer[i]}
                       onClick = {e => this.onHandleClick(answer)} dangerouslySetInnerHTML={this.createMarkup(letters[i], answer)} >
                     </button>
         });

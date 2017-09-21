@@ -12,9 +12,9 @@ class Game extends React.Component {
     this.state = {
       question: '',
       correctAnswer: '',
-      shuffledAnswers: [],
+      allAnswers: [],
       loading: true,
-      canAnswer: true,
+      canAnswer: [false, false, false, false],
       text: 'Who wants to be a millionaire?',
       scores: 0,
       secsLeft: 30,
@@ -26,8 +26,6 @@ class Game extends React.Component {
     }
   }
 
-
-
   shuffle = arr => {
     for (let i = arr.length; i; i--) {
         let j = Math.floor(Math.random() * i);
@@ -37,6 +35,7 @@ class Game extends React.Component {
     return arr;
   }
 
+
   insertQuestion = data => {
     const incorrectAnswer = data.results[0].incorrect_answers;
     const correctAnswer = data.results[0].correct_answer;
@@ -44,7 +43,7 @@ class Game extends React.Component {
     this.setState({
       question: data.results[0].question,
       correctAnswer: data.results[0].correct_answer,
-      shuffledAnswers: this.shuffle(allAnswers),
+      allAnswers: allAnswers,
       loading: false,
     });
     console.log('Correct answer: ', this.state.correctAnswer);
@@ -76,7 +75,8 @@ class Game extends React.Component {
   prepareQuestion = () => {
     this.getQuestion();
     this.setState({
-      canAnswer : true,
+      canAnswer: [true, true, true, true],
+      canClickControl: [true, false, false],
       secsLeft: 30 + this.state.secsLeft,
     });
   }
@@ -86,7 +86,7 @@ class Game extends React.Component {
       this.setState({
         canUseLifelines: [false, false, false, false],
         canClickControl: [true, false, false],
-        canAnswer: false,
+        canAnswer: [false, false, false, false],
         text: text,
       });
 
@@ -100,7 +100,6 @@ class Game extends React.Component {
 
     this.prepareQuestion();
     this.setState({
-      canAnswer: true,
       text: 'Who wants to be a millionaire?',
       scores: 0,
       secsLeft: 30,
@@ -138,8 +137,9 @@ class Game extends React.Component {
       clearInterval(this.intervalId);
       this.setState({
           scores : this.state.scores + 1,
-          canAnswer: false,
+          canAnswer: [false, false, false, false],
           canClickControl: [true, true, true],
+          canUseLifelines: [false, false, false, false],
           currentWinnings: winnings[0].currentWinnings[this.state.scores],
           guaranteedWinnings: winnings[0].guaranteedWinnings[this.state.scores]
       });
@@ -200,9 +200,10 @@ class Game extends React.Component {
       <h1>{this.state.text}</h1>
       <Question question = {this.state.question} />
       <Answers
-        shuffledAnswers = {this.state.shuffledAnswers}
+        allAnswers = {this.state.allAnswers}
         canAnswer = {this.state.canAnswer}
         onMyClick = {this.handleAnsSelect}
+        shuffle = {this.shuffle}
       />
       <Lifelines
         canUseLifelines = {this.state.canUseLifelines}

@@ -27561,7 +27561,7 @@ var Game = function (_React$Component) {
       _this.setState({
         question: data.results[0].question,
         correctAnswer: data.results[0].correct_answer,
-        shuffledAnswers: _this.shuffle(allAnswers),
+        allAnswers: allAnswers,
         loading: false
       });
       console.log('Correct answer: ', _this.state.correctAnswer);
@@ -27593,7 +27593,8 @@ var Game = function (_React$Component) {
     _this.prepareQuestion = function () {
       _this.getQuestion();
       _this.setState({
-        canAnswer: true,
+        canAnswer: [true, true, true, true],
+        canClickControl: [true, false, false],
         secsLeft: 30 + _this.state.secsLeft
       });
     };
@@ -27603,7 +27604,7 @@ var Game = function (_React$Component) {
       _this.setState({
         canUseLifelines: [false, false, false, false],
         canClickControl: [true, false, false],
-        canAnswer: false,
+        canAnswer: [false, false, false, false],
         text: text
       });
     };
@@ -27614,7 +27615,6 @@ var Game = function (_React$Component) {
 
       _this.prepareQuestion();
       _this.setState({
-        canAnswer: true,
         text: 'Who wants to be a millionaire?',
         scores: 0,
         secsLeft: 30,
@@ -27650,8 +27650,9 @@ var Game = function (_React$Component) {
         clearInterval(_this.intervalId);
         _this.setState({
           scores: _this.state.scores + 1,
-          canAnswer: false,
+          canAnswer: [false, false, false, false],
           canClickControl: [true, true, true],
+          canUseLifelines: [false, false, false, false],
           currentWinnings: _winnings2.default[0].currentWinnings[_this.state.scores],
           guaranteedWinnings: _winnings2.default[0].guaranteedWinnings[_this.state.scores]
         });
@@ -27699,9 +27700,9 @@ var Game = function (_React$Component) {
     _this.state = {
       question: '',
       correctAnswer: '',
-      shuffledAnswers: [],
+      allAnswers: [],
       loading: true,
-      canAnswer: true,
+      canAnswer: [false, false, false, false],
       text: 'Who wants to be a millionaire?',
       scores: 0,
       secsLeft: 30,
@@ -27735,9 +27736,10 @@ var Game = function (_React$Component) {
         ),
         _react2.default.createElement(_Question2.default, { question: this.state.question }),
         _react2.default.createElement(_Answers2.default, {
-          shuffledAnswers: this.state.shuffledAnswers,
+          allAnswers: this.state.allAnswers,
           canAnswer: this.state.canAnswer,
-          onMyClick: this.handleAnsSelect
+          onMyClick: this.handleAnsSelect,
+          shuffle: this.shuffle
         }),
         _react2.default.createElement(_Lifelines2.default, {
           canUseLifelines: this.state.canUseLifelines,
@@ -27887,18 +27889,17 @@ var Answers = function (_React$Component) {
     };
 
     _this.state = {
-      answers: _this.props.shuffledAnswers
+      answers: _this.props.allAnswers
     };
-    console.log(_this.state.answers);
     return _this;
   }
 
   _createClass(Answers, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      if (nextProps.shuffledAnswers !== this.props.shuffledAnswers) {
+      if (nextProps.allAnswers !== this.props.allAnswers) {
         this.setState({
-          answers: nextProps.shuffledAnswers
+          answers: this.props.shuffle(nextProps.allAnswers)
         });
       }
     }
@@ -27912,7 +27913,7 @@ var Answers = function (_React$Component) {
         return _react2.default.createElement('button', {
           className: 'answerBtn',
           key: answer,
-          disabled: !_this2.props.canAnswer,
+          disabled: !_this2.props.canAnswer[i],
           onClick: function onClick(e) {
             return _this2.onHandleClick(answer);
           }, dangerouslySetInnerHTML: _this2.createMarkup(letters[i], answer) });
