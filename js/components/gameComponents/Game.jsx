@@ -4,7 +4,7 @@ import Answers from './Answers.jsx'
 import Timer from './Timer.jsx'
 import CurrentScore from './CurrentScore.jsx'
 import Lifelines from './Lifelines.jsx'
-import winnings from './winnings.jsx'
+import data from './data.jsx'
 
 class Game extends React.Component {
   constructor(props) {
@@ -22,7 +22,6 @@ class Game extends React.Component {
       canUseLifelines: [false, false, false, false],
       lifelinesStatus: [true, true, true, true],
       canClickControl: [true, false, false],
-      difficulty: ['easy', 'medium', 'hard'],
       currentWinnings: 0,
       guaranteedWinnings: 0,
     }
@@ -53,7 +52,8 @@ class Game extends React.Component {
   }
 
   getQuestion = () => {
-    const baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=easy&type=multiple';
+    console.log(data[0].difficulty[this.state.scores]);
+    const baseUrl = `https://opentdb.com/api.php?amount=1&difficulty=${data[0].difficulty[this.state.scores]}&type=multiple`;
     fetch(baseUrl)
       .then( data => {
         if(data.ok){
@@ -155,8 +155,8 @@ class Game extends React.Component {
           canAnswer: [false, false, false, false],
           canClickControl: [true, true, true],
           canUseLifelines: [false, false, false, false],
-          currentWinnings: winnings[0].currentWinnings[this.state.scores],
-          guaranteedWinnings: winnings[0].guaranteedWinnings[this.state.scores]
+          currentWinnings: data[0].currentWinnings[this.state.scores],
+          guaranteedWinnings: data[0].guaranteedWinnings[this.state.scores]
       });
 
       if(this.state.scores === 14){

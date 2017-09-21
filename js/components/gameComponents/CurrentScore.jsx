@@ -1,5 +1,5 @@
 import React from 'react';
-import winnings from './winnings.jsx'
+import data from './data.jsx'
 
 class Answers extends React.Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class Answers extends React.Component {
 
 
   render() {
-    const winningsLi = winnings[0].currentWinnings.slice(0).reverse().map( win => <li key = {win} >{win}</li>)
+    const winningsLi = data[0].currentWinnings.slice(0).reverse().map( win => <li key = {win} >{win}</li>)
       return <div className = 'container'>
         <ul>
           {winningsLi}

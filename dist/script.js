@@ -27521,9 +27521,9 @@ var _Lifelines = __webpack_require__(249);
 
 var _Lifelines2 = _interopRequireDefault(_Lifelines);
 
-var _winnings = __webpack_require__(250);
+var _data = __webpack_require__(260);
 
-var _winnings2 = _interopRequireDefault(_winnings);
+var _data2 = _interopRequireDefault(_data);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27569,7 +27569,8 @@ var Game = function (_React$Component) {
     };
 
     _this.getQuestion = function () {
-      var baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=easy&type=multiple';
+      console.log(_data2.default[0].difficulty[_this.state.scores]);
+      var baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=' + _data2.default[0].difficulty[_this.state.scores] + '&type=multiple';
       fetch(baseUrl).then(function (data) {
         if (data.ok) {
           return data.json();
@@ -27667,8 +27668,8 @@ var Game = function (_React$Component) {
           canAnswer: [false, false, false, false],
           canClickControl: [true, true, true],
           canUseLifelines: [false, false, false, false],
-          currentWinnings: _winnings2.default[0].currentWinnings[_this.state.scores],
-          guaranteedWinnings: _winnings2.default[0].guaranteedWinnings[_this.state.scores]
+          currentWinnings: _data2.default[0].currentWinnings[_this.state.scores],
+          guaranteedWinnings: _data2.default[0].guaranteedWinnings[_this.state.scores]
         });
 
         if (_this.state.scores === 14) {
@@ -27737,7 +27738,6 @@ var Game = function (_React$Component) {
       canUseLifelines: [false, false, false, false],
       lifelinesStatus: [true, true, true, true],
       canClickControl: [true, false, false],
-      difficulty: ['easy', 'medium', 'hard'],
       currentWinnings: 0,
       guaranteedWinnings: 0
     };
@@ -28042,9 +28042,9 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _winnings = __webpack_require__(250);
+var _data = __webpack_require__(260);
 
-var _winnings2 = _interopRequireDefault(_winnings);
+var _data2 = _interopRequireDefault(_data);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28092,7 +28092,7 @@ var Answers = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var winningsLi = _winnings2.default[0].currentWinnings.slice(0).reverse().map(function (win) {
+      var winningsLi = _data2.default[0].currentWinnings.slice(0).reverse().map(function (win) {
         return _react2.default.createElement(
           'li',
           { key: win },
@@ -28221,18 +28221,7 @@ var Lifelines = function (_React$Component) {
 module.exports = Lifelines;
 
 /***/ }),
-/* 250 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = [{
-    currentWinnings: [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000],
-    guaranteedWinnings: [0, 0, 0, 0, 1000, 1000, 1000, 1000, 1000, 32000, 32000, 32000, 32000, 32000, 1000000]
-}];
-
-/***/ }),
+/* 250 */,
 /* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28459,6 +28448,24 @@ var Footer = function (_React$Component) {
 }(_react2.default.Component);
 
 module.exports = Footer;
+
+/***/ }),
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = [{
+    currentWinnings: [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000],
+    guaranteedWinnings: [0, 0, 0, 0, 1000, 1000, 1000, 1000, 1000, 32000, 32000, 32000, 32000, 32000, 1000000],
+    difficulty: ['easy', 'easy', 'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard', 'hard', 'hard', 'hard']
+}];
 
 /***/ })
 /******/ ]);
