@@ -27645,7 +27645,26 @@ var Game = function (_React$Component) {
       });
     };
 
+    _this.hightlightCorrectAns = function () {
+      var allBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
+      var correctBtn = allBtns.filter(function (btn) {
+        return btn.innerText.indexOf(_this.state.correctAnswer) > 0;
+      })[0];
+      console.log(correctBtn);
+      correctBtn.style.color = 'green';
+    };
+
+    _this.hightlightSelectedAns = function (answer) {
+      var allBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
+      var selectedBtn = allBtns.filter(function (btn) {
+        return btn.innerText.indexOf(answer) > 0;
+      })[0];
+      console.log(selectedBtn);
+      selectedBtn.style.color = 'red';
+    };
+
     _this.handleAnsSelect = function (answer) {
+      _this.hightlightCorrectAns();
       if (answer === _this.state.correctAnswer) {
         clearInterval(_this.intervalId);
         _this.setState({
@@ -27658,6 +27677,7 @@ var Game = function (_React$Component) {
         });
         _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
       } else {
+        _this.hightlightSelectedAns(answer);
         _this.finishGame('Nieprawidłowa odpowiedź!');
       }
     };

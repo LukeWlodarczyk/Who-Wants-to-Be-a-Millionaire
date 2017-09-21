@@ -132,7 +132,22 @@ class Game extends React.Component {
     });
   }
 
+  hightlightCorrectAns = () => {
+    const allBtns = [...document.querySelectorAll('.answerBtn')];
+    const correctBtn = allBtns.filter( btn => btn.innerText.indexOf(this.state.correctAnswer) > 0)[0];
+    console.log(correctBtn);
+    correctBtn.style.color = 'green';
+  }
+
+  hightlightSelectedAns = answer => {
+    const allBtns = [...document.querySelectorAll('.answerBtn')];
+    const selectedBtn = allBtns.filter( btn => btn.innerText.indexOf(answer) > 0)[0];
+    console.log(selectedBtn);
+    selectedBtn.style.color = 'red';
+  }
+
   handleAnsSelect = answer => {
+    this.hightlightCorrectAns()
     if (answer === this.state.correctAnswer){
       clearInterval(this.intervalId);
       this.setState({
@@ -146,6 +161,7 @@ class Game extends React.Component {
       this.setText('Prawidłowa odpowiedź! Grasz dalej?');
 
     } else {
+        this.hightlightSelectedAns(answer);
         this.finishGame('Nieprawidłowa odpowiedź!');
     }
   }
