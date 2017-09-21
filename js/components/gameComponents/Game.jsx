@@ -15,6 +15,7 @@ class Game extends React.Component {
       allAnswers: [],
       loading: true,
       canAnswer: [false, false, false, false],
+      canType: true,
       text: 'Who wants to be a millionaire?',
       scores: 0,
       secsLeft: 30,
@@ -85,6 +86,7 @@ class Game extends React.Component {
         canUseLifelines: [false, false, false, false],
         canClickControl: [true, false, false],
         canAnswer: [false, false, false, false],
+        canType: true,
         text: text,
       });
 
@@ -98,9 +100,10 @@ class Game extends React.Component {
     this.prepareQuestion();
     this.setState({
       text: 'Who wants to be a millionaire?',
+      canType: false,
       scores: 0,
       secsLeft: 30,
-      canUseLifelines: this.state.lifelinesStatus,
+      canUseLifelines: [true, true, true, true],
     });
 
     this.intervalId = setInterval(this.timer.bind(), 1000);
@@ -155,12 +158,24 @@ class Game extends React.Component {
           currentWinnings: winnings[0].currentWinnings[this.state.scores],
           guaranteedWinnings: winnings[0].guaranteedWinnings[this.state.scores]
       });
-      this.setText('Prawidłowa odpowiedź! Grasz dalej?');
+
+      if(this.state.scores === 14){
+        this.setText("Congratulations! You've just won a million dollars!")
+      } else {
+        this.setText('Prawidłowa odpowiedź! Grasz dalej?');
+      }
 
     } else {
         this.hightlightSelectedAns(answer);
         this.finishGame('Nieprawidłowa odpowiedź!');
     }
+  }
+
+  resign = () => {
+    console.log(this.state.currentWinnings,);
+    this.setState({
+      canType: true,
+    })
   }
 
   componentWillUnmount(){
@@ -227,9 +242,12 @@ class Game extends React.Component {
       />
       <CurrentScore currentScore = {this.state.scores} />
       <Timer time = {this.state.secsLeft} />
+      <label>NAME:
+        <input type = 'text' disabled = {!this.state.canType}></input>
+      </label>
       <button onClick = {this.startGame} disabled = {!this.state.canClickControl[0]}>START NEW GAME</button>
       <button onClick = {this.nextRound} disabled = {!this.state.canClickControl[1]}>NEXT QUESTION</button>
-      <button disabled = {!this.state.canClickControl[2]}>RESIGN</button>
+      <button onClick = {this.resign} disabled = {!this.state.canClickControl[2]}>RESIGN</button>
       <h2>Current winnings: {this.state.currentWinnings} </h2>
       <h2>Guaranteed winnings: {this.state.guaranteedWinnings}</h2>
     </div>

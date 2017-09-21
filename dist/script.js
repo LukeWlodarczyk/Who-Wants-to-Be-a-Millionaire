@@ -27599,6 +27599,7 @@ var Game = function (_React$Component) {
         canUseLifelines: [false, false, false, false],
         canClickControl: [true, false, false],
         canAnswer: [false, false, false, false],
+        canType: true,
         text: text
       });
     };
@@ -27609,9 +27610,10 @@ var Game = function (_React$Component) {
       _this.prepareQuestion();
       _this.setState({
         text: 'Who wants to be a millionaire?',
+        canType: false,
         scores: 0,
         secsLeft: 30,
-        canUseLifelines: _this.state.lifelinesStatus
+        canUseLifelines: [true, true, true, true]
       });
 
       _this.intervalId = setInterval(_this.timer.bind(), 1000);
@@ -27668,11 +27670,23 @@ var Game = function (_React$Component) {
           currentWinnings: _winnings2.default[0].currentWinnings[_this.state.scores],
           guaranteedWinnings: _winnings2.default[0].guaranteedWinnings[_this.state.scores]
         });
-        _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
+
+        if (_this.state.scores === 14) {
+          _this.setText("Congratulations! You've just won a million dollars!");
+        } else {
+          _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
+        }
       } else {
         _this.hightlightSelectedAns(answer);
         _this.finishGame('Nieprawidłowa odpowiedź!');
       }
+    };
+
+    _this.resign = function () {
+      console.log(_this.state.currentWinnings);
+      _this.setState({
+        canType: true
+      });
     };
 
     _this.handleAddExtraTime = function () {
@@ -27716,6 +27730,7 @@ var Game = function (_React$Component) {
       allAnswers: [],
       loading: true,
       canAnswer: [false, false, false, false],
+      canType: true,
       text: 'Who wants to be a millionaire?',
       scores: 0,
       secsLeft: 30,
@@ -27765,6 +27780,12 @@ var Game = function (_React$Component) {
         _react2.default.createElement(_CurrentScore2.default, { currentScore: this.state.scores }),
         _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft }),
         _react2.default.createElement(
+          'label',
+          null,
+          'NAME:',
+          _react2.default.createElement('input', { type: 'text', disabled: !this.state.canType })
+        ),
+        _react2.default.createElement(
           'button',
           { onClick: this.startGame, disabled: !this.state.canClickControl[0] },
           'START NEW GAME'
@@ -27776,7 +27797,7 @@ var Game = function (_React$Component) {
         ),
         _react2.default.createElement(
           'button',
-          { disabled: !this.state.canClickControl[2] },
+          { onClick: this.resign, disabled: !this.state.canClickControl[2] },
           'RESIGN'
         ),
         _react2.default.createElement(
