@@ -107,27 +107,24 @@ class Game extends React.Component {
       canUseLifelines: [true, true, true, true],
     });
 
-    this.intervalId = setInterval(() => {
-        this.setState({
-            secsLeft: this.state.secsLeft - 1,
-        });
-        if (this.state.secsLeft === 0){
-            this.finishGame('Koniec czasu!');
-        }
-    }, 700);
+    this.intervalId = setInterval(this.timer.bind(), 1000);
   }
+
+  timer = () => {
+    this.setState({
+        secsLeft: this.state.secsLeft - 1,
+    });
+    if (this.state.secsLeft === 0){
+        this.finishGame('Koniec czasu!');
+    }
+  }
+
+
 
   nextRound = () => {
     this.prepareQuestion();
     this.setText('Świetnie! Do dzieła! Oto pytanie')
-    this.intervalId = setInterval(() => {
-        this.setState({
-            secsLeft: this.state.secsLeft - 1,
-        });
-        if (this.state.secsLeft === 0){
-            this.finishGame('Koniec czasu!');
-        }
-    }, 700);
+    this.intervalId = setInterval(this.timer.bind(), 1000);
   }
 
   setText = text => {

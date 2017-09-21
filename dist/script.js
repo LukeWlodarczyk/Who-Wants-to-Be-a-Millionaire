@@ -27621,27 +27621,22 @@ var Game = function (_React$Component) {
         canUseLifelines: [true, true, true, true]
       });
 
-      _this.intervalId = setInterval(function () {
-        _this.setState({
-          secsLeft: _this.state.secsLeft - 1
-        });
-        if (_this.state.secsLeft === 0) {
-          _this.finishGame('Koniec czasu!');
-        }
-      }, 700);
+      _this.intervalId = setInterval(_this.timer.bind(), 1000);
+    };
+
+    _this.timer = function () {
+      _this.setState({
+        secsLeft: _this.state.secsLeft - 1
+      });
+      if (_this.state.secsLeft === 0) {
+        _this.finishGame('Koniec czasu!');
+      }
     };
 
     _this.nextRound = function () {
       _this.prepareQuestion();
       _this.setText('Świetnie! Do dzieła! Oto pytanie');
-      _this.intervalId = setInterval(function () {
-        _this.setState({
-          secsLeft: _this.state.secsLeft - 1
-        });
-        if (_this.state.secsLeft === 0) {
-          _this.finishGame('Koniec czasu!');
-        }
-      }, 700);
+      _this.intervalId = setInterval(_this.timer.bind(), 1000);
     };
 
     _this.setText = function (text) {
