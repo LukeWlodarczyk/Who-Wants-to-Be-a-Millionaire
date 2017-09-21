@@ -19,6 +19,7 @@ class Game extends React.Component {
       scores: 0,
       secsLeft: 30,
       canUseLifelines: [false, false, false, false],
+      lifelinesStatus: [true, true, true, true],
       canClickControl: [true, false, false],
       difficulty: ['easy', 'medium', 'hard'],
       currentWinnings: 0,
@@ -43,6 +44,7 @@ class Game extends React.Component {
     this.setState({
       question: data.results[0].question,
       correctAnswer: data.results[0].correct_answer,
+      canAnswer: [true, true, true, true],
       allAnswers: allAnswers,
       loading: false,
     });
@@ -50,7 +52,6 @@ class Game extends React.Component {
   }
 
   getQuestion = () => {
-    this.enableAnsBtns();
     const baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=easy&type=multiple';
     fetch(baseUrl)
       .then( data => {
@@ -67,14 +68,11 @@ class Game extends React.Component {
     });
   }
 
-  enableAnsBtns = () => {
-    const btns = document.querySelectorAll('.answerBtn')
-    btns.forEach(btn => btn.disabled = false)
-  }
 
   prepareQuestion = () => {
     this.getQuestion();
     this.setState({
+      canUseLifelines: this.state.lifelinesStatus,
       canAnswer: [true, true, true, true],
       canClickControl: [true, false, false],
       secsLeft: 30 + this.state.secsLeft,
@@ -97,13 +95,12 @@ class Game extends React.Component {
   startGame = () => {
     //Clear inteval in case multiple click on Start Game button
     clearInterval(this.intervalId);
-
     this.prepareQuestion();
     this.setState({
       text: 'Who wants to be a millionaire?',
       scores: 0,
       secsLeft: 30,
-      canUseLifelines: [true, true, true, true],
+      canUseLifelines: this.state.lifelinesStatus,
     });
 
     this.intervalId = setInterval(this.timer.bind(), 1000);
@@ -174,16 +171,16 @@ class Game extends React.Component {
   //Lifelines
 
   handleAddExtraTime = () => {
-    const canUseLifelines = this.state.canUseLifelines;
-    canUseLifelines[0] = false;
+    const lifelinesStatus = this.state.lifelinesStatus;
+    lifelinesStatus[0] = false;
     this.setState({
         secsLeft: this.state.secsLeft + 30,
     });
   }
 
   handleFiftyFifty = () => {
-    const canUseLifelines = this.state.canUseLifelines;
-    canUseLifelines[1] = false;
+    const lifelinesStatus = this.state.lifelinesStatus;
+    lifelinesStatus[1] = false;
     //Convert NodeList to Array
     const allBtns = [...document.querySelectorAll('.answerBtn')]
     console.log(allBtns);
@@ -196,14 +193,14 @@ class Game extends React.Component {
   }
 
   handleChangeQuestion = () => {
-    const canUseLifelines = this.state.canUseLifelines;
-    canUseLifelines[2] = false;
+    const lifelinesStatus = this.state.lifelinesStatus;
+    lifelinesStatus[2] = false;
     this.getQuestion();
   }
 
   handleVoting = () => {
-    const canUseLifelines = this.state.canUseLifelines;
-    canUseLifelines[3] = false;
+    const lifelinesStatus = this.state.lifelinesStatus;
+    lifelinesStatus[3] = false;
 
   }
 

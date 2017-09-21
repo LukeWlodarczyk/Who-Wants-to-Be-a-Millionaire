@@ -27561,6 +27561,7 @@ var Game = function (_React$Component) {
       _this.setState({
         question: data.results[0].question,
         correctAnswer: data.results[0].correct_answer,
+        canAnswer: [true, true, true, true],
         allAnswers: allAnswers,
         loading: false
       });
@@ -27568,7 +27569,6 @@ var Game = function (_React$Component) {
     };
 
     _this.getQuestion = function () {
-      _this.enableAnsBtns();
       var baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=easy&type=multiple';
       fetch(baseUrl).then(function (data) {
         if (data.ok) {
@@ -27583,16 +27583,10 @@ var Game = function (_React$Component) {
       });
     };
 
-    _this.enableAnsBtns = function () {
-      var btns = document.querySelectorAll('.answerBtn');
-      btns.forEach(function (btn) {
-        return btn.disabled = false;
-      });
-    };
-
     _this.prepareQuestion = function () {
       _this.getQuestion();
       _this.setState({
+        canUseLifelines: _this.state.lifelinesStatus,
         canAnswer: [true, true, true, true],
         canClickControl: [true, false, false],
         secsLeft: 30 + _this.state.secsLeft
@@ -27612,13 +27606,12 @@ var Game = function (_React$Component) {
     _this.startGame = function () {
       //Clear inteval in case multiple click on Start Game button
       clearInterval(_this.intervalId);
-
       _this.prepareQuestion();
       _this.setState({
         text: 'Who wants to be a millionaire?',
         scores: 0,
         secsLeft: 30,
-        canUseLifelines: [true, true, true, true]
+        canUseLifelines: _this.state.lifelinesStatus
       });
 
       _this.intervalId = setInterval(_this.timer.bind(), 1000);
@@ -27683,16 +27676,16 @@ var Game = function (_React$Component) {
     };
 
     _this.handleAddExtraTime = function () {
-      var canUseLifelines = _this.state.canUseLifelines;
-      canUseLifelines[0] = false;
+      var lifelinesStatus = _this.state.lifelinesStatus;
+      lifelinesStatus[0] = false;
       _this.setState({
         secsLeft: _this.state.secsLeft + 30
       });
     };
 
     _this.handleFiftyFifty = function () {
-      var canUseLifelines = _this.state.canUseLifelines;
-      canUseLifelines[1] = false;
+      var lifelinesStatus = _this.state.lifelinesStatus;
+      lifelinesStatus[1] = false;
       //Convert NodeList to Array
       var allBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
       console.log(allBtns);
@@ -27707,14 +27700,14 @@ var Game = function (_React$Component) {
     };
 
     _this.handleChangeQuestion = function () {
-      var canUseLifelines = _this.state.canUseLifelines;
-      canUseLifelines[2] = false;
+      var lifelinesStatus = _this.state.lifelinesStatus;
+      lifelinesStatus[2] = false;
       _this.getQuestion();
     };
 
     _this.handleVoting = function () {
-      var canUseLifelines = _this.state.canUseLifelines;
-      canUseLifelines[3] = false;
+      var lifelinesStatus = _this.state.lifelinesStatus;
+      lifelinesStatus[3] = false;
     };
 
     _this.state = {
@@ -27727,6 +27720,7 @@ var Game = function (_React$Component) {
       scores: 0,
       secsLeft: 30,
       canUseLifelines: [false, false, false, false],
+      lifelinesStatus: [true, true, true, true],
       canClickControl: [true, false, false],
       difficulty: ['easy', 'medium', 'hard'],
       currentWinnings: 0,
