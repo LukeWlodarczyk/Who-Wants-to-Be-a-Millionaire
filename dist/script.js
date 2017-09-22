@@ -27646,6 +27646,7 @@ var Game = function (_React$Component) {
     };
 
     _this.nextRound = function () {
+      _this.exitVotingResult();
       _this.prepareQuestion(_this.state.lifelinesStatus);
       _this.setText('Świetnie! Do dzieła! Oto pytanie');
       _this.intervalId = setInterval(_this.timer.bind(), 1000);
@@ -27745,31 +27746,111 @@ var Game = function (_React$Component) {
     };
 
     _this.handleVoting = function () {
+      var _console;
+
       // const lifelinesStatus = this.state.lifelinesStatus;
       // lifelinesStatus[3] = false;
       // this.state.canUseLifelines = this.state.lifelinesStatus;
-
+      var votingReults = document.querySelector('.votingResults');
+      var votingResultAll = document.querySelectorAll('.votingResult');
+      votingResultAll.forEach(function (r) {
+        return r.style.visibility = 'visible';
+      });
+      votingReults.style.visibility = 'visible';
       var max = 100;
-      var r1 = _this.randombetween(1, max);
-      var r2 = _this.randombetween(1, max - r1);
-      var r3 = _this.randombetween(1, max - r1 - r2);
+      var r1 = _this.randombetween(1, max - 3);
+      var r2 = _this.randombetween(1, max - 2 - r1);
+      var r3 = _this.randombetween(1, max - 1 - r1 - r2);
       var r4 = max - r1 - r2 - r3;
+      var rndNums = [r1, r2, r3, r4];
+      var maxNum = Math.max(r1, r2, r3, r4);
+      var maxNumIdx = rndNums.indexOf(maxNum);
 
-      console.log(r1 + r2 + r3 + r4);
-      console.log(r1);
-      console.log(r2);
-      console.log(r3);
-      console.log(r4);
-      var percentResult = [].concat(_toConsumableArray(document.querySelectorAll('.percentageResult')));
+      var idxMaxVal = rndNums.reduce(function (iMax, x, i, arr) {
+        return x > arr[iMax] ? i : iMax;
+      }, 0);
+      var idxSecMaxVal = rndNums.reduce(function (iMax, x, i, arr) {
+        return x > arr[iMax] ? i : iMax;
+      }, 0);
 
-      percentResult[0].style.height = r1 + 'px';
-      percentResult[1].style.height = r2 + 'px';
-      percentResult[2].style.height = r3 + 'px';
-      percentResult[3].style.height = r4 + 'px';
+      var tmp = rndNums[idxMaxVal];
+      rndNums[idxMaxVal] = rndNums[_this.state.idxCorrAns];
+      rndNums[_this.state.idxCorrAns] = tmp;
+
+      (_console = console).log.apply(_console, rndNums);
+      var percentDiagrams = document.querySelectorAll('.percentageDiagram');
+      var percentages = document.querySelectorAll('.percentage');
+
+      percentDiagrams[0].style.height = rndNums[0] + 'px';
+      percentDiagrams[1].style.height = rndNums[1] + 'px';
+      percentDiagrams[2].style.height = rndNums[2] + 'px';
+      percentDiagrams[3].style.height = rndNums[3] + 'px';
+
+      var counter0 = 0;
+      var counter1 = 0;
+      var counter2 = 0;
+      var counter3 = 0;
+
+      _this.setTimer0 = setInterval(function () {
+        percentages[0].innerText = counter0 + '%';
+
+        if (counter0 === rndNums[0]) {
+          clearInterval(_this.setTimer0);
+        }
+
+        counter0++;
+      }, 2500 / rndNums[0], 0);
+
+      _this.setTimer1 = setInterval(function () {
+        percentages[1].innerText = counter1 + '%';
+
+        if (counter1 === rndNums[1]) {
+          clearInterval(_this.setTimer1);
+        }
+
+        counter1++;
+      }, 2500 / rndNums[1], 1);
+
+      _this.setTimer2 = setInterval(function () {
+        percentages[2].innerText = counter2 + '%';
+
+        if (counter2 === rndNums[2]) {
+          clearInterval(_this.setTimer2);
+        }
+
+        counter2++;
+      }, 2500 / rndNums[2], 2);
+
+      _this.setTimer3 = setInterval(function () {
+        percentages[3].innerText = counter3 + '%';
+
+        if (counter3 === rndNums[3]) {
+          clearInterval(_this.setTimer3);
+        }
+
+        counter3++;
+      }, 2500 / rndNums[3]);
     };
 
     _this.randombetween = function (min, max) {
       return Math.floor(Math.random() * (max - min + 1) + min);
+    };
+
+    _this.exitVotingResult = function () {
+      var votingReults = document.querySelector('.votingResults');
+      var votingResultAll = document.querySelectorAll('.votingResult');
+      var percentages = document.querySelectorAll('.percentage');
+      var percentDiagrams = document.querySelectorAll('.percentageDiagram');
+      votingReults.style.visibility = 'hidden';
+      votingResultAll.forEach(function (r) {
+        return r.style.visibility = 'hidden';
+      });
+      percentages.forEach(function (p) {
+        return p.innerText = '0%';
+      });
+      percentDiagrams.forEach(function (d) {
+        return d.style.height = '0px';
+      });
     };
 
     _this.state = {
@@ -27862,7 +27943,7 @@ var Game = function (_React$Component) {
           'Guaranteed winnings: ',
           this.state.guaranteedWinnings
         ),
-        _react2.default.createElement(_Voting2.default, null)
+        _react2.default.createElement(_Voting2.default, { onMyClickExit: this.exitVotingResult })
       );
     }
   }]);
@@ -28542,9 +28623,21 @@ var Voting = function (_React$Component) {
   _inherits(Voting, _React$Component);
 
   function Voting() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
     _classCallCheck(this, Voting);
 
-    return _possibleConstructorReturn(this, (Voting.__proto__ || Object.getPrototypeOf(Voting)).apply(this, arguments));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Voting.__proto__ || Object.getPrototypeOf(Voting)).call.apply(_ref, [this].concat(args))), _this), _this.onHandleExit = function () {
+      if (typeof _this.props.onMyClickExit === 'function') {
+        _this.props.onMyClickExit();
+      }
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(Voting, [{
@@ -28553,35 +28646,52 @@ var Voting = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'voting' },
+        { className: 'votingResults' },
         _react2.default.createElement(
-          'div',
-          { className: 'votingResult' },
-          _react2.default.createElement('div', { className: 'percentageResult' }),
-          _react2.default.createElement('div', { className: 'percentageResult' }),
-          _react2.default.createElement('div', { className: 'percentageResult' }),
-          _react2.default.createElement('div', { className: 'percentageResult' })
+          'button',
+          { onClick: this.onHandleExit },
+          'Exit'
         ),
         _react2.default.createElement(
           'div',
-          { className: 'letters' },
+          { className: 'votingResult' },
+          _react2.default.createElement('div', { className: 'percentage' }),
+          _react2.default.createElement('div', { className: 'percentageDiagram' }),
           _react2.default.createElement(
-            'span',
+            'div',
             { className: 'letter' },
             'A'
-          ),
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'votingResult' },
+          _react2.default.createElement('div', { className: 'percentage' }),
+          _react2.default.createElement('div', { className: 'percentageDiagram' }),
           _react2.default.createElement(
-            'span',
+            'div',
             { className: 'letter' },
             'B'
-          ),
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'votingResult' },
+          _react2.default.createElement('div', { className: 'percentage' }),
+          _react2.default.createElement('div', { className: 'percentageDiagram' }),
           _react2.default.createElement(
-            'span',
+            'div',
             { className: 'letter' },
             'C'
-          ),
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'votingResult' },
+          _react2.default.createElement('div', { className: 'percentage' }),
+          _react2.default.createElement('div', { className: 'percentageDiagram' }),
           _react2.default.createElement(
-            'span',
+            'div',
             { className: 'letter' },
             'D'
           )

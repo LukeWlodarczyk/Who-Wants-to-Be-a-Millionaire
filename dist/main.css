@@ -8,23 +8,22 @@ video,
 canvas {
   max-width: 100%; }
 
-.voting {
-  width: 50%; }
-  .voting .votingResult {
-    height: 100px;
+.votingResults {
+  visibility: hidden;
+  width: 50%;
+  height: 150px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around; }
+  .votingResults .votingResult {
     width: 100%;
     display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-around; }
-    .voting .votingResult .percentageResult {
-      transition: 3s;
+    justify-content: flex-end;
+    flex-direction: column;
+    align-items: center; }
+    .votingResults .votingResult .percentageDiagram {
+      transition: height 3s;
       background-color: red;
       height: 0;
       width: 50px;
       border: 1px solid black; }
-  .voting .letters {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around; }

@@ -135,6 +135,7 @@ class Game extends React.Component {
 
 
   nextRound = () => {
+    this.exitVotingResult();
     this.prepareQuestion(this.state.lifelinesStatus);
     this.setText('Świetnie! Do dzieła! Oto pytanie')
     this.intervalId = setInterval(this.timer.bind(), 1000);
@@ -235,33 +236,108 @@ class Game extends React.Component {
     this.getQuestion();
   }
 
+
   handleVoting = () => {
     // const lifelinesStatus = this.state.lifelinesStatus;
     // lifelinesStatus[3] = false;
     // this.state.canUseLifelines = this.state.lifelinesStatus;
-
+    const votingReults =document.querySelector('.votingResults')
+    const votingResultAll = document.querySelectorAll('.votingResult');
+    votingResultAll.forEach( r => r.style.visibility = 'visible')
+    votingReults.style.visibility = 'visible';
     const max = 100;
-    const r1 = this.randombetween(1, max);
-    const r2 = this.randombetween(1, max-r1);
-    const r3 = this.randombetween(1, max-r1-r2);
+    const r1 = this.randombetween(1, max-3);
+    const r2 = this.randombetween(1, max-2-r1);
+    const r3 = this.randombetween(1, max-1-r1-r2);
     const r4 = max - r1 - r2 - r3;
+    const rndNums = [r1, r2, r3, r4];
+    const maxNum = Math.max(r1, r2, r3, r4);
+    const maxNumIdx = rndNums.indexOf(maxNum)
+
+    const idxMaxVal = rndNums.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+    const idxSecMaxVal = rndNums.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+
+    const tmp = rndNums[idxMaxVal];
+    rndNums[idxMaxVal] = rndNums[this.state.idxCorrAns];
+    rndNums[this.state.idxCorrAns] = tmp;
+
+    console.log(...rndNums);
+    const percentDiagrams = document.querySelectorAll('.percentageDiagram')
+    const percentages = document.querySelectorAll('.percentage');
+
+    percentDiagrams[0].style.height = `${rndNums[0]}px`;
+    percentDiagrams[1].style.height = `${rndNums[1]}px`;
+    percentDiagrams[2].style.height = `${rndNums[2]}px`;
+    percentDiagrams[3].style.height = `${rndNums[3]}px`;
+
+    let counter0 = 0;
+    let counter1 = 0;
+    let counter2 = 0;
+    let counter3 = 0;
+
+    this.setTimer0 = setInterval( () => {
+      percentages[0].innerText = `${counter0}%`;
+
+      if (counter0 === rndNums[0]) {
+        clearInterval(this.setTimer0)
+      }
+
+      counter0++;
+
+    },2500/rndNums[0],(0));
+
+    this.setTimer1 = setInterval( () => {
+      percentages[1].innerText = `${counter1}%`;
+
+      if (counter1 === rndNums[1]) {
+        clearInterval(this.setTimer1)
+      }
+
+      counter1++;
+
+    },2500/rndNums[1],(1));
+
+    this.setTimer2 = setInterval( () => {
+      percentages[2].innerText = `${counter2}%`;
+
+      if (counter2 === rndNums[2]) {
+        clearInterval(this.setTimer2)
+      }
+
+      counter2++;
+
+    },2500/rndNums[2],(2));
+
+    this.setTimer3 = setInterval( () => {
+      percentages[3].innerText = `${counter3}%`;
+
+      if (counter3 === rndNums[3]) {
+        clearInterval(this.setTimer3)
+      }
+
+      counter3++;
+
+    },2500/rndNums[3],);
 
 
-    console.log(r1 + r2 + r3 + r4);
-    console.log(r1);
-    console.log(r2);
-    console.log(r3);
-    console.log(r4);
-    const percentResult = [...document.querySelectorAll('.percentageResult')]
 
-    percentResult[0].style.height = `${r1}px`;
-    percentResult[1].style.height = `${r2}px`;
-    percentResult[2].style.height = `${r3}px`;
-    percentResult[3].style.height = `${r4}px`;
   }
+
+
 
   randombetween = (min, max) => {
     return Math.floor(Math.random()*(max-min+1)+min);
+  }
+
+  exitVotingResult = () => {
+    const votingReults = document.querySelector('.votingResults');
+    const votingResultAll = document.querySelectorAll('.votingResult');
+    const percentages = document.querySelectorAll('.percentage');
+    const percentDiagrams = document.querySelectorAll('.percentageDiagram')
+    votingReults.style.visibility = 'hidden';
+    votingResultAll.forEach( r => r.style.visibility = 'hidden')
+    percentages.forEach( p => p.innerText = '0%')
+    percentDiagrams.forEach( d => d.style.height = '0px');
   }
 
 
@@ -294,7 +370,7 @@ class Game extends React.Component {
       <button onClick = {this.resign} disabled = {!this.state.canClickControl[2]}>RESIGN</button>
       <h2>Current winnings: {this.state.currentWinnings} </h2>
       <h2>Guaranteed winnings: {this.state.guaranteedWinnings}</h2>
-      <Voting />
+      <Voting onMyClickExit = {this.exitVotingResult}/>
     </div>
   )
   }
