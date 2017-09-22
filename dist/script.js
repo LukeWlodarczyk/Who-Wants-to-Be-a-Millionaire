@@ -27554,13 +27554,19 @@ var Game = function (_React$Component) {
       return arr;
     };
 
+    _this.htmlDecode = function (input) {
+      var e = document.createElement('textarea');
+      e.innerHTML = input;
+      return e.childNodes[0].nodeValue;
+    };
+
     _this.insertQuestion = function (data) {
       var incorrectAnswer = data.results[0].incorrect_answers;
-      var correctAnswer = data.results[0].correct_answer;
+      var correctAnswer = _this.htmlDecode(data.results[0].correct_answer);
       var allAnswers = incorrectAnswer.concat(correctAnswer);
       _this.setState({
         question: data.results[0].question,
-        correctAnswer: data.results[0].correct_answer,
+        correctAnswer: correctAnswer,
         canAnswer: [true, true, true, true],
         allAnswers: allAnswers,
         loading: false
@@ -27584,10 +27590,11 @@ var Game = function (_React$Component) {
       });
     };
 
-    _this.prepareQuestion = function () {
+    _this.prepareQuestion = function (status) {
       _this.getQuestion();
       _this.setState({
-        canUseLifelines: _this.state.lifelinesStatus,
+        canUseLifelines: status,
+        lifelinesStatus: status,
         canAnswer: [true, true, true, true],
         canClickControl: [true, false, false],
         secsLeft: 30 + _this.state.secsLeft
@@ -27608,7 +27615,7 @@ var Game = function (_React$Component) {
     _this.startGame = function () {
       //Clear inteval in case multiple click on Start Game button
       clearInterval(_this.intervalId);
-      _this.prepareQuestion();
+      _this.prepareQuestion([true, true, true, true]);
       _this.setState({
         text: 'Who wants to be a millionaire?',
         canType: false,
@@ -27632,7 +27639,7 @@ var Game = function (_React$Component) {
     };
 
     _this.nextRound = function () {
-      _this.prepareQuestion();
+      _this.prepareQuestion(_this.state.lifelinesStatus);
       _this.setText('Świetnie! Do dzieła! Oto pytanie');
       _this.intervalId = setInterval(_this.timer.bind(), 1000);
     };
@@ -27654,16 +27661,19 @@ var Game = function (_React$Component) {
 
     _this.hightlightSelectedAns = function (answer) {
       var allBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
+      console.log(allBtns);
       var selectedBtn = allBtns.filter(function (btn) {
         return btn.innerText.indexOf(answer) > 0;
       })[0];
+      console.log(answer);
       console.log(selectedBtn);
       selectedBtn.style.color = 'red';
     };
 
     _this.handleAnsSelect = function (answer) {
       _this.hightlightCorrectAns();
-      if (answer === _this.state.correctAnswer) {
+      var answerSel = _this.htmlDecode(answer);
+      if (answerSel === _this.state.correctAnswer) {
         clearInterval(_this.intervalId);
         _this.setState({
           scores: _this.state.scores + 1,
@@ -27680,7 +27690,7 @@ var Game = function (_React$Component) {
           _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
         }
       } else {
-        _this.hightlightSelectedAns(answer);
+        _this.hightlightSelectedAns(answerSel);
         _this.finishGame('Nieprawidłowa odpowiedź!');
       }
     };
@@ -27695,6 +27705,8 @@ var Game = function (_React$Component) {
     _this.handleAddExtraTime = function () {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[0] = false;
+      _this.state.canUseLifelines = _this.state.lifelinesStatus;
+
       _this.setState({
         secsLeft: _this.state.secsLeft + 30
       });
@@ -27703,6 +27715,7 @@ var Game = function (_React$Component) {
     _this.handleFiftyFifty = function () {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[1] = false;
+      _this.state.canUseLifelines = _this.state.lifelinesStatus;
       //Convert NodeList to Array
       var allBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
       console.log(allBtns);
@@ -27719,12 +27732,14 @@ var Game = function (_React$Component) {
     _this.handleChangeQuestion = function () {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[2] = false;
+      _this.state.canUseLifelines = _this.state.lifelinesStatus;
       _this.getQuestion();
     };
 
     _this.handleVoting = function () {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[3] = false;
+      _this.state.canUseLifelines = _this.state.lifelinesStatus;
     };
 
     _this.state = {
