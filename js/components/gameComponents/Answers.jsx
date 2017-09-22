@@ -21,7 +21,7 @@ class Answers extends React.Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.allAnswers !== this.props.allAnswers) {
       this.setState({
-        answers: this.props.shuffle(nextProps.allAnswers)
+        answers: nextProps.allAnswers,
       });
     }
   }

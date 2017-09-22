@@ -1,0 +1,31 @@
+.voting {
+  width: 50%;
+  .votingResult {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-around;
+
+    .percentageResult {
+      transition: 3s;
+      background-color: red;
+      height: 0;
+      width: 50px;
+      border: 1px solid black;
+
+
+    }
+  }
+
+  .letters {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    .letter {
+
+    }
+  }
+}

@@ -4,6 +4,7 @@ import Answers from './Answers.jsx'
 import Timer from './Timer.jsx'
 import CurrentScore from './CurrentScore.jsx'
 import Lifelines from './Lifelines.jsx'
+import Voting from './Voting.jsx'
 import data from './data.jsx'
 
 class Game extends React.Component {
@@ -11,9 +12,11 @@ class Game extends React.Component {
     super(props);
     this.state = {
       question: '',
+      idxCorrAns: null,
       correctAnswer: '',
       allAnswers: [],
       loading: true,
+      votingVis: 'hidden',
       canAnswer: [false, false, false, false],
       canType: true,
       text: 'Who wants to be a millionaire?',
@@ -37,7 +40,7 @@ class Game extends React.Component {
   }
 
   htmlDecode = input => {
-    const e = document.createElement('textarea');
+    const e = document.createElement('div');
     e.innerHTML = input;
     return e.childNodes[0].nodeValue;
   }
@@ -45,15 +48,18 @@ class Game extends React.Component {
   insertQuestion = data => {
     const incorrectAnswer = data.results[0].incorrect_answers;
     const correctAnswer = this.htmlDecode(data.results[0].correct_answer);
-    const allAnswers = incorrectAnswer.concat(correctAnswer);
+    const allAnswers = this.shuffle(incorrectAnswer.concat(correctAnswer));
+    const idxCorrAns = allAnswers.indexOf(correctAnswer);
     this.setState({
       question: data.results[0].question,
       correctAnswer: correctAnswer,
+      idxCorrAns: idxCorrAns,
       canAnswer: [true, true, true, true],
       allAnswers: allAnswers,
       loading: false,
     });
     console.log('Correct answer: ', this.state.correctAnswer);
+    console.log('Index correct answer: ', this.state.idxCorrAns);
   }
 
   getQuestion = () => {
@@ -162,12 +168,13 @@ class Game extends React.Component {
     if (answerSel === this.state.correctAnswer){
       clearInterval(this.intervalId);
       this.setState({
-          scores : this.state.scores + 1,
-          canAnswer: [false, false, false, false],
-          canClickControl: [true, true, true],
-          canUseLifelines: [false, false, false, false],
-          currentWinnings: data[0].currentWinnings[this.state.scores],
-          guaranteedWinnings: data[0].guaranteedWinnings[this.state.scores]
+        votingVis: 'hidden',
+        scores : this.state.scores + 1,
+        canAnswer: [false, false, false, false],
+        canClickControl: [true, true, true],
+        canUseLifelines: [false, false, false, false],
+        currentWinnings: data[0].currentWinnings[this.state.scores],
+        guaranteedWinnings: data[0].guaranteedWinnings[this.state.scores]
       });
 
       if(this.state.scores === 14){
@@ -229,12 +236,33 @@ class Game extends React.Component {
   }
 
   handleVoting = () => {
-    const lifelinesStatus = this.state.lifelinesStatus;
-    lifelinesStatus[3] = false;
-    this.state.canUseLifelines = this.state.lifelinesStatus;
+    // const lifelinesStatus = this.state.lifelinesStatus;
+    // lifelinesStatus[3] = false;
+    // this.state.canUseLifelines = this.state.lifelinesStatus;
 
+    const max = 100;
+    const r1 = this.randombetween(1, max);
+    const r2 = this.randombetween(1, max-r1);
+    const r3 = this.randombetween(1, max-r1-r2);
+    const r4 = max - r1 - r2 - r3;
+
+
+    console.log(r1 + r2 + r3 + r4);
+    console.log(r1);
+    console.log(r2);
+    console.log(r3);
+    console.log(r4);
+    const percentResult = [...document.querySelectorAll('.percentageResult')]
+
+    percentResult[0].style.height = `${r1}px`;
+    percentResult[1].style.height = `${r2}px`;
+    percentResult[2].style.height = `${r3}px`;
+    percentResult[3].style.height = `${r4}px`;
   }
 
+  randombetween = (min, max) => {
+    return Math.floor(Math.random()*(max-min+1)+min);
+  }
 
 
 
@@ -266,6 +294,7 @@ class Game extends React.Component {
       <button onClick = {this.resign} disabled = {!this.state.canClickControl[2]}>RESIGN</button>
       <h2>Current winnings: {this.state.currentWinnings} </h2>
       <h2>Guaranteed winnings: {this.state.guaranteedWinnings}</h2>
+      <Voting />
     </div>
   )
   }

@@ -27521,6 +27521,10 @@ var _Lifelines = __webpack_require__(249);
 
 var _Lifelines2 = _interopRequireDefault(_Lifelines);
 
+var _Voting = __webpack_require__(261);
+
+var _Voting2 = _interopRequireDefault(_Voting);
+
 var _data = __webpack_require__(260);
 
 var _data2 = _interopRequireDefault(_data);
@@ -27555,7 +27559,7 @@ var Game = function (_React$Component) {
     };
 
     _this.htmlDecode = function (input) {
-      var e = document.createElement('textarea');
+      var e = document.createElement('div');
       e.innerHTML = input;
       return e.childNodes[0].nodeValue;
     };
@@ -27563,15 +27567,18 @@ var Game = function (_React$Component) {
     _this.insertQuestion = function (data) {
       var incorrectAnswer = data.results[0].incorrect_answers;
       var correctAnswer = _this.htmlDecode(data.results[0].correct_answer);
-      var allAnswers = incorrectAnswer.concat(correctAnswer);
+      var allAnswers = _this.shuffle(incorrectAnswer.concat(correctAnswer));
+      var idxCorrAns = allAnswers.indexOf(correctAnswer);
       _this.setState({
         question: data.results[0].question,
         correctAnswer: correctAnswer,
+        idxCorrAns: idxCorrAns,
         canAnswer: [true, true, true, true],
         allAnswers: allAnswers,
         loading: false
       });
       console.log('Correct answer: ', _this.state.correctAnswer);
+      console.log('Index correct answer: ', _this.state.idxCorrAns);
     };
 
     _this.getQuestion = function () {
@@ -27676,6 +27683,7 @@ var Game = function (_React$Component) {
       if (answerSel === _this.state.correctAnswer) {
         clearInterval(_this.intervalId);
         _this.setState({
+          votingVis: 'hidden',
           scores: _this.state.scores + 1,
           canAnswer: [false, false, false, false],
           canClickControl: [true, true, true],
@@ -27737,16 +27745,40 @@ var Game = function (_React$Component) {
     };
 
     _this.handleVoting = function () {
-      var lifelinesStatus = _this.state.lifelinesStatus;
-      lifelinesStatus[3] = false;
-      _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      // const lifelinesStatus = this.state.lifelinesStatus;
+      // lifelinesStatus[3] = false;
+      // this.state.canUseLifelines = this.state.lifelinesStatus;
+
+      var max = 100;
+      var r1 = _this.randombetween(1, max);
+      var r2 = _this.randombetween(1, max - r1);
+      var r3 = _this.randombetween(1, max - r1 - r2);
+      var r4 = max - r1 - r2 - r3;
+
+      console.log(r1 + r2 + r3 + r4);
+      console.log(r1);
+      console.log(r2);
+      console.log(r3);
+      console.log(r4);
+      var percentResult = [].concat(_toConsumableArray(document.querySelectorAll('.percentageResult')));
+
+      percentResult[0].style.height = r1 + 'px';
+      percentResult[1].style.height = r2 + 'px';
+      percentResult[2].style.height = r3 + 'px';
+      percentResult[3].style.height = r4 + 'px';
+    };
+
+    _this.randombetween = function (min, max) {
+      return Math.floor(Math.random() * (max - min + 1) + min);
     };
 
     _this.state = {
       question: '',
+      idxCorrAns: null,
       correctAnswer: '',
       allAnswers: [],
       loading: true,
+      votingVis: 'hidden',
       canAnswer: [false, false, false, false],
       canType: true,
       text: 'Who wants to be a millionaire?',
@@ -27829,7 +27861,8 @@ var Game = function (_React$Component) {
           null,
           'Guaranteed winnings: ',
           this.state.guaranteedWinnings
-        )
+        ),
+        _react2.default.createElement(_Voting2.default, null)
       );
     }
   }]);
@@ -27951,7 +27984,7 @@ var Answers = function (_React$Component) {
     value: function componentWillReceiveProps(nextProps) {
       if (nextProps.allAnswers !== this.props.allAnswers) {
         this.setState({
-          answers: this.props.shuffle(nextProps.allAnswers)
+          answers: nextProps.allAnswers
         });
       }
     }
@@ -28483,6 +28516,84 @@ module.exports = [{
     guaranteedWinnings: [0, 0, 0, 0, 1000, 1000, 1000, 1000, 1000, 32000, 32000, 32000, 32000, 32000, 1000000],
     difficulty: ['easy', 'easy', 'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard', 'hard', 'hard', 'hard']
 }];
+
+/***/ }),
+/* 261 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Voting = function (_React$Component) {
+  _inherits(Voting, _React$Component);
+
+  function Voting() {
+    _classCallCheck(this, Voting);
+
+    return _possibleConstructorReturn(this, (Voting.__proto__ || Object.getPrototypeOf(Voting)).apply(this, arguments));
+  }
+
+  _createClass(Voting, [{
+    key: 'render',
+    value: function render() {
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'voting' },
+        _react2.default.createElement(
+          'div',
+          { className: 'votingResult' },
+          _react2.default.createElement('div', { className: 'percentageResult' }),
+          _react2.default.createElement('div', { className: 'percentageResult' }),
+          _react2.default.createElement('div', { className: 'percentageResult' }),
+          _react2.default.createElement('div', { className: 'percentageResult' })
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'letters' },
+          _react2.default.createElement(
+            'span',
+            { className: 'letter' },
+            'A'
+          ),
+          _react2.default.createElement(
+            'span',
+            { className: 'letter' },
+            'B'
+          ),
+          _react2.default.createElement(
+            'span',
+            { className: 'letter' },
+            'C'
+          ),
+          _react2.default.createElement(
+            'span',
+            { className: 'letter' },
+            'D'
+          )
+        )
+      );
+    }
+  }]);
+
+  return Voting;
+}(_react2.default.Component);
+
+module.exports = Voting;
 
 /***/ })
 /******/ ]);
