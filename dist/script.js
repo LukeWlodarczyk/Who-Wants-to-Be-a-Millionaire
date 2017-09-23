@@ -27611,7 +27611,7 @@ var Game = function (_React$Component) {
     _this.finishGame = function (text) {
       clearInterval(_this.intervalId);
       _this.setState({
-        canUseLifelines: [false, false, false, false],
+        canUseLifelines: [false, false, false, false, false],
         canClickControl: [true, false, false],
         canAnswer: [false, false, false, false],
         canType: true,
@@ -27622,7 +27622,8 @@ var Game = function (_React$Component) {
     _this.startGame = function () {
       //Clear inteval in case multiple click on Start Game button
       clearInterval(_this.intervalId);
-      _this.prepareQuestion([true, true, true, true]);
+      _this.exitVotingResult();
+      _this.prepareQuestion([true, true, true, true, true]);
       _this.setState({
         text: 'Who wants to be a millionaire?',
         canType: false,
@@ -27630,7 +27631,7 @@ var Game = function (_React$Component) {
         currentWinnings: 0,
         guaranteedWinnings: 0,
         secsLeft: 30,
-        canUseLifelines: [true, true, true, true]
+        canUseLifelines: [true, true, true, true, true]
       });
 
       _this.intervalId = setInterval(_this.timer.bind(), 1000);
@@ -27679,16 +27680,17 @@ var Game = function (_React$Component) {
     };
 
     _this.handleAnsSelect = function (answer) {
-      _this.hightlightCorrectAns();
+
       var answerSel = _this.htmlDecode(answer);
       if (answerSel === _this.state.correctAnswer) {
         clearInterval(_this.intervalId);
+        _this.hightlightCorrectAns();
         _this.setState({
           votingVis: 'hidden',
           scores: _this.state.scores + 1,
           canAnswer: [false, false, false, false],
           canClickControl: [true, true, true],
-          canUseLifelines: [false, false, false, false],
+          canUseLifelines: [false, false, false, false, false],
           currentWinnings: _data2.default[0].currentWinnings[_this.state.scores],
           guaranteedWinnings: _data2.default[0].guaranteedWinnings[_this.state.scores]
         });
@@ -27699,8 +27701,16 @@ var Game = function (_React$Component) {
           _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
         }
       } else {
-        _this.hightlightSelectedAns(answerSel);
-        _this.finishGame('Nieprawidłowa odpowiedź!');
+        if (_this.state.dChanceActiv === true) {
+          _this.hightlightSelectedAns(answerSel);
+          _this.setState({
+            dChanceActiv: false
+          });
+        } else {
+          _this.hightlightCorrectAns();
+          _this.hightlightSelectedAns(answerSel);
+          _this.finishGame('Nieprawidłowa odpowiedź!');
+        }
       }
     };
 
@@ -27773,9 +27783,11 @@ var Game = function (_React$Component) {
         return x > arr[iMax] ? i : iMax;
       }, 0);
 
-      var tmp = rndNums[idxMaxVal];
-      rndNums[idxMaxVal] = rndNums[_this.state.idxCorrAns];
-      rndNums[_this.state.idxCorrAns] = tmp;
+      if (_this.randombetween(0, _this.state.scores) === 0) {
+        var tmp = rndNums[idxMaxVal];
+        rndNums[idxMaxVal] = rndNums[_this.state.idxCorrAns];
+        rndNums[_this.state.idxCorrAns] = tmp;
+      }
 
       (_console = console).log.apply(_console, rndNums);
       var percentDiagrams = document.querySelectorAll('.percentageDiagram');
@@ -27832,8 +27844,17 @@ var Game = function (_React$Component) {
       }, 2500 / rndNums[3]);
     };
 
+    _this.handleDoubleChance = function () {
+      var lifelinesStatus = _this.state.lifelinesStatus;
+      lifelinesStatus[4] = false;
+      _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      _this.setState({
+        dChanceActiv: true
+      });
+    };
+
     _this.randombetween = function (min, max) {
-      return Math.floor(Math.random() * (max - min + 1) + min);
+      return Math.floor(Math.random() * (max - min) + min);
     };
 
     _this.exitVotingResult = function () {
@@ -27862,11 +27883,12 @@ var Game = function (_React$Component) {
       votingVis: 'hidden',
       canAnswer: [false, false, false, false],
       canType: true,
+      dChanceActiv: false,
       text: 'Who wants to be a millionaire?',
       scores: 0,
       secsLeft: 30,
-      canUseLifelines: [false, false, false, false],
-      lifelinesStatus: [true, true, true, true],
+      canUseLifelines: [false, false, false, false, false],
+      lifelinesStatus: [true, true, true, true, true],
       canClickControl: [true, false, false],
       currentWinnings: 0,
       guaranteedWinnings: 0
@@ -27905,7 +27927,8 @@ var Game = function (_React$Component) {
           onMyClickAddExtraTime: this.handleAddExtraTime,
           onMyClickFiftyFifty: this.handleFiftyFifty,
           onMyClickChangeQuestion: this.handleChangeQuestion,
-          onMyClickVoting: this.handleVoting
+          onMyClickVoting: this.handleVoting,
+          onMyClickDoubleChance: this.handleDoubleChance
         }),
         _react2.default.createElement(_CurrentScore2.default, { currentScore: this.state.scores }),
         _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft }),
@@ -28300,6 +28323,12 @@ var Lifelines = function (_React$Component) {
             }
         };
 
+        _this.onHandleDoubleChance = function () {
+            if (typeof _this.props.onMyClickDoubleChance === 'function') {
+                _this.props.onMyClickDoubleChance();
+            }
+        };
+
         _this.state = {
             canUseLifelines: _this.props.canUseLifelines
         };
@@ -28341,6 +28370,11 @@ var Lifelines = function (_React$Component) {
                     'button',
                     { disabled: !this.state.canUseLifelines[3], onClick: this.onHandleClickVoting },
                     'Audience Voting'
+                ),
+                _react2.default.createElement(
+                    'button',
+                    { disabled: !this.state.canUseLifelines[4], onClick: this.onHandleDoubleChance },
+                    'Double Chance'
                 )
             );
         }

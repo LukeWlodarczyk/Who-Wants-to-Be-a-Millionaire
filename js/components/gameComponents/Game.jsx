@@ -19,11 +19,12 @@ class Game extends React.Component {
       votingVis: 'hidden',
       canAnswer: [false, false, false, false],
       canType: true,
+      dChanceActiv: false,
       text: 'Who wants to be a millionaire?',
       scores: 0,
       secsLeft: 30,
-      canUseLifelines: [false, false, false, false],
-      lifelinesStatus: [true, true, true, true],
+      canUseLifelines: [false, false, false, false, false],
+      lifelinesStatus: [true, true, true, true, true],
       canClickControl: [true, false, false],
       currentWinnings: 0,
       guaranteedWinnings: 0,
@@ -95,7 +96,7 @@ class Game extends React.Component {
   finishGame = text => {
       clearInterval(this.intervalId);
       this.setState({
-        canUseLifelines: [false, false, false, false],
+        canUseLifelines: [false, false, false, false, false],
         canClickControl: [true, false, false],
         canAnswer: [false, false, false, false],
         canType: true,
@@ -109,7 +110,8 @@ class Game extends React.Component {
   startGame = () => {
     //Clear inteval in case multiple click on Start Game button
     clearInterval(this.intervalId);
-    this.prepareQuestion([true, true, true, true]);
+    this.exitVotingResult();
+    this.prepareQuestion([true, true, true, true, true]);
     this.setState({
       text: 'Who wants to be a millionaire?',
       canType: false,
@@ -117,7 +119,7 @@ class Game extends React.Component {
       currentWinnings: 0,
       guaranteedWinnings: 0,
       secsLeft: 30,
-      canUseLifelines: [true, true, true, true],
+      canUseLifelines: [true, true, true, true, true],
     });
 
     this.intervalId = setInterval(this.timer.bind(), 1000);
@@ -164,16 +166,17 @@ class Game extends React.Component {
   }
 
   handleAnsSelect = answer => {
-    this.hightlightCorrectAns()
+
     const answerSel = this.htmlDecode(answer)
     if (answerSel === this.state.correctAnswer){
       clearInterval(this.intervalId);
+      this.hightlightCorrectAns()
       this.setState({
         votingVis: 'hidden',
         scores : this.state.scores + 1,
         canAnswer: [false, false, false, false],
         canClickControl: [true, true, true],
-        canUseLifelines: [false, false, false, false],
+        canUseLifelines: [false, false, false, false, false],
         currentWinnings: data[0].currentWinnings[this.state.scores],
         guaranteedWinnings: data[0].guaranteedWinnings[this.state.scores]
       });
@@ -185,8 +188,16 @@ class Game extends React.Component {
       }
 
     } else {
-        this.hightlightSelectedAns(answerSel);
-        this.finishGame('Nieprawidłowa odpowiedź!');
+        if(this.state.dChanceActiv === true) {
+          this.hightlightSelectedAns(answerSel);
+          this.setState({
+            dChanceActiv: false,
+          })
+        } else {
+          this.hightlightCorrectAns()
+          this.hightlightSelectedAns(answerSel);
+          this.finishGame('Nieprawidłowa odpowiedź!');
+        }
     }
   }
 
@@ -257,9 +268,12 @@ class Game extends React.Component {
     const idxMaxVal = rndNums.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
     const idxSecMaxVal = rndNums.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
 
-    const tmp = rndNums[idxMaxVal];
-    rndNums[idxMaxVal] = rndNums[this.state.idxCorrAns];
-    rndNums[this.state.idxCorrAns] = tmp;
+    if(this.randombetween(0, this.state.scores) === 0) {
+      const tmp = rndNums[idxMaxVal];
+      rndNums[idxMaxVal] = rndNums[this.state.idxCorrAns];
+      rndNums[this.state.idxCorrAns] = tmp;
+    }
+
 
     console.log(...rndNums);
     const percentDiagrams = document.querySelectorAll('.percentageDiagram')
@@ -323,10 +337,19 @@ class Game extends React.Component {
 
   }
 
+  handleDoubleChance = () => {
+    const lifelinesStatus = this.state.lifelinesStatus;
+    lifelinesStatus[4] = false;
+    this.state.canUseLifelines = this.state.lifelinesStatus;
+    this.setState({
+      dChanceActiv: true,
+    })
+  }
+
 
 
   randombetween = (min, max) => {
-    return Math.floor(Math.random()*(max-min+1)+min);
+    return Math.floor(Math.random()*(max-min)+min);
   }
 
   exitVotingResult = () => {
@@ -359,6 +382,7 @@ class Game extends React.Component {
         onMyClickFiftyFifty = {this.handleFiftyFifty}
         onMyClickChangeQuestion = {this.handleChangeQuestion}
         onMyClickVoting = {this.handleVoting}
+        onMyClickDoubleChance = {this.handleDoubleChance}
       />
       <CurrentScore currentScore = {this.state.scores} />
       <Timer time = {this.state.secsLeft} />

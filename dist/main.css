@@ -25,5 +25,5 @@ canvas {
       transition: height 3s;
       background-color: red;
       height: 0;
-      width: 50px;
+      width: 70%;
       border: 1px solid black; }

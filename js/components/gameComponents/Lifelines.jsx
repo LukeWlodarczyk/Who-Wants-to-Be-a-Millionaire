@@ -35,6 +35,12 @@ class Lifelines extends React.Component {
       }
   };
 
+  onHandleDoubleChance = () => {
+      if ( typeof this.props.onMyClickDoubleChance === 'function' ){
+          this.props.onMyClickDoubleChance();
+      }
+  };
+
   componentWillReceiveProps(nextProps) {
     if(nextProps.canUseLifelines !== this.props.canUseLifelines) {
       this.setState({
@@ -50,6 +56,7 @@ class Lifelines extends React.Component {
           <button disabled={!this.state.canUseLifelines[1]} onClick = {this.onHandleClickFiftyFifty} >50/50</button>
           <button disabled={!this.state.canUseLifelines[2]} onClick = {this.onHandleClickChangeQuestion} >Change Question</button>
           <button disabled={!this.state.canUseLifelines[3]} onClick = {this.onHandleClickVoting} >Audience Voting</button>
+          <button disabled={!this.state.canUseLifelines[4]} onClick = {this.onHandleDoubleChance} >Double Chance</button>
       </div>
     }
 }
