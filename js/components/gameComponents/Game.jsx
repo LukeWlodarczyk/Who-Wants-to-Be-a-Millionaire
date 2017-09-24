@@ -173,6 +173,7 @@ class Game extends React.Component {
       this.hightlightCorrectAns()
       this.setState({
         votingVis: 'hidden',
+        dChanceActiv: false,
         scores : this.state.scores + 1,
         canAnswer: [false, false, false, false],
         canClickControl: [true, true, true],
@@ -229,6 +230,7 @@ class Game extends React.Component {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[1] = false;
     this.state.canUseLifelines = this.state.lifelinesStatus;
+
     //Convert NodeList to Array
     const allBtns = [...document.querySelectorAll('.answerBtn')]
     console.log(allBtns);

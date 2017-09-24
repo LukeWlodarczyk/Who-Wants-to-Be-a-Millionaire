@@ -27687,6 +27687,7 @@ var Game = function (_React$Component) {
         _this.hightlightCorrectAns();
         _this.setState({
           votingVis: 'hidden',
+          dChanceActiv: false,
           scores: _this.state.scores + 1,
           canAnswer: [false, false, false, false],
           canClickControl: [true, true, true],
@@ -27735,6 +27736,7 @@ var Game = function (_React$Component) {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[1] = false;
       _this.state.canUseLifelines = _this.state.lifelinesStatus;
+
       //Convert NodeList to Array
       var allBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
       console.log(allBtns);
