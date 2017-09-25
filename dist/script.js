@@ -27558,12 +27558,6 @@ var Game = function (_React$Component) {
       return arr;
     };
 
-    _this.htmlDecode = function (input) {
-      var e = document.createElement('div');
-      e.innerHTML = input;
-      return e.childNodes[0].nodeValue;
-    };
-
     _this.insertQuestion = function (data) {
       var incorrectAnswer = data.results[0].incorrect_answers;
       var correctAnswer = _this.htmlDecode(data.results[0].correct_answer);
@@ -27660,29 +27654,16 @@ var Game = function (_React$Component) {
     };
 
     _this.hightlightCorrectAns = function () {
-      var allBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
-      var correctBtn = allBtns.filter(function (btn) {
-        return btn.innerText.indexOf(_this.state.correctAnswer) > 0;
-      })[0];
-      console.log(correctBtn);
-      correctBtn.style.color = 'green';
+      _this.state.allAnsBtns[_this.state.idxCorrAns].style.color = 'green';
     };
 
-    _this.hightlightSelectedAns = function (answer) {
-      var allBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
-      console.log(allBtns);
-      var selectedBtn = allBtns.filter(function (btn) {
-        return btn.innerText.indexOf(answer) > 0;
-      })[0];
-      console.log(answer);
-      console.log(selectedBtn);
-      selectedBtn.style.color = 'red';
+    _this.hightlightSelectedAns = function (idx) {
+      _this.state.allAnsBtns[idx].style.color = 'red';
     };
 
-    _this.handleAnsSelect = function (answer) {
-
-      var answerSel = _this.htmlDecode(answer);
-      if (answerSel === _this.state.correctAnswer) {
+    _this.handleAnsSelect = function (answer, i) {
+      _this.state.allAnsBtns = document.querySelectorAll('.answerBtn');
+      if (i === _this.state.idxCorrAns) {
         clearInterval(_this.intervalId);
         _this.hightlightCorrectAns();
         _this.setState({
@@ -27703,13 +27684,14 @@ var Game = function (_React$Component) {
         }
       } else {
         if (_this.state.dChanceActiv === true) {
-          _this.hightlightSelectedAns(answerSel);
+          _this.setText("Wrong answer! but you have another chance!");
+          _this.hightlightSelectedAns(i);
           _this.setState({
             dChanceActiv: false
           });
         } else {
           _this.hightlightCorrectAns();
-          _this.hightlightSelectedAns(answerSel);
+          _this.hightlightSelectedAns(i);
           _this.finishGame('Nieprawidłowa odpowiedź!');
         }
       }
@@ -27785,7 +27767,7 @@ var Game = function (_React$Component) {
         return x > arr[iMax] ? i : iMax;
       }, 0);
 
-      if (_this.randombetween(0, _this.state.scores) === 0) {
+      if (_this.randombetween(0, _this.state.scores / 2) === 0) {
         var tmp = rndNums[idxMaxVal];
         rndNums[idxMaxVal] = rndNums[_this.state.idxCorrAns];
         rndNums[_this.state.idxCorrAns] = tmp;
@@ -27878,6 +27860,7 @@ var Game = function (_React$Component) {
 
     _this.state = {
       question: '',
+      allAnsBtns: [],
       idxCorrAns: null,
       correctAnswer: '',
       allAnswers: [],
@@ -28069,9 +28052,9 @@ var Answers = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Answers.__proto__ || Object.getPrototypeOf(Answers)).call(this, props));
 
-    _this.onHandleClick = function (answer) {
+    _this.onHandleClick = function (answer, i) {
       if (typeof _this.props.onMyClick === 'function') {
-        _this.props.onMyClick(answer);
+        _this.props.onMyClick(answer, i);
       }
     };
 
@@ -28106,7 +28089,7 @@ var Answers = function (_React$Component) {
           key: answer,
           disabled: !_this2.props.canAnswer[i],
           onClick: function onClick(e) {
-            return _this2.onHandleClick(answer);
+            return _this2.onHandleClick(answer, i);
           }, dangerouslySetInnerHTML: _this2.createMarkup(letters[i], answer) });
       });
 

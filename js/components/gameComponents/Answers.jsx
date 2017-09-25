@@ -10,9 +10,9 @@ class Answers extends React.Component {
   }
 
 
-  onHandleClick = answer => {
+  onHandleClick = (answer, i) => {
       if ( typeof this.props.onMyClick === 'function' ){
-          this.props.onMyClick(answer);
+          this.props.onMyClick(answer, i);
       }
   };
 
@@ -40,7 +40,7 @@ class Answers extends React.Component {
                       className = 'answerBtn'
                       key = {answer}
                       disabled={!this.props.canAnswer[i]}
-                      onClick = {e => this.onHandleClick(answer)} dangerouslySetInnerHTML={this.createMarkup(letters[i], answer)} >
+                      onClick = {e => this.onHandleClick(answer, i)} dangerouslySetInnerHTML={this.createMarkup(letters[i], answer)} >
                     </button>
         });
 

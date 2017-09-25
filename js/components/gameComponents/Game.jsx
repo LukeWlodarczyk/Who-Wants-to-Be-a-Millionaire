@@ -12,6 +12,7 @@ class Game extends React.Component {
     super(props);
     this.state = {
       question: '',
+      allAnsBtns: [],
       idxCorrAns: null,
       correctAnswer: '',
       allAnswers: [],
@@ -40,11 +41,6 @@ class Game extends React.Component {
     return arr;
   }
 
-  htmlDecode = input => {
-    const e = document.createElement('div');
-    e.innerHTML = input;
-    return e.childNodes[0].nodeValue;
-  }
 
   insertQuestion = data => {
     const incorrectAnswer = data.results[0].incorrect_answers;
@@ -150,25 +146,16 @@ class Game extends React.Component {
   }
 
   hightlightCorrectAns = () => {
-    const allBtns = [...document.querySelectorAll('.answerBtn')];
-    const correctBtn = allBtns.filter( btn => btn.innerText.indexOf(this.state.correctAnswer) > 0)[0];
-    console.log(correctBtn);
-    correctBtn.style.color = 'green';
+    this.state.allAnsBtns[this.state.idxCorrAns].style.color = 'green';
   }
 
-  hightlightSelectedAns = answer => {
-    const allBtns = [...document.querySelectorAll('.answerBtn')];
-    console.log(allBtns);
-    const selectedBtn = allBtns.filter( btn => btn.innerText.indexOf(answer) > 0)[0];
-    console.log(answer);
-    console.log(selectedBtn);
-    selectedBtn.style.color = 'red';
+  hightlightSelectedAns = idx => {
+    this.state.allAnsBtns[idx].style.color = 'red';
   }
 
-  handleAnsSelect = answer => {
-
-    const answerSel = this.htmlDecode(answer)
-    if (answerSel === this.state.correctAnswer){
+  handleAnsSelect = (answer, i) => {
+    this.state.allAnsBtns = document.querySelectorAll('.answerBtn');
+    if (i === this.state.idxCorrAns){
       clearInterval(this.intervalId);
       this.hightlightCorrectAns()
       this.setState({
@@ -190,13 +177,14 @@ class Game extends React.Component {
 
     } else {
         if(this.state.dChanceActiv === true) {
-          this.hightlightSelectedAns(answerSel);
+          this.setText("Wrong answer! but you have another chance!")
+          this.hightlightSelectedAns(i);
           this.setState({
             dChanceActiv: false,
           })
         } else {
           this.hightlightCorrectAns()
-          this.hightlightSelectedAns(answerSel);
+          this.hightlightSelectedAns(i);
           this.finishGame('Nieprawidłowa odpowiedź!');
         }
     }
@@ -270,7 +258,7 @@ class Game extends React.Component {
     const idxMaxVal = rndNums.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
     const idxSecMaxVal = rndNums.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
 
-    if(this.randombetween(0, this.state.scores) === 0) {
+    if(this.randombetween(0, this.state.scores/2) === 0) {
       const tmp = rndNums[idxMaxVal];
       rndNums[idxMaxVal] = rndNums[this.state.idxCorrAns];
       rndNums[this.state.idxCorrAns] = tmp;
