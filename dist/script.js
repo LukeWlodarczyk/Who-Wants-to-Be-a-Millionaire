@@ -27558,6 +27558,12 @@ var Game = function (_React$Component) {
       return arr;
     };
 
+    _this.htmlDecode = function (input) {
+      var e = document.createElement('div');
+      e.innerHTML = input;
+      return e.childNodes[0].nodeValue;
+    };
+
     _this.insertQuestion = function (data) {
       var incorrectAnswer = data.results[0].incorrect_answers;
       var correctAnswer = _this.htmlDecode(data.results[0].correct_answer);
@@ -27719,16 +27725,11 @@ var Game = function (_React$Component) {
       lifelinesStatus[1] = false;
       _this.state.canUseLifelines = _this.state.lifelinesStatus;
 
-      //Convert NodeList to Array
-      var allBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
-      console.log(allBtns);
-      console.log(_this.state.correctAnswer);
-      var incorrectBtns = allBtns.filter(function (btn) {
-        return btn.innerText.indexOf(_this.state.correctAnswer) < 0;
-      });
-      _this.shuffle(incorrectBtns);
+      _this.state.allAnsBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
+      _this.state.allAnsBtns.splice(_this.state.idxCorrAns, 1);
+      _this.shuffle(_this.state.allAnsBtns);
       for (var i = 0; i < 2; i++) {
-        incorrectBtns[i].disabled = true;
+        _this.state.allAnsBtns[i].disabled = true;
       }
     };
 
@@ -28063,7 +28064,7 @@ var Answers = function (_React$Component) {
     };
 
     _this.state = {
-      answers: _this.props.allAnswers
+      answers: ['A', 'B', 'C', 'D']
     };
     return _this;
   }

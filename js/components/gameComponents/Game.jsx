@@ -41,6 +41,11 @@ class Game extends React.Component {
     return arr;
   }
 
+  htmlDecode = input => {
+    const e = document.createElement('div');
+    e.innerHTML = input;
+    return e.childNodes[0].nodeValue;
+  }
 
   insertQuestion = data => {
     const incorrectAnswer = data.results[0].incorrect_answers;
@@ -219,14 +224,11 @@ class Game extends React.Component {
     lifelinesStatus[1] = false;
     this.state.canUseLifelines = this.state.lifelinesStatus;
 
-    //Convert NodeList to Array
-    const allBtns = [...document.querySelectorAll('.answerBtn')]
-    console.log(allBtns);
-    console.log(this.state.correctAnswer);
-    const incorrectBtns = allBtns.filter( btn => btn.innerText.indexOf(this.state.correctAnswer) < 0)
-    this.shuffle(incorrectBtns)
+    this.state.allAnsBtns = [...document.querySelectorAll('.answerBtn')];
+    this.state.allAnsBtns.splice(this.state.idxCorrAns, 1);
+    this.shuffle(this.state.allAnsBtns)
     for (let i = 0; i < 2; i++) {
-      incorrectBtns[i].disabled = true;
+      this.state.allAnsBtns[i].disabled = true;
     }
   }
 

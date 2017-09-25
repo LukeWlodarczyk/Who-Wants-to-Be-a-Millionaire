@@ -5,7 +5,7 @@ class Answers extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      answers: this.props.allAnswers
+      answers: ['A', 'B', 'C', 'D']
     }
   }
 
