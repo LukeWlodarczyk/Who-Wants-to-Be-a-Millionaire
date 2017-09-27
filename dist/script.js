@@ -27683,10 +27683,10 @@ var Game = function (_React$Component) {
           guaranteedWinnings: _data2.default[0].guaranteedWinnings[_this.state.scores]
         });
 
-        if (_this.state.scores === 14) {
-          _this.setText("Congratulations! You've just won a million dollars!");
-        } else {
+        if (_this.state.scores < 14) {
           _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
+        } else {
+          _this.setText("Congratulations! You've just won a million dollars!");
         }
       } else {
         if (_this.state.dChanceActiv === true) {
@@ -27724,7 +27724,7 @@ var Game = function (_React$Component) {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[1] = false;
       _this.state.canUseLifelines = _this.state.lifelinesStatus;
-
+      //Convert node list to array
       _this.state.allAnsBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
       _this.state.allAnsBtns.splice(_this.state.idxCorrAns, 1);
       _this.shuffle(_this.state.allAnsBtns);

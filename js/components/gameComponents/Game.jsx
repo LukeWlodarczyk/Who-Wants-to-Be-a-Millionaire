@@ -174,10 +174,10 @@ class Game extends React.Component {
         guaranteedWinnings: data[0].guaranteedWinnings[this.state.scores]
       });
 
-      if(this.state.scores === 14){
-        this.setText("Congratulations! You've just won a million dollars!")
-      } else {
+      if(this.state.scores < 14){
         this.setText('Prawidłowa odpowiedź! Grasz dalej?');
+      } else {
+        this.setText("Congratulations! You've just won a million dollars!")
       }
 
     } else {
@@ -223,7 +223,7 @@ class Game extends React.Component {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[1] = false;
     this.state.canUseLifelines = this.state.lifelinesStatus;
-
+    //Convert node list to array
     this.state.allAnsBtns = [...document.querySelectorAll('.answerBtn')];
     this.state.allAnsBtns.splice(this.state.idxCorrAns, 1);
     this.shuffle(this.state.allAnsBtns)
