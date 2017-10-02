@@ -121,7 +121,7 @@ class Game extends React.Component {
 
 
   startGame = () => {
-    if(this.state.name.length > 3) {
+    if(this.state.name.length > -1) {
       //Clear inteval in case multiple click on Start Game button
       clearInterval(this.intervalId);
       this.exitVotingResult();
@@ -224,12 +224,14 @@ class Game extends React.Component {
   }
 
   updateRanking = resigned => {
-    
+
   const rankRef = firebase.database().ref('rank');
   const newRankRef = rankRef.push();
+  const time = (this.state.scores*30) - this.state.secsLeft
   newRankRef.set({
     name: this.state.name,
     score: (!resigned)? this.state.guaranteedWinnings : this.state.currentWinnings,
+    totalTime: (this.state.lifelinesStatus[0] == true)? time : (time+30),
   });
 
 

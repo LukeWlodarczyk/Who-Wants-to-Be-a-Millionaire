@@ -27642,7 +27642,7 @@ var Game = function (_React$Component) {
     };
 
     _this.startGame = function () {
-      if (_this.state.name.length > 3) {
+      if (_this.state.name.length > -1) {
         //Clear inteval in case multiple click on Start Game button
         clearInterval(_this.intervalId);
         _this.exitVotingResult();
@@ -27743,9 +27743,11 @@ var Game = function (_React$Component) {
 
       var rankRef = firebase.database().ref('rank');
       var newRankRef = rankRef.push();
+      var time = _this.state.scores * 30 - _this.state.secsLeft;
       newRankRef.set({
         name: _this.state.name,
-        score: !resigned ? _this.state.guaranteedWinnings : _this.state.currentWinnings
+        score: !resigned ? _this.state.guaranteedWinnings : _this.state.currentWinnings,
+        totalTime: _this.state.lifelinesStatus[0] == true ? time : time + 30
       });
     };
 
@@ -28598,11 +28600,16 @@ var BestScores = function (_React$Component) {
         }
       }
 
-      var topTen = scores.map(function (score, index) {
+      var topTen = scores.map(function (el, index) {
         return _react2.default.createElement(
           'li',
           { key: index },
-          score.name + score.score
+          el.name,
+          ' / ',
+          el.score,
+          'zl / ',
+          el.totalTime,
+          'sec'
         );
       });
       return _react2.default.createElement(

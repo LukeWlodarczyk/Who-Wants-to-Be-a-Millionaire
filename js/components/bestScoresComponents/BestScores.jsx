@@ -28,8 +28,8 @@ class BestScores extends React.Component {
           scores.push(this.state.ranking[key]);
       }
 
-      const topTen = scores.map( (score, index) => {
-        return <li key={index}>{score.name + score.score}</li>
+      const topTen = scores.map( (el, index) => {
+        return <li key={index}>{el.name} / {el.score}zl / {el.totalTime}sec</li>
       })
         return <div className = 'container'>
           <h1>Best Scores</h1>
