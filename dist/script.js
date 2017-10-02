@@ -27637,6 +27637,8 @@ var Game = function (_React$Component) {
         canType: true,
         text: text
       });
+
+      _this.updateRanking(false);
     };
 
     _this.startGame = function () {
@@ -27734,16 +27736,16 @@ var Game = function (_React$Component) {
         canType: true
       });
 
-      _this.updateRanking();
+      _this.updateRanking(true);
     };
 
-    _this.updateRanking = function () {
+    _this.updateRanking = function (resigned) {
 
       var rankRef = firebase.database().ref('rank');
       var newRankRef = rankRef.push();
       newRankRef.set({
         name: _this.state.name,
-        score: _this.state.currentWinnings
+        score: !resigned ? _this.state.guaranteedWinnings : _this.state.currentWinnings
       });
     };
 

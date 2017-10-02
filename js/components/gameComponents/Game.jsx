@@ -114,6 +114,8 @@ class Game extends React.Component {
         text: text,
       });
 
+      this.updateRanking(false);
+
 
   }
 
@@ -216,19 +218,18 @@ class Game extends React.Component {
       canType: true,
     })
 
-    this.updateRanking()
+    this.updateRanking(true);
 
 
   }
 
-  updateRanking = () => {
-
-
+  updateRanking = resigned => {
+    
   const rankRef = firebase.database().ref('rank');
   const newRankRef = rankRef.push();
   newRankRef.set({
     name: this.state.name,
-    score: this.state.currentWinnings,
+    score: (!resigned)? this.state.guaranteedWinnings : this.state.currentWinnings,
   });
 
 
