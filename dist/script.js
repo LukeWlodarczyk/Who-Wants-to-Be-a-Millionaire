@@ -27610,6 +27610,13 @@ var Game = function (_React$Component) {
       });
     };
 
+    _this.handleNameChange = function (event) {
+      var nameVal = event.target.value;
+      _this.setState({
+        name: nameVal
+      });
+    };
+
     _this.prepareQuestion = function (status) {
       _this.getQuestion();
       _this.setState({
@@ -27731,7 +27738,7 @@ var Game = function (_React$Component) {
       var rankRef = firebase.database().ref('rank');
       var newRankRef = rankRef.push();
       newRankRef.set({
-        name: 'John',
+        name: _this.state.name,
         score: _this.state.currentWinnings
       });
     };
@@ -27950,7 +27957,7 @@ var Game = function (_React$Component) {
           'label',
           null,
           'NAME:',
-          _react2.default.createElement('input', { type: 'text', disabled: !this.state.canType })
+          _react2.default.createElement('input', { type: 'text', onChange: this.handleNameChange, disabled: !this.state.canType })
         ),
         _react2.default.createElement(
           'button',

@@ -84,6 +84,14 @@ class Game extends React.Component {
     });
   }
 
+  handleNameChange = event => {
+    const nameVal = event.target.value;
+    this.setState({
+        name: nameVal,
+    })
+
+}
+
 
   prepareQuestion = status => {
     this.getQuestion();
@@ -215,7 +223,7 @@ class Game extends React.Component {
   const rankRef = firebase.database().ref('rank');
   const newRankRef = rankRef.push();
   newRankRef.set({
-    name: 'John',
+    name: this.state.name,
     score: this.state.currentWinnings,
   });
 
@@ -403,7 +411,7 @@ class Game extends React.Component {
       <CurrentScore currentScore = {this.state.scores} />
       <Timer time = {this.state.secsLeft} />
       <label>NAME:
-        <input type = 'text' disabled = {!this.state.canType}></input>
+        <input type = 'text' onChange = {this.handleNameChange} disabled = {!this.state.canType}></input>
       </label>
       <button onClick = {this.startGame} disabled = {!this.state.canClickControl[0]}>START NEW GAME</button>
       <button onClick = {this.nextRound} disabled = {!this.state.canClickControl[1]}>NEXT QUESTION</button>
