@@ -17,6 +17,8 @@ class Game extends React.Component {
       correctAnswer: '',
       allAnswers: [],
       loading: true,
+      name: '',
+      gameScore: {name: '', score: 0},
       votingVis: 'hidden',
       canAnswer: [false, false, false, false],
       canType: true,
@@ -196,15 +198,37 @@ class Game extends React.Component {
   }
 
   resign = () => {
-    console.log(this.state.currentWinnings,);
+    console.log(this.state.currentWinnings);
+
     this.setState({
       canType: true,
     })
+
+    this.updateRanking()
+
+
+  }
+
+  updateRanking = () => {
+
+
+  const rankRef = firebase.database().ref('rank');
+  const newRankRef = rankRef.push();
+  newRankRef.set({
+    name: 'John',
+    score: this.state.currentWinnings,
+  });
+
+
+
+
+
   }
 
   componentWillUnmount(){
       clearInterval(this.intervalId);
   }
+
 
 
   //Lifelines
