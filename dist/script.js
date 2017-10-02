@@ -27747,7 +27747,10 @@ var Game = function (_React$Component) {
       newRankRef.set({
         name: _this.state.name,
         score: !resigned ? _this.state.guaranteedWinnings : _this.state.currentWinnings,
-        totalTime: _this.state.lifelinesStatus[0] == true ? time : time + 30
+        totalTime: _this.state.lifelinesStatus[0] === true ? time : time + 30,
+        lifelinesUsed: _this.state.lifelinesStatus.filter(function (el) {
+          return el === false;
+        }).length
       });
     };
 
@@ -28605,11 +28608,13 @@ var BestScores = function (_React$Component) {
           'li',
           { key: index },
           el.name,
-          ' / ',
+          ' --- ',
           el.score,
-          'zl / ',
+          'zl --- ',
           el.totalTime,
-          'sec'
+          'sec --- ',
+          el.lifelinesUsed,
+          '/4'
         );
       });
       return _react2.default.createElement(

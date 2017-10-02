@@ -231,7 +231,8 @@ class Game extends React.Component {
   newRankRef.set({
     name: this.state.name,
     score: (!resigned)? this.state.guaranteedWinnings : this.state.currentWinnings,
-    totalTime: (this.state.lifelinesStatus[0] == true)? time : (time+30),
+    totalTime: (this.state.lifelinesStatus[0] === true)? time : (time+30),
+    lifelinesUsed: this.state.lifelinesStatus.filter( el => el === false).length,
   });
 
 
