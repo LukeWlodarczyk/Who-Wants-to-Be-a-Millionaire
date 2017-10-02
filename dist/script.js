@@ -28604,7 +28604,7 @@ var BestScores = function (_React$Component) {
       }
 
       var topTen = scores.sort(function (a, b) {
-        return b.score - a.score;
+        return b.score === a.score ? a.totalTime - b.totalTime : b.score - a.score;
       }).map(function (el, index) {
         return _react2.default.createElement(
           'li',
