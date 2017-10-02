@@ -28603,7 +28603,9 @@ var BestScores = function (_React$Component) {
         }
       }
 
-      var topTen = scores.map(function (el, index) {
+      var topTen = scores.sort(function (a, b) {
+        return b.score - a.score;
+      }).map(function (el, index) {
         return _react2.default.createElement(
           'li',
           { key: index },
@@ -28614,7 +28616,7 @@ var BestScores = function (_React$Component) {
           el.totalTime,
           'sec --- ',
           el.lifelinesUsed,
-          '/4'
+          '/5'
         );
       });
       return _react2.default.createElement(
