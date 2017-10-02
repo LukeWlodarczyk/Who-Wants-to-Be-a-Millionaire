@@ -27640,21 +27640,25 @@ var Game = function (_React$Component) {
     };
 
     _this.startGame = function () {
-      //Clear inteval in case multiple click on Start Game button
-      clearInterval(_this.intervalId);
-      _this.exitVotingResult();
-      _this.prepareQuestion([true, true, true, true, true]);
-      _this.setState({
-        text: 'Who wants to be a millionaire?',
-        canType: false,
-        scores: 0,
-        currentWinnings: 0,
-        guaranteedWinnings: 0,
-        secsLeft: 30,
-        canUseLifelines: [true, true, true, true, true]
-      });
+      if (_this.state.name.length > 3) {
+        //Clear inteval in case multiple click on Start Game button
+        clearInterval(_this.intervalId);
+        _this.exitVotingResult();
+        _this.prepareQuestion([true, true, true, true, true]);
+        _this.setState({
+          text: 'Who wants to be a millionaire?',
+          canType: false,
+          scores: 0,
+          currentWinnings: 0,
+          guaranteedWinnings: 0,
+          secsLeft: 30,
+          canUseLifelines: [true, true, true, true, true]
+        });
 
-      _this.intervalId = setInterval(_this.timer.bind(), 1000);
+        _this.intervalId = setInterval(_this.timer.bind(), 1000);
+      } else {
+        console.log('Your name is too short');
+      }
     };
 
     _this.timer = function () {

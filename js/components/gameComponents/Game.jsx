@@ -119,21 +119,25 @@ class Game extends React.Component {
 
 
   startGame = () => {
-    //Clear inteval in case multiple click on Start Game button
-    clearInterval(this.intervalId);
-    this.exitVotingResult();
-    this.prepareQuestion([true, true, true, true, true]);
-    this.setState({
-      text: 'Who wants to be a millionaire?',
-      canType: false,
-      scores: 0,
-      currentWinnings: 0,
-      guaranteedWinnings: 0,
-      secsLeft: 30,
-      canUseLifelines: [true, true, true, true, true],
-    });
+    if(this.state.name.length > 3) {
+      //Clear inteval in case multiple click on Start Game button
+      clearInterval(this.intervalId);
+      this.exitVotingResult();
+      this.prepareQuestion([true, true, true, true, true]);
+      this.setState({
+        text: 'Who wants to be a millionaire?',
+        canType: false,
+        scores: 0,
+        currentWinnings: 0,
+        guaranteedWinnings: 0,
+        secsLeft: 30,
+        canUseLifelines: [true, true, true, true, true],
+      });
 
-    this.intervalId = setInterval(this.timer.bind(), 1000);
+      this.intervalId = setInterval(this.timer.bind(), 1000);
+    } else {
+      console.log('Your name is too short');
+    }
   }
 
   timer = () => {
