@@ -85,9 +85,8 @@ class Game extends React.Component {
   }
 
   handleNameChange = event => {
-    const nameVal = event.target.value;
     this.setState({
-        name: nameVal,
+        name: event.target.value,
     })
 
 }
@@ -106,6 +105,8 @@ class Game extends React.Component {
 
   finishGame = text => {
       clearInterval(this.intervalId);
+      this.changeAudio('gameSounds', 'wrong_answer');
+      this.updateRanking(false);
       this.setState({
         canUseLifelines: [false, false, false, false, false],
         canClickControl: [true, false, false],
@@ -121,9 +122,11 @@ class Game extends React.Component {
 
 
   startGame = () => {
-    if(this.state.name.length > -1) {
+    if(this.state.name.length > 1) {
       //Clear inteval in case multiple click on Start Game button
       clearInterval(this.intervalId);
+      this.changeAudio('gameSounds', 'lets_play');
+      this.timeuot = setTimeout( () => this.changeAudio('mainTheme', data[0].themeRound[this.state.scores]), 1000)
       this.exitVotingResult();
       this.prepareQuestion([true, true, true, true, true]);
       this.setState({
@@ -154,6 +157,8 @@ class Game extends React.Component {
 
 
   nextRound = () => {
+    this.changeAudio('gameSounds', 'next');
+    this.timeuot = setTimeout( () => this.changeAudio('mainTheme', data[0].themeRound[this.state.scores]), 1000)
     this.exitVotingResult();
     this.prepareQuestion(this.state.lifelinesStatus);
     this.setText('Świetnie! Do dzieła! Oto pytanie')
@@ -166,56 +171,77 @@ class Game extends React.Component {
     });
   }
 
+  changeAudio = (id, src) => {
+    const audio = document.querySelector(`#${id}`)
+    audio.src=`./music/${src}.mp3`;
+    audio.volume=1;
+    audio.currentTime=0;
+    audio.play();
+  }
+
   hightlightCorrectAns = () => {
     this.state.allAnsBtns[this.state.idxCorrAns].style.color = 'green';
   }
 
   hightlightSelectedAns = idx => {
+    this.state.allAnsBtns[idx].style.color = 'yellow';
+  }
+
+  hightlightWrongAns = idx => {
     this.state.allAnsBtns[idx].style.color = 'red';
   }
 
   handleAnsSelect = (answer, i) => {
+    this.changeAudio('gameSounds', 'final_answer');
     this.state.allAnsBtns = document.querySelectorAll('.answerBtn');
-    if (i === this.state.idxCorrAns){
-      clearInterval(this.intervalId);
-      this.hightlightCorrectAns()
-      this.setState({
-        votingVis: 'hidden',
-        dChanceActiv: false,
-        scores : this.state.scores + 1,
-        canAnswer: [false, false, false, false],
-        canClickControl: [true, true, true],
-        canUseLifelines: [false, false, false, false, false],
-        currentWinnings: data[0].currentWinnings[this.state.scores],
-        guaranteedWinnings: data[0].guaranteedWinnings[this.state.scores]
-      });
+    this.hightlightSelectedAns(i);
+    this.timeoutId = setTimeout( () => {
+      if (i === this.state.idxCorrAns){
+        clearInterval(this.intervalId);
+        this.changeAudio('gameSounds', 'correct_answer');
+        this.hightlightCorrectAns()
+        this.setState({
+          votingVis: 'hidden',
+          dChanceActiv: false,
+          scores : this.state.scores + 1,
+          canAnswer: [false, false, false, false],
+          canClickControl: [true, true, true],
+          canUseLifelines: [false, false, false, false, false],
+          currentWinnings: data[0].currentWinnings[this.state.scores],
+          guaranteedWinnings: data[0].guaranteedWinnings[this.state.scores]
+        });
 
-      if(this.state.scores < 14){
-        this.setText('Prawidłowa odpowiedź! Grasz dalej?');
-      } else {
-        this.setText("Congratulations! You've just won a million dollars!")
-      }
-
-    } else {
-        if(this.state.dChanceActiv === true) {
-          this.setText("Wrong answer! but you have another chance!")
-          this.hightlightSelectedAns(i);
-          this.setState({
-            dChanceActiv: false,
-          })
+        if(this.state.scores < 15){
+          this.setText('Prawidłowa odpowiedź! Grasz dalej?');
         } else {
-          this.hightlightCorrectAns()
-          this.hightlightSelectedAns(i);
-          this.finishGame('Nieprawidłowa odpowiedź!');
+          this.updateRanking(false);
+          this.setText("Congratulations! You've just won a million dollars!")
         }
-    }
+
+      } else {
+          if(this.state.dChanceActiv === false) {
+            this.changeAudio('gameSounds', 'wrong_answer');
+            this.hightlightCorrectAns()
+            this.hightlightWrongAns(i);
+            this.finishGame('Nieprawidłowa odpowiedź!');
+          } else {
+            this.setText("Wrong answer! but you have another chance!")
+            this.hightlightWrongAns(i);
+            this.setState({
+              dChanceActiv: false,
+            })
+          }
+      }
+    }, 3000);
   }
 
   resign = () => {
+    this.changeAudio('gameSounds', 'resign');
     console.log(this.state.currentWinnings);
 
     this.setState({
       canType: true,
+      canClickControl: [true, false, false],
     })
 
     this.updateRanking(true);
@@ -224,10 +250,9 @@ class Game extends React.Component {
   }
 
   updateRanking = resigned => {
-
   const rankRef = firebase.database().ref('rank');
   const newRankRef = rankRef.push();
-  const time = (this.state.scores*30) - this.state.secsLeft
+  const time = (this.state.scores + 1) *30 - this.state.secsLeft
   newRankRef.set({
     name: this.state.name,
     score: (!resigned)? this.state.guaranteedWinnings : this.state.currentWinnings,
@@ -281,9 +306,9 @@ class Game extends React.Component {
 
 
   handleVoting = () => {
-    // const lifelinesStatus = this.state.lifelinesStatus;
-    // lifelinesStatus[3] = false;
-    // this.state.canUseLifelines = this.state.lifelinesStatus;
+    const lifelinesStatus = this.state.lifelinesStatus;
+    lifelinesStatus[3] = false;
+    this.state.canUseLifelines = this.state.lifelinesStatus;
     const votingReults =document.querySelector('.votingResults')
     const votingResultAll = document.querySelectorAll('.votingResult');
     votingResultAll.forEach( r => r.style.visibility = 'visible')
@@ -427,6 +452,7 @@ class Game extends React.Component {
       <h2>Current winnings: {this.state.currentWinnings} </h2>
       <h2>Guaranteed winnings: {this.state.guaranteedWinnings}</h2>
       <Voting onMyClickExit = {this.exitVotingResult}/>
+      <audio id='gameSounds' src="./music/final_answer.mp3"></audio>
     </div>
   )
   }

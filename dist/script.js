@@ -13802,7 +13802,8 @@ function createRouterHistory(createHistory) {
 module.exports = [{
     currentWinnings: [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000],
     guaranteedWinnings: [0, 0, 0, 0, 1000, 1000, 1000, 1000, 1000, 32000, 32000, 32000, 32000, 32000, 1000000],
-    difficulty: ['easy', 'easy', 'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard', 'hard', 'hard', 'hard']
+    difficulty: ['easy', 'easy', 'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard', 'hard', 'hard', 'hard'],
+    themeRound: ['easy', 'easy', 'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard', 'hard', 'hard', 'hard_million']
 }];
 
 /***/ }),
@@ -27611,9 +27612,8 @@ var Game = function (_React$Component) {
     };
 
     _this.handleNameChange = function (event) {
-      var nameVal = event.target.value;
       _this.setState({
-        name: nameVal
+        name: event.target.value
       });
     };
 
@@ -27630,6 +27630,8 @@ var Game = function (_React$Component) {
 
     _this.finishGame = function (text) {
       clearInterval(_this.intervalId);
+      _this.changeAudio('gameSounds', 'wrong_answer');
+      _this.updateRanking(false);
       _this.setState({
         canUseLifelines: [false, false, false, false, false],
         canClickControl: [true, false, false],
@@ -27642,9 +27644,13 @@ var Game = function (_React$Component) {
     };
 
     _this.startGame = function () {
-      if (_this.state.name.length > -1) {
+      if (_this.state.name.length > 1) {
         //Clear inteval in case multiple click on Start Game button
         clearInterval(_this.intervalId);
+        _this.changeAudio('gameSounds', 'lets_play');
+        _this.timeuot = setTimeout(function () {
+          return _this.changeAudio('mainTheme', _data2.default[0].themeRound[_this.state.scores]);
+        }, 1000);
         _this.exitVotingResult();
         _this.prepareQuestion([true, true, true, true, true]);
         _this.setState({
@@ -27673,6 +27679,10 @@ var Game = function (_React$Component) {
     };
 
     _this.nextRound = function () {
+      _this.changeAudio('gameSounds', 'next');
+      _this.timeuot = setTimeout(function () {
+        return _this.changeAudio('mainTheme', _data2.default[0].themeRound[_this.state.scores]);
+      }, 1000);
       _this.exitVotingResult();
       _this.prepareQuestion(_this.state.lifelinesStatus);
       _this.setText('Świetnie! Do dzieła! Oto pytanie');
@@ -27685,65 +27695,85 @@ var Game = function (_React$Component) {
       });
     };
 
+    _this.changeAudio = function (id, src) {
+      var audio = document.querySelector('#' + id);
+      audio.src = './music/' + src + '.mp3';
+      audio.volume = 1;
+      audio.currentTime = 0;
+      audio.play();
+    };
+
     _this.hightlightCorrectAns = function () {
       _this.state.allAnsBtns[_this.state.idxCorrAns].style.color = 'green';
     };
 
     _this.hightlightSelectedAns = function (idx) {
+      _this.state.allAnsBtns[idx].style.color = 'yellow';
+    };
+
+    _this.hightlightWrongAns = function (idx) {
       _this.state.allAnsBtns[idx].style.color = 'red';
     };
 
     _this.handleAnsSelect = function (answer, i) {
+      _this.changeAudio('gameSounds', 'final_answer');
       _this.state.allAnsBtns = document.querySelectorAll('.answerBtn');
-      if (i === _this.state.idxCorrAns) {
-        clearInterval(_this.intervalId);
-        _this.hightlightCorrectAns();
-        _this.setState({
-          votingVis: 'hidden',
-          dChanceActiv: false,
-          scores: _this.state.scores + 1,
-          canAnswer: [false, false, false, false],
-          canClickControl: [true, true, true],
-          canUseLifelines: [false, false, false, false, false],
-          currentWinnings: _data2.default[0].currentWinnings[_this.state.scores],
-          guaranteedWinnings: _data2.default[0].guaranteedWinnings[_this.state.scores]
-        });
-
-        if (_this.state.scores < 14) {
-          _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
-        } else {
-          _this.setText("Congratulations! You've just won a million dollars!");
-        }
-      } else {
-        if (_this.state.dChanceActiv === true) {
-          _this.setText("Wrong answer! but you have another chance!");
-          _this.hightlightSelectedAns(i);
-          _this.setState({
-            dChanceActiv: false
-          });
-        } else {
+      _this.hightlightSelectedAns(i);
+      _this.timeoutId = setTimeout(function () {
+        if (i === _this.state.idxCorrAns) {
+          clearInterval(_this.intervalId);
+          _this.changeAudio('gameSounds', 'correct_answer');
           _this.hightlightCorrectAns();
-          _this.hightlightSelectedAns(i);
-          _this.finishGame('Nieprawidłowa odpowiedź!');
+          _this.setState({
+            votingVis: 'hidden',
+            dChanceActiv: false,
+            scores: _this.state.scores + 1,
+            canAnswer: [false, false, false, false],
+            canClickControl: [true, true, true],
+            canUseLifelines: [false, false, false, false, false],
+            currentWinnings: _data2.default[0].currentWinnings[_this.state.scores],
+            guaranteedWinnings: _data2.default[0].guaranteedWinnings[_this.state.scores]
+          });
+
+          if (_this.state.scores < 15) {
+            _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
+          } else {
+            _this.updateRanking(false);
+            _this.setText("Congratulations! You've just won a million dollars!");
+          }
+        } else {
+          if (_this.state.dChanceActiv === false) {
+            _this.changeAudio('gameSounds', 'wrong_answer');
+            _this.hightlightCorrectAns();
+            _this.hightlightWrongAns(i);
+            _this.finishGame('Nieprawidłowa odpowiedź!');
+          } else {
+            _this.setText("Wrong answer! but you have another chance!");
+            _this.hightlightWrongAns(i);
+            _this.setState({
+              dChanceActiv: false
+            });
+          }
         }
-      }
+      }, 3000);
     };
 
     _this.resign = function () {
+      _this.changeAudio('gameSounds', 'resign');
       console.log(_this.state.currentWinnings);
 
       _this.setState({
-        canType: true
+        canType: true,
+        canClickControl: [true, false, false]
       });
 
       _this.updateRanking(true);
     };
 
     _this.updateRanking = function (resigned) {
-
       var rankRef = firebase.database().ref('rank');
       var newRankRef = rankRef.push();
-      var time = _this.state.scores * 30 - _this.state.secsLeft;
+      var time = (_this.state.scores + 1) * 30 - _this.state.secsLeft;
       newRankRef.set({
         name: _this.state.name,
         score: !resigned ? _this.state.guaranteedWinnings : _this.state.currentWinnings,
@@ -27787,9 +27817,9 @@ var Game = function (_React$Component) {
     _this.handleVoting = function () {
       var _console;
 
-      // const lifelinesStatus = this.state.lifelinesStatus;
-      // lifelinesStatus[3] = false;
-      // this.state.canUseLifelines = this.state.lifelinesStatus;
+      var lifelinesStatus = _this.state.lifelinesStatus;
+      lifelinesStatus[3] = false;
+      _this.state.canUseLifelines = _this.state.lifelinesStatus;
       var votingReults = document.querySelector('.votingResults');
       var votingResultAll = document.querySelectorAll('.votingResult');
       votingResultAll.forEach(function (r) {
@@ -27998,7 +28028,8 @@ var Game = function (_React$Component) {
           'Guaranteed winnings: ',
           this.state.guaranteedWinnings
         ),
-        _react2.default.createElement(_Voting2.default, { onMyClickExit: this.exitVotingResult })
+        _react2.default.createElement(_Voting2.default, { onMyClickExit: this.exitVotingResult }),
+        _react2.default.createElement('audio', { id: 'gameSounds', src: './music/final_answer.mp3' })
       );
     }
   }]);
@@ -28700,7 +28731,8 @@ var Main = function (_React$Component) {
         { className: 'container' },
         _react2.default.createElement(_Header2.default, null),
         this.props.children,
-        _react2.default.createElement(_Footer2.default, null)
+        _react2.default.createElement(_Footer2.default, null),
+        _react2.default.createElement('audio', { id: 'mainTheme', src: './music/main_theme.mp3', loop: true, autoPlay: true })
       );
     }
   }]);
