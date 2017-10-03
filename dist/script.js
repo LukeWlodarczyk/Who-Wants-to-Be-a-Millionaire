@@ -27631,7 +27631,7 @@ var Game = function (_React$Component) {
     _this.finishGame = function (text) {
       clearInterval(_this.intervalId);
       _this.changeAudio('gameSounds', 'wrong_answer');
-      _this.updateRanking(false);
+      _this.changeAudio('mainTheme', 'main_theme');
       _this.setState({
         canUseLifelines: [false, false, false, false, false],
         canClickControl: [true, false, false],
@@ -27649,7 +27649,7 @@ var Game = function (_React$Component) {
         clearInterval(_this.intervalId);
         _this.changeAudio('gameSounds', 'lets_play');
         _this.timeuot = setTimeout(function () {
-          return _this.changeAudio('mainTheme', _data2.default[0].themeRound[_this.state.scores]);
+          return _this.changeAudio('mainTheme', 'easy');
         }, 1000);
         _this.exitVotingResult();
         _this.prepareQuestion([true, true, true, true, true]);
@@ -27722,7 +27722,6 @@ var Game = function (_React$Component) {
       _this.timeoutId = setTimeout(function () {
         if (i === _this.state.idxCorrAns) {
           clearInterval(_this.intervalId);
-          _this.changeAudio('gameSounds', 'correct_answer');
           _this.hightlightCorrectAns();
           _this.setState({
             votingVis: 'hidden',
@@ -27736,9 +27735,12 @@ var Game = function (_React$Component) {
           });
 
           if (_this.state.scores < 15) {
+            _this.changeAudio('gameSounds', 'correct_answer');
             _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
           } else {
             _this.updateRanking(false);
+            _this.changeAudio('mainTheme', 'winning_theme');
+            _this.changeAudio('gameSounds', 'you_won_million');
             _this.setText("Congratulations! You've just won a million dollars!");
           }
         } else {
@@ -27760,11 +27762,16 @@ var Game = function (_React$Component) {
 
     _this.resign = function () {
       _this.changeAudio('gameSounds', 'resign');
+      _this.timeuot = setTimeout(function () {
+        return _this.changeAudio('mainTheme', 'main_theme');
+      }, 1000);
       console.log(_this.state.currentWinnings);
 
       _this.setState({
         canType: true,
-        canClickControl: [true, false, false]
+        canClickControl: [true, false, false],
+        canUseLifelines: [false, false, false, false, false],
+        canAnswer: [false, false, false]
       });
 
       _this.updateRanking(true);
@@ -27788,7 +27795,7 @@ var Game = function (_React$Component) {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[0] = false;
       _this.state.canUseLifelines = _this.state.lifelinesStatus;
-
+      _this.changeAudio('gameSounds', 'lifelines');
       _this.setState({
         secsLeft: _this.state.secsLeft + 30
       });
@@ -27798,6 +27805,7 @@ var Game = function (_React$Component) {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[1] = false;
       _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      _this.changeAudio('gameSounds', 'lifelines');
       //Convert node list to array
       _this.state.allAnsBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
       _this.state.allAnsBtns.splice(_this.state.idxCorrAns, 1);
@@ -27811,6 +27819,7 @@ var Game = function (_React$Component) {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[2] = false;
       _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      _this.changeAudio('gameSounds', 'lifelines');
       _this.getQuestion();
     };
 
@@ -27820,6 +27829,8 @@ var Game = function (_React$Component) {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[3] = false;
       _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      _this.changeAudio('gameSounds', 'lifelines');
+
       var votingReults = document.querySelector('.votingResults');
       var votingResultAll = document.querySelectorAll('.votingResult');
       votingResultAll.forEach(function (r) {
@@ -27907,6 +27918,7 @@ var Game = function (_React$Component) {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[4] = false;
       _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      _this.changeAudio('gameSounds', 'lifelines');
       _this.setState({
         dChanceActiv: true
       });
@@ -28586,6 +28598,14 @@ var BestScores = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (BestScores.__proto__ || Object.getPrototypeOf(BestScores)).call(this, props));
 
+    _this.changeAudio = function (id, src) {
+      var audio = document.querySelector('#' + id);
+      audio.src = './music/' + src + '.mp3';
+      audio.volume = 1;
+      audio.currentTime = 0;
+      audio.play();
+    };
+
     _this.state = {
       ranking: []
     };
@@ -28597,6 +28617,7 @@ var BestScores = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
+      this.changeAudio('mainTheme', 'best_scores');
       var rankRef = firebase.database().ref('rank');
       rankRef.on('value', function (snapshot) {
         _this2.setState({

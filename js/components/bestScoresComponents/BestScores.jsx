@@ -9,16 +9,24 @@ class BestScores extends React.Component {
     }
   }
 
+  changeAudio = (id, src) => {
+    const audio = document.querySelector(`#${id}`)
+    audio.src=`./music/${src}.mp3`;
+    audio.volume=1;
+    audio.currentTime=0;
+    audio.play();
+  }
 
 
   componentDidMount(){
-      const rankRef = firebase.database().ref('rank');
-        rankRef.on('value', snapshot => {
-          this.setState({
-            ranking: snapshot.val(),
-          })
-        });
-      console.log(typeof this.state.ranking);
+    this.changeAudio('mainTheme', 'best_scores');
+    const rankRef = firebase.database().ref('rank');
+      rankRef.on('value', snapshot => {
+        this.setState({
+          ranking: snapshot.val(),
+        })
+      });
+    console.log(typeof this.state.ranking);
   }
 
 

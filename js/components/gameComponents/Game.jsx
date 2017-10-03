@@ -106,7 +106,7 @@ class Game extends React.Component {
   finishGame = text => {
       clearInterval(this.intervalId);
       this.changeAudio('gameSounds', 'wrong_answer');
-      this.updateRanking(false);
+      this.changeAudio('mainTheme', 'main_theme');
       this.setState({
         canUseLifelines: [false, false, false, false, false],
         canClickControl: [true, false, false],
@@ -126,7 +126,7 @@ class Game extends React.Component {
       //Clear inteval in case multiple click on Start Game button
       clearInterval(this.intervalId);
       this.changeAudio('gameSounds', 'lets_play');
-      this.timeuot = setTimeout( () => this.changeAudio('mainTheme', data[0].themeRound[this.state.scores]), 1000)
+      this.timeuot = setTimeout( () => this.changeAudio('mainTheme', 'easy'), 1000)
       this.exitVotingResult();
       this.prepareQuestion([true, true, true, true, true]);
       this.setState({
@@ -198,7 +198,6 @@ class Game extends React.Component {
     this.timeoutId = setTimeout( () => {
       if (i === this.state.idxCorrAns){
         clearInterval(this.intervalId);
-        this.changeAudio('gameSounds', 'correct_answer');
         this.hightlightCorrectAns()
         this.setState({
           votingVis: 'hidden',
@@ -212,9 +211,12 @@ class Game extends React.Component {
         });
 
         if(this.state.scores < 15){
+          this.changeAudio('gameSounds', 'correct_answer');
           this.setText('Prawidłowa odpowiedź! Grasz dalej?');
         } else {
           this.updateRanking(false);
+          this.changeAudio('mainTheme', 'winning_theme');
+          this.changeAudio('gameSounds', 'you_won_million');
           this.setText("Congratulations! You've just won a million dollars!")
         }
 
@@ -237,11 +239,14 @@ class Game extends React.Component {
 
   resign = () => {
     this.changeAudio('gameSounds', 'resign');
+    this.timeuot = setTimeout( () => this.changeAudio('mainTheme', 'main_theme'), 1000)
     console.log(this.state.currentWinnings);
 
     this.setState({
       canType: true,
       canClickControl: [true, false, false],
+      canUseLifelines: [false, false, false, false, false],
+      canAnswer: [false, false, false],
     })
 
     this.updateRanking(true);
@@ -278,7 +283,7 @@ class Game extends React.Component {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[0] = false;
     this.state.canUseLifelines = this.state.lifelinesStatus;
-
+    this.changeAudio('gameSounds', 'lifelines');
     this.setState({
         secsLeft: this.state.secsLeft + 30,
     });
@@ -288,6 +293,7 @@ class Game extends React.Component {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[1] = false;
     this.state.canUseLifelines = this.state.lifelinesStatus;
+    this.changeAudio('gameSounds', 'lifelines');
     //Convert node list to array
     this.state.allAnsBtns = [...document.querySelectorAll('.answerBtn')];
     this.state.allAnsBtns.splice(this.state.idxCorrAns, 1);
@@ -301,6 +307,7 @@ class Game extends React.Component {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[2] = false;
     this.state.canUseLifelines = this.state.lifelinesStatus;
+    this.changeAudio('gameSounds', 'lifelines');
     this.getQuestion();
   }
 
@@ -309,6 +316,8 @@ class Game extends React.Component {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[3] = false;
     this.state.canUseLifelines = this.state.lifelinesStatus;
+    this.changeAudio('gameSounds', 'lifelines');
+
     const votingReults =document.querySelector('.votingResults')
     const votingResultAll = document.querySelectorAll('.votingResult');
     votingResultAll.forEach( r => r.style.visibility = 'visible')
@@ -398,6 +407,7 @@ class Game extends React.Component {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[4] = false;
     this.state.canUseLifelines = this.state.lifelinesStatus;
+    this.changeAudio('gameSounds', 'lifelines');
     this.setState({
       dChanceActiv: true,
     })
