@@ -6,7 +6,9 @@ import Footer from './Footer.jsx'
 class Main extends React.Component {
 
 
-  componentWillMount(){
+  componentDidMount(){
+    document.querySelector('#mainTheme').volume=0.05;
+
     const config = {
       apiKey: "AIzaSyDDwby-Yr6BFMhaIV7RooPj2I7PV0YxTQs",
       databaseURL: "https://who-wants-to-be-a-millionaire1.firebaseio.com",

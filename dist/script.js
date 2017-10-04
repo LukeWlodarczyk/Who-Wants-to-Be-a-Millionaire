@@ -27698,7 +27698,7 @@ var Game = function (_React$Component) {
     _this.changeAudio = function (id, src) {
       var audio = document.querySelector('#' + id);
       audio.src = './music/' + src + '.mp3';
-      audio.volume = 1;
+      audio.volume = 0.05;
       audio.currentTime = 0;
       audio.play();
     };
@@ -27738,6 +27738,9 @@ var Game = function (_React$Component) {
             _this.changeAudio('gameSounds', 'correct_answer');
             _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
           } else {
+            _this.setState({
+              canClickControl: [true, false, false]
+            });
             _this.updateRanking(false);
             _this.changeAudio('mainTheme', 'winning_theme');
             _this.changeAudio('gameSounds', 'you_won_million');
@@ -28598,14 +28601,6 @@ var BestScores = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (BestScores.__proto__ || Object.getPrototypeOf(BestScores)).call(this, props));
 
-    _this.changeAudio = function (id, src) {
-      var audio = document.querySelector('#' + id);
-      audio.src = './music/' + src + '.mp3';
-      audio.volume = 1;
-      audio.currentTime = 0;
-      audio.play();
-    };
-
     _this.state = {
       ranking: []
     };
@@ -28617,7 +28612,6 @@ var BestScores = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      this.changeAudio('mainTheme', 'best_scores');
       var rankRef = firebase.database().ref('rank');
       rankRef.on('value', function (snapshot) {
         _this2.setState({
@@ -28736,8 +28730,10 @@ var Main = function (_React$Component) {
   }
 
   _createClass(Main, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      document.querySelector('#mainTheme').volume = 0.05;
+
       var config = {
         apiKey: "AIzaSyDDwby-Yr6BFMhaIV7RooPj2I7PV0YxTQs",
         databaseURL: "https://who-wants-to-be-a-millionaire1.firebaseio.com"

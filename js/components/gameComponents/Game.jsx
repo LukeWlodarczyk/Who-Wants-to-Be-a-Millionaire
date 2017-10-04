@@ -174,7 +174,7 @@ class Game extends React.Component {
   changeAudio = (id, src) => {
     const audio = document.querySelector(`#${id}`)
     audio.src=`./music/${src}.mp3`;
-    audio.volume=1;
+    audio.volume=0.05;
     audio.currentTime=0;
     audio.play();
   }
@@ -214,6 +214,9 @@ class Game extends React.Component {
           this.changeAudio('gameSounds', 'correct_answer');
           this.setText('Prawidłowa odpowiedź! Grasz dalej?');
         } else {
+          this.setState({
+            canClickControl: [true, false, false],
+          })
           this.updateRanking(false);
           this.changeAudio('mainTheme', 'winning_theme');
           this.changeAudio('gameSounds', 'you_won_million');
