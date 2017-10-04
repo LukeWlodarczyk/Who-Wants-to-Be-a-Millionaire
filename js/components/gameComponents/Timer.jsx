@@ -13,11 +13,9 @@ class Timer extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       timer: `${Math.floor(nextProps.time / 60)}:`.padStart(2, '0') + `${nextProps.time % 60}`.padStart(2, '0'),
-      hue: 120,
+      hue: nextProps.time * 120 / nextProps.maxTime,
     });
   }
-
-
 
 
 
@@ -25,7 +23,7 @@ class Timer extends React.Component {
 
 
         return <div className = 'container'>
-          <p style={{'backgroundColor': `hsl(${this.state.hue}, 100%, 50%)`}}>{this.state.timer}</p>
+          <p style={{'color': `hsl(${this.state.hue}, 100%, 50%)`}}>{this.state.timer}</p>
         </div>
       }
 }

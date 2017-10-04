@@ -27673,7 +27673,6 @@ var Game = function (_React$Component) {
       _this.setState({
         secsLeft: _this.state.secsLeft - 1
       });
-      console.log(_this.state.secsLeft);
       if (_this.state.secsLeft === 0) {
         _this.finishGame('Koniec czasu!');
       }
@@ -27688,6 +27687,9 @@ var Game = function (_React$Component) {
       _this.prepareQuestion(_this.state.lifelinesStatus);
       _this.setText('Świetnie! Do dzieła! Oto pytanie');
       _this.intervalId = setInterval(_this.timer.bind(), 1000);
+      _this.setState({
+        maxSecRound: _this.state.secsLeft + 30
+      });
     };
 
     _this.setText = function (text) {
@@ -27965,6 +27967,7 @@ var Game = function (_React$Component) {
       text: 'Who wants to be a millionaire?',
       scores: 0,
       secsLeft: 30,
+      maxSecRound: 30,
       canUseLifelines: [false, false, false, false, false],
       lifelinesStatus: [true, true, true, true, true],
       canClickControl: [true, false, false],
@@ -28009,7 +28012,7 @@ var Game = function (_React$Component) {
           onMyClickDoubleChance: this.handleDoubleChance
         }),
         _react2.default.createElement(_CurrentScore2.default, { currentScore: this.state.scores }),
-        _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft }),
+        _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft, maxTime: this.state.maxSecRound }),
         _react2.default.createElement(
           'label',
           null,
@@ -28241,7 +28244,7 @@ var Timer = function (_React$Component) {
     value: function componentWillReceiveProps(nextProps) {
       this.setState({
         timer: (Math.floor(nextProps.time / 60) + ':').padStart(2, '0') + ('' + nextProps.time % 60).padStart(2, '0'),
-        hue: 120
+        hue: nextProps.time * 120 / nextProps.maxTime
       });
     }
   }, {
@@ -28253,7 +28256,7 @@ var Timer = function (_React$Component) {
         { className: 'container' },
         _react2.default.createElement(
           'p',
-          { style: { 'backgroundColor': 'hsl(' + this.state.hue + ', 100%, 50%)' } },
+          { style: { 'color': 'hsl(' + this.state.hue + ', 100%, 50%)' } },
           this.state.timer
         )
       );

@@ -26,6 +26,7 @@ class Game extends React.Component {
       text: 'Who wants to be a millionaire?',
       scores: 0,
       secsLeft: 30,
+      maxSecRound: 30,
       canUseLifelines: [false, false, false, false, false],
       lifelinesStatus: [true, true, true, true, true],
       canClickControl: [true, false, false],
@@ -149,7 +150,6 @@ class Game extends React.Component {
     this.setState({
         secsLeft: this.state.secsLeft - 1,
     });
-    console.log(this.state.secsLeft);
     if (this.state.secsLeft === 0){
         this.finishGame('Koniec czasu!');
     }
@@ -164,6 +164,9 @@ class Game extends React.Component {
     this.prepareQuestion(this.state.lifelinesStatus);
     this.setText('Świetnie! Do dzieła! Oto pytanie')
     this.intervalId = setInterval(this.timer.bind(), 1000);
+    this.setState({
+      maxSecRound: this.state.secsLeft+30,
+    })
   }
 
   setText = text => {
@@ -456,7 +459,7 @@ class Game extends React.Component {
         onMyClickDoubleChance = {this.handleDoubleChance}
       />
       <CurrentScore currentScore = {this.state.scores} />
-      <Timer time = {this.state.secsLeft} />
+      <Timer time = {this.state.secsLeft} maxTime = {this.state.maxSecRound} />
       <label>NAME:
         <input type = 'text' onChange = {this.handleNameChange} disabled = {!this.state.canType}></input>
       </label>
