@@ -27673,6 +27673,7 @@ var Game = function (_React$Component) {
       _this.setState({
         secsLeft: _this.state.secsLeft - 1
       });
+      console.log(_this.state.secsLeft);
       if (_this.state.secsLeft === 0) {
         _this.finishGame('Koniec czasu!');
       }
@@ -28228,15 +28229,9 @@ var Timer = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Timer.__proto__ || Object.getPrototypeOf(Timer)).call(this, props));
 
-    _this.countdown = function () {
-      var minutes = ('' + Math.floor(_this.state.seconds / 60)).padStart(2, '0');
-      var seconds = ('' + _this.state.seconds % 60).padStart(2, '0');
-      return minutes + ':' + seconds;
-    };
-
     _this.state = {
-      seconds: 30,
-      timer: '00:30'
+      timer: '00:00',
+      hue: 120
     };
     return _this;
   }
@@ -28245,8 +28240,8 @@ var Timer = function (_React$Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       this.setState({
-        seconds: nextProps.time,
-        timer: this.countdown()
+        timer: (Math.floor(nextProps.time / 60) + ':').padStart(2, '0') + ('' + nextProps.time % 60).padStart(2, '0'),
+        hue: 120
       });
     }
   }, {
@@ -28258,7 +28253,7 @@ var Timer = function (_React$Component) {
         { className: 'container' },
         _react2.default.createElement(
           'p',
-          null,
+          { style: { 'backgroundColor': 'hsl(' + this.state.hue + ', 100%, 50%)' } },
           this.state.timer
         )
       );

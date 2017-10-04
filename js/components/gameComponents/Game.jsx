@@ -149,6 +149,7 @@ class Game extends React.Component {
     this.setState({
         secsLeft: this.state.secsLeft - 1,
     });
+    console.log(this.state.secsLeft);
     if (this.state.secsLeft === 0){
         this.finishGame('Koniec czasu!');
     }

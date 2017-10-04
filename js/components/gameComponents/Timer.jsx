@@ -5,30 +5,27 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      seconds: 30,
-      timer: '00:30',
+      timer: '00:00',
+      hue: 120,
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      seconds: nextProps.time,
-      timer: this.countdown(),
+      timer: `${Math.floor(nextProps.time / 60)}:`.padStart(2, '0') + `${nextProps.time % 60}`.padStart(2, '0'),
+      hue: 120,
     });
   }
 
-  countdown = () => {
-    const minutes = `${Math.floor(this.state.seconds / 60)}`.padStart(2, '0');
-    const seconds = `${this.state.seconds % 60}`.padStart(2, '0');
-    return `${minutes}:${seconds}`
-  }
+
+
 
 
     render() {
 
 
         return <div className = 'container'>
-          <p>{this.state.timer}</p>
+          <p style={{'backgroundColor': `hsl(${this.state.hue}, 100%, 50%)`}}>{this.state.timer}</p>
         </div>
       }
 }
