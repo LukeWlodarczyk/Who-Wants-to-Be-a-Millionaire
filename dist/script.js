@@ -28228,8 +28228,15 @@ var Timer = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Timer.__proto__ || Object.getPrototypeOf(Timer)).call(this, props));
 
+    _this.countdown = function () {
+      var minutes = ('' + Math.floor(_this.state.seconds / 60)).padStart(2, '0');
+      var seconds = ('' + _this.state.seconds % 60).padStart(2, '0');
+      return minutes + ':' + seconds;
+    };
+
     _this.state = {
-      time: _this.props.time
+      seconds: 30,
+      timer: '00:30'
     };
     return _this;
   }
@@ -28238,19 +28245,21 @@ var Timer = function (_React$Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       this.setState({
-        time: nextProps.time
+        seconds: nextProps.time,
+        timer: this.countdown()
       });
     }
   }, {
     key: 'render',
     value: function render() {
+
       return _react2.default.createElement(
         'div',
         { className: 'container' },
         _react2.default.createElement(
           'p',
           null,
-          this.state.time
+          this.state.timer
         )
       );
     }
