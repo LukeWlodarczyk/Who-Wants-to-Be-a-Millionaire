@@ -178,7 +178,6 @@ class Game extends React.Component {
   changeAudio = (id, src) => {
     const audio = document.querySelector(`#${id}`)
     audio.src=`./music/${src}.mp3`;
-    audio.volume=0.05;
     audio.currentTime=0;
     audio.play();
   }

@@ -27713,7 +27713,6 @@ var Game = function (_React$Component) {
     _this.changeAudio = function (id, src) {
       var audio = document.querySelector('#' + id);
       audio.src = './music/' + src + '.mp3';
-      audio.volume = 0.05;
       audio.currentTime = 0;
       audio.play();
     };
@@ -28750,8 +28749,6 @@ var Main = function (_React$Component) {
   _createClass(Main, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      document.querySelector('#mainTheme').volume = 0.05;
-
       var config = {
         apiKey: "AIzaSyDDwby-Yr6BFMhaIV7RooPj2I7PV0YxTQs",
         databaseURL: "https://who-wants-to-be-a-millionaire1.firebaseio.com"
@@ -28919,10 +28916,30 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Options = function (_React$Component) {
   _inherits(Options, _React$Component);
 
-  function Options() {
+  function Options(props) {
     _classCallCheck(this, Options);
 
-    return _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).call(this, props));
+
+    _this.onChangeThemeVol = function (event) {
+      _this.setState({
+        mainThemeVol: event.target.value
+      });
+      document.querySelector('#mainTheme').volume = event.target.value;
+    };
+
+    _this.onChangeGameSoundsVol = function (event) {
+      _this.setState({
+        gameSoundsVol: event.target.value
+      });
+      document.querySelector('#gameSounds').volume = event.target.value;
+    };
+
+    _this.state = {
+      mainThemeVol: 0.7,
+      gameSoundsVol: 0.7
+    };
+    return _this;
   }
 
   _createClass(Options, [{
@@ -28935,7 +28952,11 @@ var Options = function (_React$Component) {
           'h1',
           null,
           'Options'
-        )
+        ),
+        'Music:',
+        _react2.default.createElement('input', { type: 'range', value: this.state.mainThemeVol, max: '1', min: '0', step: 'any', onChange: this.onChangeThemeVol }),
+        'Game sounds:',
+        _react2.default.createElement('input', { type: 'range', value: this.state.gameSoundsVol, max: '1', min: '0', step: 'any', onChange: this.onChangeGameSoundsVol })
       );
     }
   }]);
