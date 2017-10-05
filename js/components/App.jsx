@@ -4,6 +4,8 @@ import Menu from './menuComponents/Menu.jsx';
 import Game from './gameComponents/Game.jsx';
 import BestScores from './bestScoresComponents/BestScores.jsx';
 import Main from './Main.jsx';
+import Options from './Options.jsx';
+import Instruction from './Instruction.jsx';
 import {
   Router,
   Route,
@@ -22,6 +24,8 @@ class App extends React.Component {
         <Route path="/menu" component={ Menu }/>
         <Route path="/game" component={ Game }/>
         <Route path="/bestscores" component={ BestScores }/>
+        <Route path="/options" component={ Options }/>
+        <Route path="/instruction" component={ Instruction }/>
       </Route>
 
 

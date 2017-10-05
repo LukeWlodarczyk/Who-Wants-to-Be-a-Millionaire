@@ -469,7 +469,6 @@ class Game extends React.Component {
       <h2>Current winnings: {this.state.currentWinnings} </h2>
       <h2>Guaranteed winnings: {this.state.guaranteedWinnings}</h2>
       <Voting onMyClickExit = {this.exitVotingResult}/>
-      <audio id='gameSounds' src="./music/final_answer.mp3"></audio>
     </div>
   )
   }
