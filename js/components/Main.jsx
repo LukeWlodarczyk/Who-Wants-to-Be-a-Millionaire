@@ -19,7 +19,7 @@ class Main extends React.Component {
       <Header/>
       { this.props.children }
       <Footer/>
-      <audio id='gameSounds' src="./music/final_answer.mp3"></audio>
+      <audio id='gameSounds' src="./music/lets_play.mp3"></audio>
       <audio id='mainTheme' src="./music/main_theme.mp3" loop autoPlay></audio>
     </div>
   }

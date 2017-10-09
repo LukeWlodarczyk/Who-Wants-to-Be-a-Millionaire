@@ -28764,7 +28764,7 @@ var Main = function (_React$Component) {
         _react2.default.createElement(_Header2.default, null),
         this.props.children,
         _react2.default.createElement(_Footer2.default, null),
-        _react2.default.createElement('audio', { id: 'gameSounds', src: './music/final_answer.mp3' }),
+        _react2.default.createElement('audio', { id: 'gameSounds', src: './music/lets_play.mp3' }),
         _react2.default.createElement('audio', { id: 'mainTheme', src: './music/main_theme.mp3', loop: true, autoPlay: true })
       );
     }
@@ -28925,24 +28925,33 @@ var Options = function (_React$Component) {
       _this.setState({
         mainThemeVol: event.target.value
       });
-      document.querySelector('#mainTheme').volume = event.target.value;
+      document.querySelector('#mainTheme').volume = _this.state.mainThemeVol;
     };
 
     _this.onChangeGameSoundsVol = function (event) {
       _this.setState({
         gameSoundsVol: event.target.value
       });
-      document.querySelector('#gameSounds').volume = event.target.value;
+      document.querySelector('#gameSounds').volume = _this.state.gameSoundsVol;
+      document.querySelector('#gameSounds').play();
     };
 
     _this.state = {
-      mainThemeVol: 0.7,
-      gameSoundsVol: 0.7
+      mainThemeVol: 1,
+      gameSoundsVol: 1
     };
     return _this;
   }
 
   _createClass(Options, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.setState({
+        mainThemeVol: document.querySelector('#mainTheme').volume,
+        gameSoundsVol: document.querySelector('#gameSounds').volume
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(

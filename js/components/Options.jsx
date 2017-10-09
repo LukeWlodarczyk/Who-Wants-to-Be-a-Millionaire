@@ -5,8 +5,8 @@ class Options extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mainThemeVol: 0.7,
-      gameSoundsVol: 0.7,
+      mainThemeVol: 1,
+      gameSoundsVol: 1,
     }
   }
 
@@ -14,19 +14,23 @@ class Options extends React.Component {
     this.setState({
       mainThemeVol: event.target.value
     })
-    document.querySelector('#mainTheme').volume = event.target.value
+    document.querySelector('#mainTheme').volume = this.state.mainThemeVol
   }
 
   onChangeGameSoundsVol = event => {
     this.setState({
       gameSoundsVol: event.target.value
     })
-    document.querySelector('#gameSounds').volume = event.target.value
+    document.querySelector('#gameSounds').volume = this.state.gameSoundsVol;
+    document.querySelector('#gameSounds').play();
   }
 
-
-
-
+  componentDidMount() {
+    this.setState({
+      mainThemeVol: document.querySelector('#mainTheme').volume,
+      gameSoundsVol: document.querySelector('#gameSounds').volume,
+    })
+  }
 
   render() {
       return <div className = 'container'>
