@@ -10,4 +10,4 @@ Site is published at https://lukewlodarczyk.github.io/Who-Wants-to-Be-a-Milliona
 * Fetch - to get the data from API
 * Webpack - build tool
 
-![layout](src/img/Millionaire.png)
+![layout](img/Millionaire.png)
