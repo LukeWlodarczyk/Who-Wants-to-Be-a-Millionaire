@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Header from './Header.jsx'
-import Footer from './Footer.jsx'
 
-class Main extends React.Component {
+export default class Main extends React.Component {
 
 
   componentDidMount(){
@@ -12,17 +11,16 @@ class Main extends React.Component {
       databaseURL: "https://who-wants-to-be-a-millionaire1.firebaseio.com",
     };
     firebase.initializeApp(config);
+    document.querySelector('#mainTheme').volume = 0.05;
+    document.querySelector('#gameSounds').volume = 0.05;
   }
 
   render() {
     return <div className = 'container'>
       <Header/>
       { this.props.children }
-      <Footer/>
       <audio id='gameSounds' src="./music/lets_play.mp3"></audio>
       <audio id='mainTheme' src="./music/main_theme.mp3" loop autoPlay></audio>
     </div>
   }
 }
-
-module.exports = Main;

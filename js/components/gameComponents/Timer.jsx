@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-class Timer extends React.Component {
+export default class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +12,7 @@ class Timer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      timer: `${Math.floor(nextProps.time / 60)}:`.padStart(2, '0') + `${nextProps.time % 60}`.padStart(2, '0'),
+      timer: `${Math.floor(nextProps.time / 60)}:`.padStart(3, '0') + `${nextProps.time % 60}`.padStart(2, '0'),
       hue: nextProps.time * 120 / nextProps.maxTime,
     });
   }
@@ -22,11 +22,8 @@ class Timer extends React.Component {
     render() {
 
 
-        return <div className = 'container'>
-          <p style={{'color': `hsl(${this.state.hue}, 100%, 50%)`}}>{this.state.timer}</p>
+        return <div className = ''>
+          <p className='timer' style={{'color': `hsl(${this.state.hue}, 100%, 50%)`, 'borderColor': `hsl(${this.state.hue}, 100%, 50%)`}}>{this.state.timer}</p>
         </div>
       }
 }
-
-
- module.exports = Timer;

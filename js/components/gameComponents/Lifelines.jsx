@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-class Lifelines extends React.Component {
+export default class Lifelines extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,15 +51,12 @@ class Lifelines extends React.Component {
 
 
   render() {
-      return <div className = 'container'>
-          <button disabled={!this.state.canUseLifelines[0]} onClick = {this.onHandleClickExtraTime} >Extra Time</button>
-          <button disabled={!this.state.canUseLifelines[1]} onClick = {this.onHandleClickFiftyFifty} >50/50</button>
-          <button disabled={!this.state.canUseLifelines[2]} onClick = {this.onHandleClickChangeQuestion} >Change Question</button>
-          <button disabled={!this.state.canUseLifelines[3]} onClick = {this.onHandleClickVoting} >Audience Voting</button>
-          <button disabled={!this.state.canUseLifelines[4]} onClick = {this.onHandleDoubleChance} >Double Chance</button>
+      return <div className = 'lifelinesContainer'>
+          <button className='lifelinesButton' disabled={!this.state.canUseLifelines[0]} onClick = {this.onHandleClickExtraTime} >Extra Time</button>
+          <button className='lifelinesButton' disabled={!this.state.canUseLifelines[1]} onClick = {this.onHandleClickFiftyFifty} >50/50</button>
+          <button className='lifelinesButton' disabled={!this.state.canUseLifelines[2]} onClick = {this.onHandleClickChangeQuestion} >Change Question</button>
+          <button className='lifelinesButton' disabled={!this.state.canUseLifelines[3]} onClick = {this.onHandleClickVoting} >Audience Voting</button>
+          <button className='lifelinesButton' disabled={!this.state.canUseLifelines[4]} onClick = {this.onHandleDoubleChance} >Double Chance</button>
       </div>
     }
 }
-
-
- module.exports = Lifelines;

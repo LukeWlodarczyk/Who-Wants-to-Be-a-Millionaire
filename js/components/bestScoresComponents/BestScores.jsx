@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-class BestScores extends React.Component {
+export default class BestScores extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,16 +29,34 @@ class BestScores extends React.Component {
       }
 
       const ranking = scores.sort( (a, b) => (b.score === a.score) ? a.totalTime - b.totalTime : b.score - a.score).map( (el, index) => {
-        return <li key={index}>{el.name} --- {el.score}zl --- {el.totalTime}sec --- {el.lifelinesUsed}/5</li>
+        return <tr key={index}>
+                <td>{index+1}</td>
+                <td>{el.name}</td>
+                <td>{el.score}&pound; </td>
+                <td>{el.totalTime}sec </td>
+                <td>{el.lifelinesUsed}/5</td>
+               </tr>
       })
-        return <div className = 'container'>
-          <h1>Best Scores</h1>
-          <ul>
-            {ranking}
-          </ul>
+
+        return <div className='container bestScoreContainer'>
+
+          <table className='bestScoreTable'>
+            <thead>
+              <tr>
+                <td colSpan="5">Best Scores</td>
+              </tr>
+              <tr>
+                <td>Position</td>
+                <td>Name</td>
+                <td>Score</td>
+                <td>Total time</td>
+                <td>Lifelines used</td>
+              </tr>
+            </thead>
+            <tbody>
+              {ranking}
+            </tbody>
+          </table>
         </div>
       }
 }
-
-
- module.exports = BestScores;

@@ -4,12 +4,9 @@ import {
   IndexLink
 } from 'react-router';
 
-class RandomQuotes extends React.Component {
+export default class MenuButton extends React.Component {
 
     render() {
-        return <Link to={this.props.source} >{this.props.text}</Link>
+        return <Link className='menuButton' to={this.props.source} >{this.props.text}</Link>
       }
 }
-
-
- module.exports = RandomQuotes;

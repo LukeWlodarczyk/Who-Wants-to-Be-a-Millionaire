@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-class Answers extends React.Component {
+export default class Answers extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,11 +44,8 @@ class Answers extends React.Component {
                     </button>
         });
 
-      return <div className = 'container'>
+      return <div className = 'asnwersContainer'>
         {btns}
       </div>
     }
 }
-
-
- module.exports = Answers;

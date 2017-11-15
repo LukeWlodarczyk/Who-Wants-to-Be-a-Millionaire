@@ -1,17 +1,11 @@
 import React from 'react';
 
-class Voting extends React.Component {
+export default class Voting extends React.Component {
 
-  onHandleExit = () => {
-      if ( typeof this.props.onMyClickExit === 'function' ){
-          this.props.onMyClickExit();
-      }
-  };
 
   render() {
 
     return <div className = 'votingResults'>
-      <button onClick = {this.onHandleExit}>Exit</button>
       <div className = 'votingResult'>
         <div className = 'percentage'></div>
         <div className = 'percentageDiagram'></div>
@@ -35,6 +29,3 @@ class Voting extends React.Component {
     </div>
   }
 }
-
-
- module.exports = Voting;

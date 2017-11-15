@@ -1,7 +1,7 @@
 import React from 'react';
-import data from './data.jsx'
+import data from './data.js'
 
-class CurrentScore extends React.Component {
+export default class CurrentScore extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,13 +17,13 @@ class CurrentScore extends React.Component {
       });
     }
     const hl = document.querySelector('.currentWinnings');
-    hl.style.transform = `translate(0, ${this.state.currentScore * -20}px)`
+    hl.style.transform = `translate(0, ${this.state.currentScore * -30}px)`
   }
 
 
   render() {
-    const winningsLi = data[0].currentWinnings.slice(0).reverse().map( win => <li key = {win} >{win}</li>)
-      return <div className = 'container'>
+    const winningsLi = data.currentWinnings.slice(0).reverse().map( win => <li key = {win} >{win}&pound;</li>)
+      return <div className = ''>
         <ul className='currentScore'>
           {winningsLi}
           <li className='currentWinnings'></li>
@@ -31,6 +31,3 @@ class CurrentScore extends React.Component {
       </div>
     }
 }
-
-
- module.exports = CurrentScore;

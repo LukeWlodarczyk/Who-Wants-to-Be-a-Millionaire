@@ -4,14 +4,12 @@ import {
   IndexLink
 } from 'react-router';
 
-class Header extends React.Component {
+export default class Header extends React.Component {
   render() {
-    return <div className = 'container'>
+    return <div>
       <header className='header'>
-        <Link to='/'>Milionerzy</Link>
+        <Link className='logo' to='/'>Who wants to be a millionaire?</Link>
       </header>
     </div>
   }
 }
-
-module.exports = Header;

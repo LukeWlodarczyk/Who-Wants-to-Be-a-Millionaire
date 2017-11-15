@@ -13793,20 +13793,7 @@ function createRouterHistory(createHistory) {
 }
 
 /***/ }),
-/* 117 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = [{
-    currentWinnings: [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000],
-    guaranteedWinnings: [0, 0, 0, 0, 1000, 1000, 1000, 1000, 1000, 32000, 32000, 32000, 32000, 32000, 1000000],
-    difficulty: ['easy', 'easy', 'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard', 'hard', 'hard', 'hard'],
-    themeRound: ['easy', 'easy', 'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard', 'hard', 'hard', 'hard_million']
-}];
-
-/***/ }),
+/* 117 */,
 /* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13843,10 +13830,6 @@ var _Options = __webpack_require__(256);
 
 var _Options2 = _interopRequireDefault(_Options);
 
-var _Instruction = __webpack_require__(257);
-
-var _Instruction2 = _interopRequireDefault(_Instruction);
-
 var _reactRouter = __webpack_require__(43);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -13879,8 +13862,7 @@ var App = function (_React$Component) {
           _react2.default.createElement(_reactRouter.Route, { path: '/menu', component: _Menu2.default }),
           _react2.default.createElement(_reactRouter.Route, { path: '/game', component: _Game2.default }),
           _react2.default.createElement(_reactRouter.Route, { path: '/bestscores', component: _BestScores2.default }),
-          _react2.default.createElement(_reactRouter.Route, { path: '/options', component: _Options2.default }),
-          _react2.default.createElement(_reactRouter.Route, { path: '/instruction', component: _Instruction2.default })
+          _react2.default.createElement(_reactRouter.Route, { path: '/options', component: _Options2.default })
         )
       );
     }
@@ -25117,6 +25099,10 @@ module.exports = ReactDOMInvalidARIAHook;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(4);
@@ -25149,11 +25135,10 @@ var Menu = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: 'container menuContainer' },
         _react2.default.createElement(_MenuButton2.default, { source: '/game', text: 'Start' }),
         _react2.default.createElement(_MenuButton2.default, { source: '/bestscores', text: 'Best scores' }),
-        _react2.default.createElement(_MenuButton2.default, { source: '/options', text: 'Options' }),
-        _react2.default.createElement(_MenuButton2.default, { source: '/instruction', text: 'Instruction' })
+        _react2.default.createElement(_MenuButton2.default, { source: '/options', text: 'Options' })
       );
     }
   }]);
@@ -25161,7 +25146,7 @@ var Menu = function (_React$Component) {
   return Menu;
 }(_react2.default.Component);
 
-module.exports = Menu;
+exports.default = Menu;
 
 /***/ }),
 /* 218 */
@@ -25169,6 +25154,10 @@ module.exports = Menu;
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -25186,30 +25175,30 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var RandomQuotes = function (_React$Component) {
-  _inherits(RandomQuotes, _React$Component);
+var MenuButton = function (_React$Component) {
+  _inherits(MenuButton, _React$Component);
 
-  function RandomQuotes() {
-    _classCallCheck(this, RandomQuotes);
+  function MenuButton() {
+    _classCallCheck(this, MenuButton);
 
-    return _possibleConstructorReturn(this, (RandomQuotes.__proto__ || Object.getPrototypeOf(RandomQuotes)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (MenuButton.__proto__ || Object.getPrototypeOf(MenuButton)).apply(this, arguments));
   }
 
-  _createClass(RandomQuotes, [{
+  _createClass(MenuButton, [{
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
         _reactRouter.Link,
-        { to: this.props.source },
+        { className: 'menuButton', to: this.props.source },
         this.props.text
       );
     }
   }]);
 
-  return RandomQuotes;
+  return MenuButton;
 }(_react2.default.Component);
 
-module.exports = RandomQuotes;
+exports.default = MenuButton;
 
 /***/ }),
 /* 219 */
@@ -27521,6 +27510,10 @@ var replaceLocation = exports.replaceLocation = function replaceLocation(locatio
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(4);
@@ -27551,7 +27544,7 @@ var _Voting = __webpack_require__(251);
 
 var _Voting2 = _interopRequireDefault(_Voting);
 
-var _data = __webpack_require__(117);
+var _data = __webpack_require__(263);
 
 var _data2 = _interopRequireDefault(_data);
 
@@ -27590,6 +27583,10 @@ var Game = function (_React$Component) {
       return e.childNodes[0].nodeValue;
     };
 
+    _this.randombetween = function (min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    };
+
     _this.insertQuestion = function (data) {
       var incorrectAnswer = data.results[0].incorrect_answers;
       var correctAnswer = _this.htmlDecode(data.results[0].correct_answer);
@@ -27608,8 +27605,8 @@ var Game = function (_React$Component) {
     };
 
     _this.getQuestion = function () {
-      console.log(_data2.default[0].difficulty[_this.state.scores]);
-      var baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=' + _data2.default[0].difficulty[_this.state.scores] + '&type=multiple';
+      console.log(_data2.default.difficulty[_this.state.scores]);
+      var baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=' + _data2.default.difficulty[_this.state.scores] + '&type=multiple';
       fetch(baseUrl).then(function (data) {
         if (data.ok) {
           return data.json();
@@ -27642,6 +27639,7 @@ var Game = function (_React$Component) {
 
     _this.finishGame = function (text) {
       clearInterval(_this.intervalId);
+      _this.updateRanking(false, true);
       _this.changeAudio('gameSounds', 'wrong_answer');
       _this.changeAudio('mainTheme', 'main_theme');
       _this.setState({
@@ -27651,12 +27649,11 @@ var Game = function (_React$Component) {
         canType: true,
         text: text
       });
-
-      _this.updateRanking(false);
     };
 
     _this.startGame = function () {
-      if (_this.state.name.length > 1) {
+
+      if (_this.state.name.length > 0) {
         //Clear inteval in case multiple click on Start Game button
         clearInterval(_this.intervalId);
         _this.changeAudio('gameSounds', 'lets_play');
@@ -27666,38 +27663,39 @@ var Game = function (_React$Component) {
         _this.exitVotingResult();
         _this.prepareQuestion([true, true, true, true, true]);
         _this.setState({
-          text: 'Who wants to be a millionaire?',
+          text: 'Hello ' + _this.state.name + '! This is your first question:',
+          maxSecRound: 30,
           canType: false,
           scores: 0,
           currentWinnings: 0,
           guaranteedWinnings: 0,
           secsLeft: 30,
-          canUseLifelines: [true, true, true, true, true]
+          canUseLifelines: [true, true, true, true, true],
+          isPause: false
         });
-
         _this.intervalId = setInterval(_this.timer.bind(), 1000);
-      } else {
-        console.log('Your name is too short');
       }
     };
 
     _this.timer = function () {
-      _this.setState({
-        secsLeft: _this.state.secsLeft - 1
-      });
+      if (!_this.state.isPause) {
+        _this.setState({
+          secsLeft: _this.state.secsLeft - 1
+        });
+      }
       if (_this.state.secsLeft === 0) {
-        _this.finishGame('Koniec czasu!');
+        _this.finishGame('Time is over!');
       }
     };
 
     _this.nextRound = function () {
       _this.changeAudio('gameSounds', 'next');
       _this.timeuot = setTimeout(function () {
-        return _this.changeAudio('mainTheme', _data2.default[0].themeRound[_this.state.scores]);
+        return _this.changeAudio('mainTheme', _data2.default.themeRound[_this.state.scores]);
       }, 1000);
       _this.exitVotingResult();
       _this.prepareQuestion(_this.state.lifelinesStatus);
-      _this.setText('Świetnie! Do dzieła! Oto pytanie');
+      _this.setText('Great! This is your next question!');
       _this.intervalId = setInterval(_this.timer.bind(), 1000);
       _this.setState({
         maxSecRound: _this.state.secsLeft + 30
@@ -27712,45 +27710,55 @@ var Game = function (_React$Component) {
 
     _this.changeAudio = function (id, src) {
       var audio = document.querySelector('#' + id);
-      audio.src = './music/' + src + '.mp3';
       audio.currentTime = 0;
+      audio.src = './music/' + src + '.mp3';
       audio.play();
     };
 
     _this.hightlightCorrectAns = function () {
-      _this.state.allAnsBtns[_this.state.idxCorrAns].style.color = 'green';
+      _this.state.allAnsBtns[_this.state.idxCorrAns].classList.remove('selected');
+      _this.state.allAnsBtns[_this.state.idxCorrAns].classList.add('correct');
     };
 
     _this.hightlightSelectedAns = function (idx) {
-      _this.state.allAnsBtns[idx].style.color = 'yellow';
+      _this.state.allAnsBtns[idx].classList.add('selected');
+      _this.state.allAnsBtns[idx].disabled = true;
     };
 
     _this.hightlightWrongAns = function (idx) {
-      _this.state.allAnsBtns[idx].style.color = 'red';
+      _this.state.allAnsBtns[idx].classList.remove('selected');
+      _this.state.allAnsBtns[idx].classList.add('wrong');
+      _this.state.allAnsBtns[idx].disabled = true;
     };
 
     _this.handleAnsSelect = function (answer, i) {
       _this.changeAudio('gameSounds', 'final_answer');
       _this.state.allAnsBtns = document.querySelectorAll('.answerBtn');
       _this.hightlightSelectedAns(i);
+      _this.setState({
+        isPause: true,
+        canAnswer: [false, false, false, false],
+        canUseLifelines: [false, false, false, false, false]
+      });
       _this.timeoutId = setTimeout(function () {
         if (i === _this.state.idxCorrAns) {
           clearInterval(_this.intervalId);
           _this.hightlightCorrectAns();
           _this.setState({
+            isPause: false,
             votingVis: 'hidden',
             dChanceActiv: false,
             scores: _this.state.scores + 1,
             canAnswer: [false, false, false, false],
             canClickControl: [true, true, true],
             canUseLifelines: [false, false, false, false, false],
-            currentWinnings: _data2.default[0].currentWinnings[_this.state.scores],
-            guaranteedWinnings: _data2.default[0].guaranteedWinnings[_this.state.scores]
+            currentWinnings: _data2.default.currentWinnings[_this.state.scores],
+            guaranteedWinnings: _data2.default.guaranteedWinnings[_this.state.scores]
           });
 
           if (_this.state.scores < 15) {
             _this.changeAudio('gameSounds', 'correct_answer');
-            _this.setText('Prawidłowa odpowiedź! Grasz dalej?');
+            _this.setText('Correct answer! Do you want to continue playing??');
           } else {
             _this.setState({
               canClickControl: [true, false, false]
@@ -27762,19 +27770,21 @@ var Game = function (_React$Component) {
           }
         } else {
           if (_this.state.dChanceActiv === false) {
-            _this.changeAudio('gameSounds', 'wrong_answer');
             _this.hightlightCorrectAns();
             _this.hightlightWrongAns(i);
-            _this.finishGame('Nieprawidłowa odpowiedź!');
+            _this.updateRanking(false);
+            _this.finishGame('Wrong answer!');
           } else {
             _this.setText("Wrong answer! but you have another chance!");
-            _this.hightlightWrongAns(i);
             _this.setState({
+              isPause: false,
+              canAnswer: [true, true, true, true],
               dChanceActiv: false
             });
+            _this.hightlightWrongAns(i);
           }
         }
-      }, 3000);
+      }, 2500);
     };
 
     _this.resign = function () {
@@ -27783,7 +27793,7 @@ var Game = function (_React$Component) {
         return _this.changeAudio('mainTheme', 'main_theme');
       }, 1000);
       console.log(_this.state.currentWinnings);
-
+      _this.setText('Congratulations! You won ' + _this.state.currentWinnings + ' pounds');
       _this.setState({
         canType: true,
         canClickControl: [true, false, false],
@@ -27795,23 +27805,27 @@ var Game = function (_React$Component) {
     };
 
     _this.updateRanking = function (resigned) {
-      var rankRef = firebase.database().ref('rank');
-      var newRankRef = rankRef.push();
-      var time = (_this.state.scores + 1) * 30 - _this.state.secsLeft;
-      newRankRef.set({
-        name: _this.state.name,
-        score: !resigned ? _this.state.guaranteedWinnings : _this.state.currentWinnings,
-        totalTime: _this.state.lifelinesStatus[0] === true ? time : time + 30,
-        lifelinesUsed: _this.state.lifelinesStatus.filter(function (el) {
-          return el === false;
-        }).length
-      });
+      var timeOver = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (resigned && _this.state.currentWinnings > 0 || !resigned && _this.state.guaranteedWinnings > 0 && !timeOver) {
+        var rankRef = firebase.database().ref('rank');
+        var newRankRef = rankRef.push();
+        var time = (_this.state.scores + 1) * 30 - _this.state.secsLeft;
+        newRankRef.set({
+          name: _this.state.name,
+          score: !resigned ? _this.state.guaranteedWinnings : _this.state.currentWinnings,
+          totalTime: _this.state.lifelinesStatus[0] === true ? time : time + 30,
+          lifelinesUsed: _this.state.lifelinesStatus.filter(function (el) {
+            return el === false;
+          }).length
+        });
+      }
     };
 
     _this.handleAddExtraTime = function () {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[0] = false;
-      _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      _this.state.canUseLifelines = [false, false, false, false, false];
       _this.changeAudio('gameSounds', 'lifelines');
       _this.setState({
         secsLeft: _this.state.secsLeft + 30
@@ -27821,21 +27835,21 @@ var Game = function (_React$Component) {
     _this.handleFiftyFifty = function () {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[1] = false;
-      _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      _this.state.canUseLifelines = [false, false, false, false, false];
       _this.changeAudio('gameSounds', 'lifelines');
-      //Convert node list to array
       _this.state.allAnsBtns = [].concat(_toConsumableArray(document.querySelectorAll('.answerBtn')));
       _this.state.allAnsBtns.splice(_this.state.idxCorrAns, 1);
       _this.shuffle(_this.state.allAnsBtns);
       for (var i = 0; i < 2; i++) {
         _this.state.allAnsBtns[i].disabled = true;
+        _this.state.allAnsBtns[i].classList.add('wrong');
       }
     };
 
     _this.handleChangeQuestion = function () {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[2] = false;
-      _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      _this.state.canUseLifelines = [false, false, false, false, false];
       _this.changeAudio('gameSounds', 'lifelines');
       _this.getQuestion();
     };
@@ -27845,7 +27859,7 @@ var Game = function (_React$Component) {
 
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[3] = false;
-      _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      _this.state.canUseLifelines = [false, false, false, false, false];
       _this.changeAudio('gameSounds', 'lifelines');
 
       var votingReults = document.querySelector('.votingResults');
@@ -27863,16 +27877,9 @@ var Game = function (_React$Component) {
       var maxNum = Math.max(r1, r2, r3, r4);
       var maxNumIdx = rndNums.indexOf(maxNum);
 
-      var idxMaxVal = rndNums.reduce(function (iMax, x, i, arr) {
-        return x > arr[iMax] ? i : iMax;
-      }, 0);
-      var idxSecMaxVal = rndNums.reduce(function (iMax, x, i, arr) {
-        return x > arr[iMax] ? i : iMax;
-      }, 0);
-
       if (_this.randombetween(0, _this.state.scores / 2) === 0) {
-        var tmp = rndNums[idxMaxVal];
-        rndNums[idxMaxVal] = rndNums[_this.state.idxCorrAns];
+        var tmp = rndNums[maxNumIdx];
+        rndNums[maxNumIdx] = rndNums[_this.state.idxCorrAns];
         rndNums[_this.state.idxCorrAns] = tmp;
       }
 
@@ -27898,7 +27905,7 @@ var Game = function (_React$Component) {
         }
 
         counter0++;
-      }, 2500 / rndNums[0], 0);
+      }, 2500 / rndNums[0]);
 
       _this.setTimer1 = setInterval(function () {
         percentages[1].innerText = counter1 + '%';
@@ -27908,7 +27915,7 @@ var Game = function (_React$Component) {
         }
 
         counter1++;
-      }, 2500 / rndNums[1], 1);
+      }, 2500 / rndNums[1]);
 
       _this.setTimer2 = setInterval(function () {
         percentages[2].innerText = counter2 + '%';
@@ -27918,7 +27925,7 @@ var Game = function (_React$Component) {
         }
 
         counter2++;
-      }, 2500 / rndNums[2], 2);
+      }, 2500 / rndNums[2]);
 
       _this.setTimer3 = setInterval(function () {
         percentages[3].innerText = counter3 + '%';
@@ -27934,15 +27941,11 @@ var Game = function (_React$Component) {
     _this.handleDoubleChance = function () {
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[4] = false;
-      _this.state.canUseLifelines = _this.state.lifelinesStatus;
+      _this.state.canUseLifelines = [false, false, false, false, false];
       _this.changeAudio('gameSounds', 'lifelines');
       _this.setState({
         dChanceActiv: true
       });
-    };
-
-    _this.randombetween = function (min, max) {
-      return Math.floor(Math.random() * (max - min) + min);
     };
 
     _this.exitVotingResult = function () {
@@ -27971,7 +27974,6 @@ var Game = function (_React$Component) {
       loading: true,
       name: '',
       gameScore: { name: '', score: 0 },
-      votingVis: 'hidden',
       canAnswer: [false, false, false, false],
       canType: true,
       dChanceActiv: false,
@@ -27983,7 +27985,8 @@ var Game = function (_React$Component) {
       lifelinesStatus: [true, true, true, true, true],
       canClickControl: [true, false, false],
       currentWinnings: 0,
-      guaranteedWinnings: 0
+      guaranteedWinnings: 0,
+      isPause: false
     };
     return _this;
   }
@@ -28001,64 +28004,76 @@ var Game = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: 'container gameContainer' },
         _react2.default.createElement(
-          'h1',
-          null,
-          this.state.text
-        ),
-        _react2.default.createElement(_Question2.default, { question: this.state.question }),
-        _react2.default.createElement(_Answers2.default, {
-          allAnswers: this.state.allAnswers,
-          canAnswer: this.state.canAnswer,
-          onMyClick: this.handleAnsSelect,
-          shuffle: this.shuffle
-        }),
-        _react2.default.createElement(_Lifelines2.default, {
-          canUseLifelines: this.state.canUseLifelines,
-          onMyClickAddExtraTime: this.handleAddExtraTime,
-          onMyClickFiftyFifty: this.handleFiftyFifty,
-          onMyClickChangeQuestion: this.handleChangeQuestion,
-          onMyClickVoting: this.handleVoting,
-          onMyClickDoubleChance: this.handleDoubleChance
-        }),
-        _react2.default.createElement(_CurrentScore2.default, { currentScore: this.state.scores }),
-        _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft, maxTime: this.state.maxSecRound }),
-        _react2.default.createElement(
-          'label',
-          null,
-          'NAME:',
-          _react2.default.createElement('input', { type: 'text', onChange: this.handleNameChange, disabled: !this.state.canType })
-        ),
-        _react2.default.createElement(
-          'button',
-          { onClick: this.startGame, disabled: !this.state.canClickControl[0] },
-          'START NEW GAME'
-        ),
-        _react2.default.createElement(
-          'button',
-          { onClick: this.nextRound, disabled: !this.state.canClickControl[1] },
-          'NEXT QUESTION'
-        ),
-        _react2.default.createElement(
-          'button',
-          { onClick: this.resign, disabled: !this.state.canClickControl[2] },
-          'RESIGN'
+          'div',
+          { className: 'panel' },
+          _react2.default.createElement(
+            'form',
+            { className: 'form' },
+            _react2.default.createElement(
+              'label',
+              null,
+              _react2.default.createElement('input', { type: 'text', placeholder: 'Enter your name...', onChange: this.handleNameChange, disabled: !this.state.canType, required: true })
+            ),
+            _react2.default.createElement('input', { className: 'panelButton', onClick: this.startGame, disabled: !this.state.canClickControl[0], type: 'submit', value: 'START NEW GAME' })
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'panelButton', onClick: this.nextRound, disabled: !this.state.canClickControl[1] },
+            'NEXT QUESTION'
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'panelButton', onClick: this.resign, disabled: !this.state.canClickControl[2] },
+            'RESIGN'
+          ),
+          _react2.default.createElement(
+            'p',
+            { className: 'winning' },
+            'Current winnings: ',
+            this.state.currentWinnings,
+            '\xA3 '
+          ),
+          _react2.default.createElement(
+            'p',
+            { className: 'winning' },
+            'Guaranteed winnings: ',
+            this.state.guaranteedWinnings,
+            '\xA3 '
+          ),
+          _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft, maxTime: this.state.maxSecRound })
         ),
         _react2.default.createElement(
-          'h2',
-          null,
-          'Current winnings: ',
-          this.state.currentWinnings,
-          ' '
+          'div',
+          { className: 'game' },
+          _react2.default.createElement(
+            'h1',
+            { className: 'text' },
+            this.state.text
+          ),
+          _react2.default.createElement(_Question2.default, { question: this.state.question }),
+          _react2.default.createElement(_Answers2.default, {
+            allAnswers: this.state.allAnswers,
+            canAnswer: this.state.canAnswer,
+            onMyClick: this.handleAnsSelect,
+            shuffle: this.shuffle
+          }),
+          _react2.default.createElement(_Lifelines2.default, {
+            canUseLifelines: this.state.canUseLifelines,
+            onMyClickAddExtraTime: this.handleAddExtraTime,
+            onMyClickFiftyFifty: this.handleFiftyFifty,
+            onMyClickChangeQuestion: this.handleChangeQuestion,
+            onMyClickVoting: this.handleVoting,
+            onMyClickDoubleChance: this.handleDoubleChance
+          }),
+          _react2.default.createElement(_Voting2.default, null)
         ),
         _react2.default.createElement(
-          'h2',
-          null,
-          'Guaranteed winnings: ',
-          this.state.guaranteedWinnings
-        ),
-        _react2.default.createElement(_Voting2.default, { onMyClickExit: this.exitVotingResult })
+          'div',
+          { className: 'winnings' },
+          _react2.default.createElement(_CurrentScore2.default, { currentScore: this.state.scores })
+        )
       );
     }
   }]);
@@ -28066,7 +28081,7 @@ var Game = function (_React$Component) {
   return Game;
 }(_react2.default.Component);
 
-module.exports = Game;
+exports.default = Game;
 
 /***/ }),
 /* 246 */
@@ -28074,6 +28089,10 @@ module.exports = Game;
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -28119,7 +28138,7 @@ var Question = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: 'questionContainer' },
         _react2.default.createElement('p', { dangerouslySetInnerHTML: this.createMarkup() })
       );
     }
@@ -28128,7 +28147,7 @@ var Question = function (_React$Component) {
   return Question;
 }(_react2.default.Component);
 
-module.exports = Question;
+exports.default = Question;
 
 /***/ }),
 /* 247 */
@@ -28136,6 +28155,10 @@ module.exports = Question;
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -28202,7 +28225,7 @@ var Answers = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: 'asnwersContainer' },
         btns
       );
     }
@@ -28211,7 +28234,7 @@ var Answers = function (_React$Component) {
   return Answers;
 }(_react2.default.Component);
 
-module.exports = Answers;
+exports.default = Answers;
 
 /***/ }),
 /* 248 */
@@ -28219,6 +28242,10 @@ module.exports = Answers;
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -28253,7 +28280,7 @@ var Timer = function (_React$Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       this.setState({
-        timer: (Math.floor(nextProps.time / 60) + ':').padStart(2, '0') + ('' + nextProps.time % 60).padStart(2, '0'),
+        timer: (Math.floor(nextProps.time / 60) + ':').padStart(3, '0') + ('' + nextProps.time % 60).padStart(2, '0'),
         hue: nextProps.time * 120 / nextProps.maxTime
       });
     }
@@ -28263,10 +28290,10 @@ var Timer = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: '' },
         _react2.default.createElement(
           'p',
-          { style: { 'color': 'hsl(' + this.state.hue + ', 100%, 50%)' } },
+          { className: 'timer', style: { 'color': 'hsl(' + this.state.hue + ', 100%, 50%)', 'borderColor': 'hsl(' + this.state.hue + ', 100%, 50%)' } },
           this.state.timer
         )
       );
@@ -28276,7 +28303,7 @@ var Timer = function (_React$Component) {
   return Timer;
 }(_react2.default.Component);
 
-module.exports = Timer;
+exports.default = Timer;
 
 /***/ }),
 /* 249 */
@@ -28285,13 +28312,17 @@ module.exports = Timer;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _data = __webpack_require__(117);
+var _data = __webpack_require__(263);
 
 var _data2 = _interopRequireDefault(_data);
 
@@ -28327,21 +28358,22 @@ var CurrentScore = function (_React$Component) {
         });
       }
       var hl = document.querySelector('.currentWinnings');
-      hl.style.transform = 'translate(0, ' + this.state.currentScore * -20 + 'px)';
+      hl.style.transform = 'translate(0, ' + this.state.currentScore * -30 + 'px)';
     }
   }, {
     key: 'render',
     value: function render() {
-      var winningsLi = _data2.default[0].currentWinnings.slice(0).reverse().map(function (win) {
+      var winningsLi = _data2.default.currentWinnings.slice(0).reverse().map(function (win) {
         return _react2.default.createElement(
           'li',
           { key: win },
-          win
+          win,
+          '\xA3'
         );
       });
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: '' },
         _react2.default.createElement(
           'ul',
           { className: 'currentScore' },
@@ -28355,7 +28387,7 @@ var CurrentScore = function (_React$Component) {
   return CurrentScore;
 }(_react2.default.Component);
 
-module.exports = CurrentScore;
+exports.default = CurrentScore;
 
 /***/ }),
 /* 250 */
@@ -28363,6 +28395,10 @@ module.exports = CurrentScore;
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -28437,30 +28473,30 @@ var Lifelines = function (_React$Component) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                { className: 'container' },
+                { className: 'lifelinesContainer' },
                 _react2.default.createElement(
                     'button',
-                    { disabled: !this.state.canUseLifelines[0], onClick: this.onHandleClickExtraTime },
+                    { className: 'lifelinesButton', disabled: !this.state.canUseLifelines[0], onClick: this.onHandleClickExtraTime },
                     'Extra Time'
                 ),
                 _react2.default.createElement(
                     'button',
-                    { disabled: !this.state.canUseLifelines[1], onClick: this.onHandleClickFiftyFifty },
+                    { className: 'lifelinesButton', disabled: !this.state.canUseLifelines[1], onClick: this.onHandleClickFiftyFifty },
                     '50/50'
                 ),
                 _react2.default.createElement(
                     'button',
-                    { disabled: !this.state.canUseLifelines[2], onClick: this.onHandleClickChangeQuestion },
+                    { className: 'lifelinesButton', disabled: !this.state.canUseLifelines[2], onClick: this.onHandleClickChangeQuestion },
                     'Change Question'
                 ),
                 _react2.default.createElement(
                     'button',
-                    { disabled: !this.state.canUseLifelines[3], onClick: this.onHandleClickVoting },
+                    { className: 'lifelinesButton', disabled: !this.state.canUseLifelines[3], onClick: this.onHandleClickVoting },
                     'Audience Voting'
                 ),
                 _react2.default.createElement(
                     'button',
-                    { disabled: !this.state.canUseLifelines[4], onClick: this.onHandleDoubleChance },
+                    { className: 'lifelinesButton', disabled: !this.state.canUseLifelines[4], onClick: this.onHandleDoubleChance },
                     'Double Chance'
                 )
             );
@@ -28470,7 +28506,7 @@ var Lifelines = function (_React$Component) {
     return Lifelines;
 }(_react2.default.Component);
 
-module.exports = Lifelines;
+exports.default = Lifelines;
 
 /***/ }),
 /* 251 */
@@ -28478,6 +28514,10 @@ module.exports = Lifelines;
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -28497,21 +28537,9 @@ var Voting = function (_React$Component) {
   _inherits(Voting, _React$Component);
 
   function Voting() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
     _classCallCheck(this, Voting);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Voting.__proto__ || Object.getPrototypeOf(Voting)).call.apply(_ref, [this].concat(args))), _this), _this.onHandleExit = function () {
-      if (typeof _this.props.onMyClickExit === 'function') {
-        _this.props.onMyClickExit();
-      }
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    return _possibleConstructorReturn(this, (Voting.__proto__ || Object.getPrototypeOf(Voting)).apply(this, arguments));
   }
 
   _createClass(Voting, [{
@@ -28521,11 +28549,6 @@ var Voting = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { className: 'votingResults' },
-        _react2.default.createElement(
-          'button',
-          { onClick: this.onHandleExit },
-          'Exit'
-        ),
         _react2.default.createElement(
           'div',
           { className: 'votingResult' },
@@ -28577,7 +28600,7 @@ var Voting = function (_React$Component) {
   return Voting;
 }(_react2.default.Component);
 
-module.exports = Voting;
+exports.default = Voting;
 
 /***/ }),
 /* 252 */
@@ -28585,6 +28608,10 @@ module.exports = Voting;
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -28662,30 +28689,92 @@ var BestScores = function (_React$Component) {
         return b.score === a.score ? a.totalTime - b.totalTime : b.score - a.score;
       }).map(function (el, index) {
         return _react2.default.createElement(
-          'li',
+          'tr',
           { key: index },
-          el.name,
-          ' --- ',
-          el.score,
-          'zl --- ',
-          el.totalTime,
-          'sec --- ',
-          el.lifelinesUsed,
-          '/5'
+          _react2.default.createElement(
+            'td',
+            null,
+            index + 1
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            el.name
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            el.score,
+            '\xA3 '
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            el.totalTime,
+            'sec '
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            el.lifelinesUsed,
+            '/5'
+          )
         );
       });
+
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: 'container bestScoreContainer' },
         _react2.default.createElement(
-          'h1',
-          null,
-          'Best Scores'
-        ),
-        _react2.default.createElement(
-          'ul',
-          null,
-          ranking
+          'table',
+          { className: 'bestScoreTable' },
+          _react2.default.createElement(
+            'thead',
+            null,
+            _react2.default.createElement(
+              'tr',
+              null,
+              _react2.default.createElement(
+                'td',
+                { colSpan: '5' },
+                'Best Scores'
+              )
+            ),
+            _react2.default.createElement(
+              'tr',
+              null,
+              _react2.default.createElement(
+                'td',
+                null,
+                'Position'
+              ),
+              _react2.default.createElement(
+                'td',
+                null,
+                'Name'
+              ),
+              _react2.default.createElement(
+                'td',
+                null,
+                'Score'
+              ),
+              _react2.default.createElement(
+                'td',
+                null,
+                'Total time'
+              ),
+              _react2.default.createElement(
+                'td',
+                null,
+                'Lifelines used'
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'tbody',
+            null,
+            ranking
+          )
         )
       );
     }
@@ -28694,7 +28783,7 @@ var BestScores = function (_React$Component) {
   return BestScores;
 }(_react2.default.Component);
 
-module.exports = BestScores;
+exports.default = BestScores;
 
 /***/ }),
 /* 253 */
@@ -28702,6 +28791,10 @@ module.exports = BestScores;
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -28716,10 +28809,6 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 var _Header = __webpack_require__(254);
 
 var _Header2 = _interopRequireDefault(_Header);
-
-var _Footer = __webpack_require__(255);
-
-var _Footer2 = _interopRequireDefault(_Footer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28746,6 +28835,8 @@ var Main = function (_React$Component) {
         databaseURL: "https://who-wants-to-be-a-millionaire1.firebaseio.com"
       };
       firebase.initializeApp(config);
+      document.querySelector('#mainTheme').volume = 0.05;
+      document.querySelector('#gameSounds').volume = 0.05;
     }
   }, {
     key: 'render',
@@ -28755,7 +28846,6 @@ var Main = function (_React$Component) {
         { className: 'container' },
         _react2.default.createElement(_Header2.default, null),
         this.props.children,
-        _react2.default.createElement(_Footer2.default, null),
         _react2.default.createElement('audio', { id: 'gameSounds', src: './music/lets_play.mp3' }),
         _react2.default.createElement('audio', { id: 'mainTheme', src: './music/main_theme.mp3', loop: true, autoPlay: true })
       );
@@ -28765,7 +28855,7 @@ var Main = function (_React$Component) {
   return Main;
 }(_react2.default.Component);
 
-module.exports = Main;
+exports.default = Main;
 
 /***/ }),
 /* 254 */
@@ -28773,6 +28863,10 @@ module.exports = Main;
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -28804,14 +28898,14 @@ var Header = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        null,
         _react2.default.createElement(
           'header',
           { className: 'header' },
           _react2.default.createElement(
             _reactRouter.Link,
-            { to: '/' },
-            'Milionerzy'
+            { className: 'logo', to: '/' },
+            'Who wants to be a millionaire?'
           )
         )
       );
@@ -28821,70 +28915,19 @@ var Header = function (_React$Component) {
   return Header;
 }(_react2.default.Component);
 
-module.exports = Header;
+exports.default = Header;
 
 /***/ }),
-/* 255 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(4);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouter = __webpack_require__(43);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Footer = function (_React$Component) {
-  _inherits(Footer, _React$Component);
-
-  function Footer() {
-    _classCallCheck(this, Footer);
-
-    return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));
-  }
-
-  _createClass(Footer, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { className: 'container' },
-        _react2.default.createElement(
-          'footer',
-          { className: 'footer' },
-          _react2.default.createElement(
-            _reactRouter.Link,
-            { to: '/' },
-            'Milionerzy'
-          )
-        )
-      );
-    }
-  }]);
-
-  return Footer;
-}(_react2.default.Component);
-
-module.exports = Footer;
-
-/***/ }),
+/* 255 */,
 /* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -28943,16 +28986,24 @@ var Options = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: 'optionsContainer' },
         _react2.default.createElement(
           'h1',
-          null,
+          { className: 'optionsHeading' },
           'Options'
         ),
-        'Music:',
-        _react2.default.createElement('input', { type: 'range', value: this.state.mainThemeVol, max: '1', min: '0', step: 'any', onChange: this.onChangeThemeVol }),
-        'Game sounds:',
-        _react2.default.createElement('input', { type: 'range', value: this.state.gameSoundsVol, max: '1', min: '0', step: 'any', onChange: this.onChangeGameSoundsVol })
+        _react2.default.createElement(
+          'p',
+          { className: 'soundHeading' },
+          'Music'
+        ),
+        _react2.default.createElement('input', { type: 'range', value: this.state.mainThemeVol, max: '0.4', min: '0', step: 'any', onChange: this.onChangeThemeVol }),
+        _react2.default.createElement(
+          'p',
+          { className: 'soundHeading' },
+          'Game sounds'
+        ),
+        _react2.default.createElement('input', { type: 'range', value: this.state.gameSoundsVol, max: '0.4', min: '0', step: 'any', onChange: this.onChangeGameSoundsVol })
       );
     }
   }]);
@@ -28960,57 +29011,27 @@ var Options = function (_React$Component) {
   return Options;
 }(_react2.default.Component);
 
-module.exports = Options;
+exports.default = Options;
 
 /***/ }),
-/* 257 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */,
+/* 263 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+        currentWinnings    : [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000],
+        guaranteedWinnings : [0, 0, 0, 0, 1000, 1000, 1000, 1000, 1000, 32000, 32000, 32000, 32000, 32000, 1000000],
+        difficulty         : ['easy', 'easy', 'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard', 'hard', 'hard', 'hard'],
+        themeRound         : ['easy', 'easy', 'easy', 'easy', 'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard', 'hard', 'hard', 'hard_million',]
+});
 
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(4);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Instruction = function (_React$Component) {
-  _inherits(Instruction, _React$Component);
-
-  function Instruction() {
-    _classCallCheck(this, Instruction);
-
-    return _possibleConstructorReturn(this, (Instruction.__proto__ || Object.getPrototypeOf(Instruction)).apply(this, arguments));
-  }
-
-  _createClass(Instruction, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { className: 'container' },
-        _react2.default.createElement(
-          'h1',
-          null,
-          'Instruction'
-        )
-      );
-    }
-  }]);
-
-  return Instruction;
-}(_react2.default.Component);
-
-module.exports = Instruction;
 
 /***/ })
 /******/ ]);

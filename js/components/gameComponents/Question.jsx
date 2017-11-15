@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-class Question extends React.Component {
+export default class Question extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,11 +21,8 @@ class Question extends React.Component {
 
 
   render() {
-      return <div className = 'container'>
+      return <div className = 'questionContainer'>
         <p dangerouslySetInnerHTML={this.createMarkup()} />
       </div>
     }
 }
-
-
- module.exports = Question;

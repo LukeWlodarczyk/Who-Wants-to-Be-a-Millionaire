@@ -1,10 +1,310 @@
+body {
+  background: url("../img/background.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  height: 1.5em;
+  background-color: rgba(0, 0, 0, .6);
+  border: 1px solid black;
+  border-top: none;
+  text-align: center;
+  margin-bottom: 1em;
+
+  .logo {
+    display: block;
+    text-decoration: none;
+    color: skyblue;
+    line-height: 1.5em;
+  }
+}
+
+.menuContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+
+  .menuButton {
+    background-color: rgba(0, 0, 0, .6);
+    color: lightblue;
+    width: 30%;
+    border: 1px solid black;
+    padding: 1em;
+    text-decoration: none;
+    text-align: center;
+    margin: 1em;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, .8);
+    }
+  }
+}
+
+.gameContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+
+  .panel {
+    width: 18%;
+    color: lightblue;
+    background-color: rgba(0, 0, 0, .6);
+    padding: 1em;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    input {
+      width: 100%;
+      padding: 0.5em;
+      color: skyblue;
+      border: 1px solid black;
+      background-color: rgba(0, 0, 0, .4);
+
+      &::placeholder {
+        color: lighten(skyblue, 10%);
+      }
+    }
+
+    .panelButton {
+      display: block;
+      width: 100%;
+      margin: 1em 0;
+      background-color: rgba(0, 0, 0, .4);
+      border: 1px solid black;
+      color: skyblue;
+      padding: 0.6em;
+      transition: 0.6s;
+
+      &:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, .6);
+      }
+
+      &:disabled {
+        background-color: rgba(0, 0, 0, .9);
+        cursor: pointer;
+      }
+    }
+
+    .winning {
+      width: 100%;
+      margin-top: 1em;
+      text-align: left;
+      font-size: 1.1em;
+    }
+
+    .timer {
+      margin-top: 3em;
+      background-color: rgba(0, 0, 0, .4);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid green;
+      box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .8);
+    }
+  }
+
+  .game {
+    width: 60%;
+  }
+
+  .text {
+    color: skyblue;
+    text-align: center;
+    background-color: rgba(0, 0, 0, .7);
+    margin-bottom: 5px;
+    padding: 0.4em;
+    font-size: 1.5em;
+  }
+
+  .lifelinesContainer {
+    margin: 3em 0;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row wrap;
+
+    .lifelinesButton {
+      min-width: 100px;
+      padding: 10px;
+      margin-top: 0.3em;
+      border: 1px solid black;
+      color: lightblue;
+      background-color: rgba(0, 0, 0, .7);
+      transition: 0.6s;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, .8);
+        cursor: pointer;
+      }
+
+      &:disabled {
+        background-color: rgba(0, 0, 0, .9);
+        cursor: pointer;
+      }
+    }
+  }
+
+  .winnings {
+    width: 18%;
+  }
+}
+
+.questionContainer {
+  color: lightblue;
+  background-color: rgba(0, 0, 0, .8);
+  min-height: 60px;
+  padding: 1em;
+  text-align: center;
+  border: 1px solid black;
+}
+
+.asnwersContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.answerBtn {
+  min-width: 100px;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: rgba(0, 0, 0, .6);
+  transition: 0.6s;
+  color: lightblue;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, .8);
+    cursor: pointer;
+  }
+
+  &:disabled {
+    cursor: pointer;
+  }
+}
+
+.selected {
+  background-color: rgba(251, 158, 0, 0.81);
+  color: black;
+
+  &:hover {
+    background-color: rgba(251, 158, 0, 0.81);
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: rgba(251, 158, 0, 0.81);
+    cursor: pointer;
+  }
+}
+
+.wrong {
+  background-color: rgba(255, 0, 0, 0.75);
+  color: black;
+
+  &:hover {
+    background-color: rgba(255, 0, 0, 0.75);
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: rgba(255, 0, 0, 0.75);
+    cursor: pointer;
+  }
+}
+
+.correct {
+  background-color: rgba(0, 255, 3, 0.75);
+  color: black;
+
+  &:disabled {
+    background-color: rgba(0, 255, 3, 0.75);
+    cursor: pointer;
+  }
+}
+
+.bestScoreContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.bestScoreTable {
+  width: 80%;
+  border: 1px solid black;
+  border-collapse: collapse;
+  color: lightblue;
+
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+    padding: 5px;
+  }
+
+  tbody {
+    tr {
+      background-color: rgba(0, 0, 0, .6);
+
+      &:nth-child(2n) {
+        background-color: rgba(0, 0, 0, .7);
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 0, .8);
+      }
+    }
+  }
+
+  thead {
+    tr {
+      background-color: rgba(0, 0, 0, .8);
+    }
+  }
+}
+
+.optionsContainer {
+  text-align: center;
+  color: skyblue;
+  background-color: rgba(0, 0, 0, .6);
+  min-height: 90vh;
+  border: 1px solid black;
+
+  .optionsHeading {
+    font-size: 3em;
+    padding: 1em;
+  }
+
+  .soundHeading {
+    font-size: 1.5em;
+    padding: 1em;
+  }
+}
+
 .votingResults {
   visibility: hidden;
-  width: 50%;
+  width: 100%;
   height: 150px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  margin: 3em 0;
+  color: skyblue;
+  background-color: rgba(0, 0, 0, .6);
+  border: 1px solid black;
 
   .votingResult {
     width: 100%;
@@ -13,33 +313,57 @@
     flex-direction: column;
     align-items: center;
 
+    .letter {
+      margin: 0.5em 0;
+    }
+
     .percentageDiagram {
       transition: height 3s;
-      background-color: red;
+      background-color: rgba(0, 0, 0, .7);
       height: 0;
       width: 70%;
       border: 1px solid black;
     }
   }
-
 }
+
 .currentScore {
-  width: 100px;
   position: relative;
   text-align: left;
   overflow: hidden;
+  color: lightblue;
+  background-color: rgba(0, 0, 0, .6);
+  border: 1px solid black;
+
   li {
+    line-height: 20px;
+    box-sizing: content-box;
     height: 20px;
-    display: flex;
-    align-items: center;
+    padding: 5px 0;
+    text-align: center;
+
+    &:nth-child(1) {
+      color: rgba(251, 158, 0, .9);
+    }
+
+    &:nth-child(6) {
+      color: rgba(251, 158, 0, .9);
+    }
+
+    &:nth-child(11) {
+      color: rgba(251, 158, 0, .9);
+    }
   }
+
   .currentWinnings {
+    box-sizing: content-box;
     width: 100%;
-    height: 20px;
+    height: 18px;
+    padding: 5px 0;
     border: 1px solid black;
     position: absolute;
-    bottom: -20px;
+    bottom: -30px;
     transition: 1s;
-    background-color: rgba(0, 69, 142, 0.81)
+    background-color: rgba(0, 0, 0, .4);
   }
 }

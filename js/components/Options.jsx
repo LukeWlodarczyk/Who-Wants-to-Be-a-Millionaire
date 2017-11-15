@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-class Options extends React.Component {
+export default class Options extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,7 +14,7 @@ class Options extends React.Component {
     this.setState({
       mainThemeVol: event.target.value
     })
-    document.querySelector('#mainTheme').volume = this.state.mainThemeVol
+    document.querySelector('#mainTheme').volume = this.state.mainThemeVol;
   }
 
   onChangeGameSoundsVol = event => {
@@ -33,15 +33,12 @@ class Options extends React.Component {
   }
 
   render() {
-      return <div className = 'container'>
-        <h1>Options</h1>
-          Music:
-          <input type="range" value={this.state.mainThemeVol} max="1" min="0" step="any" onChange={this.onChangeThemeVol}/>
-          Game sounds:
-          <input type="range" value={this.state.gameSoundsVol} max="1" min="0" step="any" onChange={this.onChangeGameSoundsVol}/>
+      return <div className = 'optionsContainer'>
+        <h1 className='optionsHeading'>Options</h1>
+          <p className='soundHeading'>Music</p>
+          <input type="range" value={this.state.mainThemeVol} max="0.4" min="0" step="any" onChange={this.onChangeThemeVol}/>
+          <p className='soundHeading'>Game sounds</p>
+          <input type="range" value={this.state.gameSoundsVol} max="0.4" min="0" step="any" onChange={this.onChangeGameSoundsVol}/>
       </div>
     }
 }
-
-
- module.exports = Options;

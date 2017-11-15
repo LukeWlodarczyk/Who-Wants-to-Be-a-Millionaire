@@ -5,9 +5,9 @@ import Timer from './Timer.jsx'
 import CurrentScore from './CurrentScore.jsx'
 import Lifelines from './Lifelines.jsx'
 import Voting from './Voting.jsx'
-import data from './data.jsx'
+import data from './data.js'
 
-class Game extends React.Component {
+export default class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,7 +19,6 @@ class Game extends React.Component {
       loading: true,
       name: '',
       gameScore: {name: '', score: 0},
-      votingVis: 'hidden',
       canAnswer: [false, false, false, false],
       canType: true,
       dChanceActiv: false,
@@ -32,6 +31,7 @@ class Game extends React.Component {
       canClickControl: [true, false, false],
       currentWinnings: 0,
       guaranteedWinnings: 0,
+      isPause: false,
     }
   }
 
@@ -48,6 +48,10 @@ class Game extends React.Component {
     const e = document.createElement('div');
     e.innerHTML = input;
     return e.childNodes[0].nodeValue;
+  }
+
+  randombetween = (min, max) => {
+    return Math.floor(Math.random()*(max-min)+min);
   }
 
   insertQuestion = data => {
@@ -68,8 +72,8 @@ class Game extends React.Component {
   }
 
   getQuestion = () => {
-    console.log(data[0].difficulty[this.state.scores]);
-    const baseUrl = `https://opentdb.com/api.php?amount=1&difficulty=${data[0].difficulty[this.state.scores]}&type=multiple`;
+    console.log(data.difficulty[this.state.scores]);
+    const baseUrl = `https://opentdb.com/api.php?amount=1&difficulty=${data.difficulty[this.state.scores]}&type=multiple`;
     fetch(baseUrl)
       .then( data => {
         if(data.ok){
@@ -106,6 +110,7 @@ class Game extends React.Component {
 
   finishGame = text => {
       clearInterval(this.intervalId);
+      this.updateRanking(false, true);
       this.changeAudio('gameSounds', 'wrong_answer');
       this.changeAudio('mainTheme', 'main_theme');
       this.setState({
@@ -115,15 +120,12 @@ class Game extends React.Component {
         canType: true,
         text: text,
       });
-
-      this.updateRanking(false);
-
-
   }
 
 
   startGame = () => {
-    if(this.state.name.length > 1) {
+
+    if(this.state.name.length > 0) {
       //Clear inteval in case multiple click on Start Game button
       clearInterval(this.intervalId);
       this.changeAudio('gameSounds', 'lets_play');
@@ -131,27 +133,28 @@ class Game extends React.Component {
       this.exitVotingResult();
       this.prepareQuestion([true, true, true, true, true]);
       this.setState({
-        text: 'Who wants to be a millionaire?',
+        text: `Hello ${this.state.name}! This is your first question:`,
+        maxSecRound: 30,
         canType: false,
         scores: 0,
         currentWinnings: 0,
         guaranteedWinnings: 0,
         secsLeft: 30,
         canUseLifelines: [true, true, true, true, true],
+        isPause: false,
       });
-
       this.intervalId = setInterval(this.timer.bind(), 1000);
-    } else {
-      console.log('Your name is too short');
     }
   }
 
   timer = () => {
-    this.setState({
-        secsLeft: this.state.secsLeft - 1,
-    });
+    if(!this.state.isPause) {
+      this.setState({
+          secsLeft: this.state.secsLeft - 1,
+      });
+    }
     if (this.state.secsLeft === 0){
-        this.finishGame('Koniec czasu!');
+        this.finishGame('Time is over!');
     }
   }
 
@@ -159,10 +162,10 @@ class Game extends React.Component {
 
   nextRound = () => {
     this.changeAudio('gameSounds', 'next');
-    this.timeuot = setTimeout( () => this.changeAudio('mainTheme', data[0].themeRound[this.state.scores]), 1000)
+    this.timeuot = setTimeout( () => this.changeAudio('mainTheme', data.themeRound[this.state.scores]), 1000)
     this.exitVotingResult();
     this.prepareQuestion(this.state.lifelinesStatus);
-    this.setText('Świetnie! Do dzieła! Oto pytanie')
+    this.setText('Great! This is your next question!')
     this.intervalId = setInterval(this.timer.bind(), 1000);
     this.setState({
       maxSecRound: this.state.secsLeft+30,
@@ -176,46 +179,56 @@ class Game extends React.Component {
   }
 
   changeAudio = (id, src) => {
-    const audio = document.querySelector(`#${id}`)
-    audio.src=`./music/${src}.mp3`;
+    const audio = document.querySelector(`#${id}`);
     audio.currentTime=0;
+    audio.src=`./music/${src}.mp3`;
     audio.play();
   }
 
   hightlightCorrectAns = () => {
-    this.state.allAnsBtns[this.state.idxCorrAns].style.color = 'green';
+    this.state.allAnsBtns[this.state.idxCorrAns].classList.remove('selected');
+    this.state.allAnsBtns[this.state.idxCorrAns].classList.add('correct');
   }
 
   hightlightSelectedAns = idx => {
-    this.state.allAnsBtns[idx].style.color = 'yellow';
+    this.state.allAnsBtns[idx].classList.add('selected');
+    this.state.allAnsBtns[idx].disabled=true;
   }
 
   hightlightWrongAns = idx => {
-    this.state.allAnsBtns[idx].style.color = 'red';
+    this.state.allAnsBtns[idx].classList.remove('selected');
+    this.state.allAnsBtns[idx].classList.add('wrong');
+    this.state.allAnsBtns[idx].disabled=true;
   }
 
   handleAnsSelect = (answer, i) => {
     this.changeAudio('gameSounds', 'final_answer');
     this.state.allAnsBtns = document.querySelectorAll('.answerBtn');
     this.hightlightSelectedAns(i);
+    this.setState({
+      isPause: true,
+      canAnswer: [false, false, false, false],
+      canUseLifelines: [false, false, false, false, false],
+    });
     this.timeoutId = setTimeout( () => {
       if (i === this.state.idxCorrAns){
         clearInterval(this.intervalId);
         this.hightlightCorrectAns()
         this.setState({
+          isPause: false,
           votingVis: 'hidden',
           dChanceActiv: false,
           scores : this.state.scores + 1,
           canAnswer: [false, false, false, false],
           canClickControl: [true, true, true],
           canUseLifelines: [false, false, false, false, false],
-          currentWinnings: data[0].currentWinnings[this.state.scores],
-          guaranteedWinnings: data[0].guaranteedWinnings[this.state.scores]
+          currentWinnings: data.currentWinnings[this.state.scores],
+          guaranteedWinnings: data.guaranteedWinnings[this.state.scores]
         });
 
         if(this.state.scores < 15){
           this.changeAudio('gameSounds', 'correct_answer');
-          this.setText('Prawidłowa odpowiedź! Grasz dalej?');
+          this.setText('Correct answer! Do you want to continue playing??');
         } else {
           this.setState({
             canClickControl: [true, false, false],
@@ -228,26 +241,28 @@ class Game extends React.Component {
 
       } else {
           if(this.state.dChanceActiv === false) {
-            this.changeAudio('gameSounds', 'wrong_answer');
             this.hightlightCorrectAns()
             this.hightlightWrongAns(i);
-            this.finishGame('Nieprawidłowa odpowiedź!');
+            this.updateRanking(false);
+            this.finishGame('Wrong answer!');
           } else {
             this.setText("Wrong answer! but you have another chance!")
-            this.hightlightWrongAns(i);
             this.setState({
+              isPause: false,
+              canAnswer: [true, true, true, true],
               dChanceActiv: false,
             })
+            this.hightlightWrongAns(i);
           }
       }
-    }, 3000);
+    }, 2500);
   }
 
   resign = () => {
     this.changeAudio('gameSounds', 'resign');
     this.timeuot = setTimeout( () => this.changeAudio('mainTheme', 'main_theme'), 1000)
     console.log(this.state.currentWinnings);
-
+    this.setText(`Congratulations! You won ${this.state.currentWinnings} pounds`)
     this.setState({
       canType: true,
       canClickControl: [true, false, false],
@@ -260,21 +275,18 @@ class Game extends React.Component {
 
   }
 
-  updateRanking = resigned => {
-  const rankRef = firebase.database().ref('rank');
-  const newRankRef = rankRef.push();
-  const time = (this.state.scores + 1) *30 - this.state.secsLeft
-  newRankRef.set({
-    name: this.state.name,
-    score: (!resigned)? this.state.guaranteedWinnings : this.state.currentWinnings,
-    totalTime: (this.state.lifelinesStatus[0] === true)? time : (time+30),
-    lifelinesUsed: this.state.lifelinesStatus.filter( el => el === false).length,
-  });
-
-
-
-
-
+  updateRanking = (resigned, timeOver = false) => {
+    if(resigned && this.state.currentWinnings > 0 || !resigned && this.state.guaranteedWinnings > 0 && !timeOver) {
+      const rankRef = firebase.database().ref('rank');
+      const newRankRef = rankRef.push();
+      const time = (this.state.scores + 1) *30 - this.state.secsLeft
+      newRankRef.set({
+        name: this.state.name,
+        score: (!resigned)? this.state.guaranteedWinnings : this.state.currentWinnings,
+        totalTime: (this.state.lifelinesStatus[0] === true) ? time : (time+30),
+        lifelinesUsed: this.state.lifelinesStatus.filter( el => el === false).length,
+      });
+    }
   }
 
   componentWillUnmount(){
@@ -288,7 +300,7 @@ class Game extends React.Component {
   handleAddExtraTime = () => {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[0] = false;
-    this.state.canUseLifelines = this.state.lifelinesStatus;
+    this.state.canUseLifelines =[false, false, false, false, false];
     this.changeAudio('gameSounds', 'lifelines');
     this.setState({
         secsLeft: this.state.secsLeft + 30,
@@ -298,21 +310,21 @@ class Game extends React.Component {
   handleFiftyFifty = () => {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[1] = false;
-    this.state.canUseLifelines = this.state.lifelinesStatus;
+    this.state.canUseLifelines =[false, false, false, false, false];
     this.changeAudio('gameSounds', 'lifelines');
-    //Convert node list to array
     this.state.allAnsBtns = [...document.querySelectorAll('.answerBtn')];
     this.state.allAnsBtns.splice(this.state.idxCorrAns, 1);
     this.shuffle(this.state.allAnsBtns)
     for (let i = 0; i < 2; i++) {
       this.state.allAnsBtns[i].disabled = true;
+      this.state.allAnsBtns[i].classList.add('wrong')
     }
   }
 
   handleChangeQuestion = () => {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[2] = false;
-    this.state.canUseLifelines = this.state.lifelinesStatus;
+    this.state.canUseLifelines =[false, false, false, false, false];
     this.changeAudio('gameSounds', 'lifelines');
     this.getQuestion();
   }
@@ -321,7 +333,7 @@ class Game extends React.Component {
   handleVoting = () => {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[3] = false;
-    this.state.canUseLifelines = this.state.lifelinesStatus;
+    this.state.canUseLifelines =[false, false, false, false, false];
     this.changeAudio('gameSounds', 'lifelines');
 
     const votingReults =document.querySelector('.votingResults')
@@ -337,12 +349,10 @@ class Game extends React.Component {
     const maxNum = Math.max(r1, r2, r3, r4);
     const maxNumIdx = rndNums.indexOf(maxNum)
 
-    const idxMaxVal = rndNums.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
-    const idxSecMaxVal = rndNums.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
 
     if(this.randombetween(0, this.state.scores/2) === 0) {
-      const tmp = rndNums[idxMaxVal];
-      rndNums[idxMaxVal] = rndNums[this.state.idxCorrAns];
+      const tmp = rndNums[maxNumIdx];
+      rndNums[maxNumIdx] = rndNums[this.state.idxCorrAns];
       rndNums[this.state.idxCorrAns] = tmp;
     }
 
@@ -370,7 +380,7 @@ class Game extends React.Component {
 
       counter0++;
 
-    },2500/rndNums[0],(0));
+    },2500/rndNums[0]);
 
     this.setTimer1 = setInterval( () => {
       percentages[1].innerText = `${counter1}%`;
@@ -381,7 +391,7 @@ class Game extends React.Component {
 
       counter1++;
 
-    },2500/rndNums[1],(1));
+    },2500/rndNums[1]);
 
     this.setTimer2 = setInterval( () => {
       percentages[2].innerText = `${counter2}%`;
@@ -392,7 +402,7 @@ class Game extends React.Component {
 
       counter2++;
 
-    },2500/rndNums[2],(2));
+    },2500/rndNums[2]);
 
     this.setTimer3 = setInterval( () => {
       percentages[3].innerText = `${counter3}%`;
@@ -403,7 +413,7 @@ class Game extends React.Component {
 
       counter3++;
 
-    },2500/rndNums[3],);
+    },2500/rndNums[3]);
 
 
 
@@ -412,17 +422,11 @@ class Game extends React.Component {
   handleDoubleChance = () => {
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[4] = false;
-    this.state.canUseLifelines = this.state.lifelinesStatus;
+    this.state.canUseLifelines =[false, false, false, false, false];
     this.changeAudio('gameSounds', 'lifelines');
     this.setState({
       dChanceActiv: true,
     })
-  }
-
-
-
-  randombetween = (min, max) => {
-    return Math.floor(Math.random()*(max-min)+min);
   }
 
   exitVotingResult = () => {
@@ -440,38 +444,43 @@ class Game extends React.Component {
 
   render() {
     return (
-    <div className = 'container'>
-      <h1>{this.state.text}</h1>
-      <Question question = {this.state.question} />
-      <Answers
-        allAnswers = {this.state.allAnswers}
-        canAnswer = {this.state.canAnswer}
-        onMyClick = {this.handleAnsSelect}
-        shuffle = {this.shuffle}
-      />
-      <Lifelines
-        canUseLifelines = {this.state.canUseLifelines}
-        onMyClickAddExtraTime = {this.handleAddExtraTime}
-        onMyClickFiftyFifty = {this.handleFiftyFifty}
-        onMyClickChangeQuestion = {this.handleChangeQuestion}
-        onMyClickVoting = {this.handleVoting}
-        onMyClickDoubleChance = {this.handleDoubleChance}
-      />
-      <CurrentScore currentScore = {this.state.scores} />
-      <Timer time = {this.state.secsLeft} maxTime = {this.state.maxSecRound} />
-      <label>NAME:
-        <input type = 'text' onChange = {this.handleNameChange} disabled = {!this.state.canType}></input>
-      </label>
-      <button onClick = {this.startGame} disabled = {!this.state.canClickControl[0]}>START NEW GAME</button>
-      <button onClick = {this.nextRound} disabled = {!this.state.canClickControl[1]}>NEXT QUESTION</button>
-      <button onClick = {this.resign} disabled = {!this.state.canClickControl[2]}>RESIGN</button>
-      <h2>Current winnings: {this.state.currentWinnings} </h2>
-      <h2>Guaranteed winnings: {this.state.guaranteedWinnings}</h2>
-      <Voting onMyClickExit = {this.exitVotingResult}/>
+    <div className='container gameContainer'>
+      <div className='panel'>
+        <form className='form'>
+          <label>
+            <input type='text' placeholder='Enter your name...' onChange = {this.handleNameChange} disabled = {!this.state.canType} required></input>
+          </label>
+          <input className='panelButton' onClick = {this.startGame} disabled = {!this.state.canClickControl[0]} type='submit' value='START NEW GAME'/>
+        </form>
+        <button className='panelButton' onClick = {this.nextRound} disabled = {!this.state.canClickControl[1]}>NEXT QUESTION</button>
+        <button className='panelButton' onClick = {this.resign} disabled = {!this.state.canClickControl[2]}>RESIGN</button>
+        <p className='winning'>Current winnings: {this.state.currentWinnings}&pound; </p>
+        <p className='winning'>Guaranteed winnings: {this.state.guaranteedWinnings}&pound; </p>
+        <Timer time = {this.state.secsLeft} maxTime = {this.state.maxSecRound} />
+      </div>
+      <div className='game'>
+        <h1 className='text'>{this.state.text}</h1>
+        <Question question = {this.state.question} />
+        <Answers
+          allAnswers = {this.state.allAnswers}
+          canAnswer = {this.state.canAnswer}
+          onMyClick = {this.handleAnsSelect}
+          shuffle = {this.shuffle}
+        />
+        <Lifelines
+          canUseLifelines = {this.state.canUseLifelines}
+          onMyClickAddExtraTime = {this.handleAddExtraTime}
+          onMyClickFiftyFifty = {this.handleFiftyFifty}
+          onMyClickChangeQuestion = {this.handleChangeQuestion}
+          onMyClickVoting = {this.handleVoting}
+          onMyClickDoubleChance = {this.handleDoubleChance}
+        />
+        <Voting />
+      </div>
+      <div className='winnings'>
+        <CurrentScore currentScore = {this.state.scores} />
+      </div>
     </div>
   )
   }
 }
-
-
- module.exports = Game;
