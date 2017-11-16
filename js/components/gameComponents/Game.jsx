@@ -67,12 +67,10 @@ export default class Game extends React.Component {
       allAnswers: allAnswers,
       loading: false,
     });
-    console.log('Correct answer: ', this.state.correctAnswer);
-    console.log('Index correct answer: ', this.state.idxCorrAns);
   }
 
   getQuestion = () => {
-    console.log(data.difficulty[this.state.scores]);
+
     const baseUrl = `https://opentdb.com/api.php?amount=1&difficulty=${data.difficulty[this.state.scores]}&type=multiple`;
     fetch(baseUrl)
       .then( data => {
@@ -90,6 +88,7 @@ export default class Game extends React.Component {
   }
 
   handleNameChange = event => {
+    event.preventDefault();
     this.setState({
         name: event.target.value,
     })
@@ -261,7 +260,6 @@ export default class Game extends React.Component {
   resign = () => {
     this.changeAudio('gameSounds', 'resign');
     this.timeuot = setTimeout( () => this.changeAudio('mainTheme', 'main_theme'), 1000)
-    console.log(this.state.currentWinnings);
     this.setText(`Congratulations! You won ${this.state.currentWinnings} pounds`)
     this.setState({
       canType: true,
@@ -356,8 +354,6 @@ export default class Game extends React.Component {
       rndNums[this.state.idxCorrAns] = tmp;
     }
 
-
-    console.log(...rndNums);
     const percentDiagrams = document.querySelectorAll('.percentageDiagram')
     const percentages = document.querySelectorAll('.percentage');
 

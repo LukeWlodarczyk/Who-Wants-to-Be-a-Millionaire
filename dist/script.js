@@ -27294,12 +27294,10 @@ var Game = function (_React$Component) {
         allAnswers: allAnswers,
         loading: false
       });
-      console.log('Correct answer: ', _this.state.correctAnswer);
-      console.log('Index correct answer: ', _this.state.idxCorrAns);
     };
 
     _this.getQuestion = function () {
-      console.log(_data2.default.difficulty[_this.state.scores]);
+
       var baseUrl = 'https://opentdb.com/api.php?amount=1&difficulty=' + _data2.default.difficulty[_this.state.scores] + '&type=multiple';
       fetch(baseUrl).then(function (data) {
         if (data.ok) {
@@ -27315,6 +27313,7 @@ var Game = function (_React$Component) {
     };
 
     _this.handleNameChange = function (event) {
+      event.preventDefault();
       _this.setState({
         name: event.target.value
       });
@@ -27486,7 +27485,6 @@ var Game = function (_React$Component) {
       _this.timeuot = setTimeout(function () {
         return _this.changeAudio('mainTheme', 'main_theme');
       }, 1000);
-      console.log(_this.state.currentWinnings);
       _this.setText('Congratulations! You won ' + _this.state.currentWinnings + ' pounds');
       _this.setState({
         canType: true,
@@ -27549,8 +27547,6 @@ var Game = function (_React$Component) {
     };
 
     _this.handleVoting = function () {
-      var _console;
-
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[3] = false;
       _this.state.canUseLifelines = [false, false, false, false, false];
@@ -27577,7 +27573,6 @@ var Game = function (_React$Component) {
         rndNums[_this.state.idxCorrAns] = tmp;
       }
 
-      (_console = console).log.apply(_console, rndNums);
       var percentDiagrams = document.querySelectorAll('.percentageDiagram');
       var percentages = document.querySelectorAll('.percentage');
 
