@@ -295,6 +295,7 @@ export default class Game extends React.Component {
   //Lifelines
 
   handleAddExtraTime = () => {
+    this.setText("You've got extra 30 second!");
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[0] = false;
     this.state.canUseLifelines =[false, false, false, false, false];
@@ -305,6 +306,7 @@ export default class Game extends React.Component {
   }
 
   handleFiftyFifty = () => {
+    this.setText("Let's highlight two wrong answers!");
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[1] = false;
     this.state.canUseLifelines =[false, false, false, false, false];
@@ -319,6 +321,7 @@ export default class Game extends React.Component {
   }
 
   handleChangeQuestion = () => {
+    this.setText("That was really hard question. Let's look at this:");
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[2] = false;
     this.state.canUseLifelines =[false, false, false, false, false];
@@ -328,6 +331,7 @@ export default class Game extends React.Component {
 
 
   handleVoting = () => {
+    this.setText("Let's give audience a chance!");
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[3] = false;
     this.state.canUseLifelines =[false, false, false, false, false];
@@ -415,6 +419,7 @@ export default class Game extends React.Component {
   }
 
   handleDoubleChance = () => {
+    this.setText("Good choice! It makes things easier.");
     const lifelinesStatus = this.state.lifelinesStatus;
     lifelinesStatus[4] = false;
     this.state.canUseLifelines =[false, false, false, false, false];

@@ -27514,6 +27514,7 @@ var Game = function (_React$Component) {
     };
 
     _this.handleAddExtraTime = function () {
+      _this.setText("You've got extra 30 second!");
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[0] = false;
       _this.state.canUseLifelines = [false, false, false, false, false];
@@ -27524,6 +27525,7 @@ var Game = function (_React$Component) {
     };
 
     _this.handleFiftyFifty = function () {
+      _this.setText("Let's highlight two wrong answers!");
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[1] = false;
       _this.state.canUseLifelines = [false, false, false, false, false];
@@ -27538,6 +27540,7 @@ var Game = function (_React$Component) {
     };
 
     _this.handleChangeQuestion = function () {
+      _this.setText("That was really hard question. Let's look at this:");
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[2] = false;
       _this.state.canUseLifelines = [false, false, false, false, false];
@@ -27546,6 +27549,7 @@ var Game = function (_React$Component) {
     };
 
     _this.handleVoting = function () {
+      _this.setText("Let's give audience a chance!");
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[3] = false;
       _this.state.canUseLifelines = [false, false, false, false, false];
@@ -27627,6 +27631,7 @@ var Game = function (_React$Component) {
     };
 
     _this.handleDoubleChance = function () {
+      _this.setText("Good choice! It makes things easier.");
       var lifelinesStatus = _this.state.lifelinesStatus;
       lifelinesStatus[4] = false;
       _this.state.canUseLifelines = [false, false, false, false, false];

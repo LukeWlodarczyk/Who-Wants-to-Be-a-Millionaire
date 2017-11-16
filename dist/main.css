@@ -14,8 +14,9 @@ body {
 
 .container {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto; }
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1em; }
 
 .header {
   height: 1.5em;
@@ -23,7 +24,9 @@ body {
   border: 1px solid black;
   border-top: none;
   text-align: center;
-  margin-bottom: 1em; }
+  margin: 0 1em;
+  margin-bottom: 1em;
+  max-width: 1400px; }
   .header .logo {
     display: block;
     text-decoration: none;

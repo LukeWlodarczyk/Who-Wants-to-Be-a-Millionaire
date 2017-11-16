@@ -5,8 +5,9 @@ body {
 
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
+  padding: 0 1em;
 }
 
 .header {
@@ -15,7 +16,9 @@ body {
   border: 1px solid black;
   border-top: none;
   text-align: center;
+  margin: 0 1em;
   margin-bottom: 1em;
+  max-width: 1400px;
 
   .logo {
     display: block;
