@@ -27313,7 +27313,6 @@ var Game = function (_React$Component) {
     };
 
     _this.handleNameChange = function (event) {
-      event.preventDefault();
       _this.setState({
         name: event.target.value
       });
@@ -27344,8 +27343,8 @@ var Game = function (_React$Component) {
       });
     };
 
-    _this.startGame = function () {
-
+    _this.startGame = function (event) {
+      event.preventDefault();
       if (_this.state.name.length > 0) {
         //Clear inteval in case multiple click on Start Game button
         clearInterval(_this.intervalId);

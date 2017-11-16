@@ -88,7 +88,6 @@ export default class Game extends React.Component {
   }
 
   handleNameChange = event => {
-    event.preventDefault();
     this.setState({
         name: event.target.value,
     })
@@ -122,8 +121,8 @@ export default class Game extends React.Component {
   }
 
 
-  startGame = () => {
-
+  startGame = event => {
+    event.preventDefault();
     if(this.state.name.length > 0) {
       //Clear inteval in case multiple click on Start Game button
       clearInterval(this.intervalId);
