@@ -5,6 +5,7 @@ import Timer from './Timer.jsx'
 import CurrentScore from './CurrentScore.jsx'
 import Lifelines from './Lifelines.jsx'
 import Voting from './Voting.jsx'
+import Winnings from './Winnings.jsx'
 import data from './data.js'
 
 export default class Game extends React.Component {
@@ -454,8 +455,10 @@ export default class Game extends React.Component {
         </form>
         <button className='panelButton' onClick = {this.nextRound} disabled = {!this.state.canClickControl[1]}>NEXT QUESTION</button>
         <button className='panelButton' onClick = {this.resign} disabled = {!this.state.canClickControl[2]}>RESIGN</button>
-        <p className='winning'>Current winnings: {this.state.currentWinnings}&pound; </p>
-        <p className='winning'>Guaranteed winnings: {this.state.guaranteedWinnings}&pound; </p>
+        <Winnings
+          guaranteed = {this.state.guaranteedWinnings}
+          current = {this.state.currentWinnings}
+        />
         <Timer time = {this.state.secsLeft} maxTime = {this.state.maxSecRound} />
       </div>
       <div className='game'>

@@ -27238,6 +27238,10 @@ var _Voting = __webpack_require__(251);
 
 var _Voting2 = _interopRequireDefault(_Voting);
 
+var _Winnings = __webpack_require__(262);
+
+var _Winnings2 = _interopRequireDefault(_Winnings);
+
 var _data = __webpack_require__(117);
 
 var _data2 = _interopRequireDefault(_data);
@@ -27721,20 +27725,10 @@ var Game = function (_React$Component) {
             { className: 'panelButton', onClick: this.resign, disabled: !this.state.canClickControl[2] },
             'RESIGN'
           ),
-          _react2.default.createElement(
-            'p',
-            { className: 'winning' },
-            'Current winnings: ',
-            this.state.currentWinnings,
-            '\xA3 '
-          ),
-          _react2.default.createElement(
-            'p',
-            { className: 'winning' },
-            'Guaranteed winnings: ',
-            this.state.guaranteedWinnings,
-            '\xA3 '
-          ),
+          _react2.default.createElement(_Winnings2.default, {
+            guaranteed: this.state.guaranteedWinnings,
+            current: this.state.currentWinnings
+          }),
           _react2.default.createElement(_Timer2.default, { time: this.state.secsLeft, maxTime: this.state.maxSecRound })
         ),
         _react2.default.createElement(
@@ -28704,6 +28698,75 @@ var Options = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Options;
+
+/***/ }),
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Winnings = function (_React$Component) {
+  _inherits(Winnings, _React$Component);
+
+  function Winnings() {
+    _classCallCheck(this, Winnings);
+
+    return _possibleConstructorReturn(this, (Winnings.__proto__ || Object.getPrototypeOf(Winnings)).apply(this, arguments));
+  }
+
+  _createClass(Winnings, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'winningsContainer' },
+        _react2.default.createElement(
+          'p',
+          { className: 'winning' },
+          'Current winnings: ',
+          this.props.current,
+          '\xA3 '
+        ),
+        _react2.default.createElement(
+          'p',
+          { className: 'winning' },
+          'Guaranteed winnings: ',
+          this.props.guaranteed,
+          '\xA3 '
+        )
+      );
+    }
+  }]);
+
+  return Winnings;
+}(_react2.default.Component);
+
+exports.default = Winnings;
 
 /***/ })
 /******/ ]);
